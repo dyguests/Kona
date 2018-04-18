@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.fanhl.kona.R
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.subscribeBy
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,7 +23,7 @@ class MainActivity : BaseActivity() {
         MainAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
                 val post = (adapter as MainAdapter).data[position]
-                toast("tap cover ${post.id}")
+                GalleryActivity.launch(this@MainActivity, post)
             }
             setEnableLoadMore(true)
             setOnLoadMoreListener({
