@@ -1,4 +1,4 @@
-package com.fanhl.kona
+package com.fanhl.kona.util
 
 import io.reactivex.Observable
 import io.reactivex.Observer

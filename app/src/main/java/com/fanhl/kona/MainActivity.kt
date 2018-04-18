@@ -2,11 +2,11 @@ package com.fanhl.kona
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.util.subscribeBy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
