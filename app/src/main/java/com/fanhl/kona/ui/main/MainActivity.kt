@@ -87,8 +87,10 @@ class MainActivity : BaseActivity() {
                             } else {
                                 adapter.setNewData(it)
                             }
+                            adapter.loadMoreComplete()
+
                             page++
-                            adapter.loadMoreEnd()
+//                            adapter.loadMoreEnd()
                         },
                         onError = {
                             swipe_refresh_layout.apply { post { isRefreshing = false } }
@@ -96,7 +98,6 @@ class MainActivity : BaseActivity() {
                         },
                         onComplete = {
                             swipe_refresh_layout.apply { post { isRefreshing = false } }
-                            adapter.loadMoreComplete()
                         }
                 )
     }
