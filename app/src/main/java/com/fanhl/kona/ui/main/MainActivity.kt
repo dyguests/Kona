@@ -30,6 +30,8 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private var page: Int = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -67,12 +69,15 @@ class MainActivity : BaseActivity() {
 
     private fun refreshData() {
         swipe_refresh_layout.apply { post { isRefreshing = true } }
+        page = 1
         loadData()
     }
 
     private fun loadData(loadMore: Boolean = false) {
         app.client.postService
-                .getPost()
+                .getPost(
+                        page = page
+                )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -82,6 +87,7 @@ class MainActivity : BaseActivity() {
                             } else {
                                 adapter.setNewData(it)
                             }
+                            page++
                             adapter.loadMoreEnd()
                         },
                         onError = {
