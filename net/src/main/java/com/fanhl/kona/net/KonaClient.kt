@@ -18,8 +18,10 @@ class KonaClient {
     val postService by lazy { retrofit.create(PostService::class.java) }
 
     companion object {
-        const val BASE_URL_EXPLICIT = "https://konachan.com/"
-        const val BASE_URL_SAFE = "https://konachan.net/"
+//        const val BASE_URL_EXPLICIT = "https://konachan.com/"
+        const val BASE_URL_EXPLICIT = "http://konachan.com/"
+//        const val BASE_URL_SAFE = "https://konachan.net/"
+        const val BASE_URL_SAFE = "http://konachan.net/"
         const val BASE_URL = BASE_URL_SAFE
     }
 }

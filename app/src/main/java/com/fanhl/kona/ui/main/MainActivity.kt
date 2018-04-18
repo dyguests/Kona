@@ -7,23 +7,29 @@ import android.view.Menu
 import android.view.MenuItem
 import com.fanhl.kona.R
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.subscribeBy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.toast
 
 class MainActivity : BaseActivity() {
+    private val adapter by lazy {
+        MainAdapter().apply {
+            setOnItemClickListener { adapter, view, position ->
+                (adapter as MainAdapter).data[position]
+                toast("tap cover $")
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        assignViews()
 
         refreshData()
     }
@@ -44,6 +50,15 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private fun assignViews() {
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+
+        recycler_view.adapter = adapter
+    }
+
     private fun refreshData() {
         app.client.postService
                 .getPost()
@@ -51,7 +66,7 @@ class MainActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            Log.d(TAG, it.toString())
+                            adapter.setNewData(it)
                         }
                 )
     }

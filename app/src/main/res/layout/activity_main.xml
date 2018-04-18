@@ -37,7 +37,7 @@
             android:orientation="vertical"
             app:layoutManager="@string/grid_layout_manager"
             app:spanCount="2"
-            tools:listitem="@layout/item_cover"/>
+            tools:listitem="@layout/item_post"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
