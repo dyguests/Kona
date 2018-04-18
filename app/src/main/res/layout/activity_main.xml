@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="enterAlways|snap"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -37,7 +37,7 @@
             android:orientation="vertical"
             app:layoutManager="@string/grid_layout_manager"
             app:spanCount="2"
-            tools:listitem="@layout/item_post"/>
+            tools:listitem="@layout/item_post" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -47,6 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email"/>
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>

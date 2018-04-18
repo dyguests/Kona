@@ -2,6 +2,7 @@ package com.fanhl.kona.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -22,6 +23,10 @@ class MainActivity : BaseActivity() {
                 (adapter as MainAdapter).data[position]
                 toast("tap cover $")
             }
+            setEnableLoadMore(true)
+            setOnLoadMoreListener({
+                loadData(true)
+            }, recycler_view)
         }
     }
 
@@ -56,17 +61,36 @@ class MainActivity : BaseActivity() {
                     .setAction("Action", null).show()
         }
 
+        swipe_refresh_layout.setOnRefreshListener { refreshData() }
         recycler_view.adapter = adapter
     }
 
     private fun refreshData() {
+        swipe_refresh_layout.apply { post { isRefreshing = true } }
+        loadData()
+    }
+
+    private fun loadData(loadMore: Boolean = false) {
         app.client.postService
                 .getPost()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            adapter.setNewData(it)
+                            if (loadMore) {
+                                adapter.addData(it)
+                            } else {
+                                adapter.setNewData(it)
+                            }
+                            adapter.loadMoreEnd()
+                        },
+                        onError = {
+                            swipe_refresh_layout.apply { post { isRefreshing = false } }
+                            adapter.loadMoreFail()
+                        },
+                        onComplete = {
+                            swipe_refresh_layout.apply { post { isRefreshing = false } }
+                            adapter.loadMoreComplete()
                         }
                 )
     }

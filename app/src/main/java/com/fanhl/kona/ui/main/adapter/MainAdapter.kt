@@ -20,7 +20,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
             this.data = data
 
             Glide.with(itemView.img_cover)
-                    .load(data.previewUrl)
+                    .load("http:" + data.previewUrl)
                     .into(itemView.img_cover)
         }
     }
