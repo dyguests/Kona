@@ -20,8 +20,8 @@ class MainActivity : BaseActivity() {
     private val adapter by lazy {
         MainAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
-                (adapter as MainAdapter).data[position]
-                toast("tap cover $")
+                val post = (adapter as MainAdapter).data[position]
+                toast("tap cover ${post.id}")
             }
             setEnableLoadMore(true)
             setOnLoadMoreListener({
