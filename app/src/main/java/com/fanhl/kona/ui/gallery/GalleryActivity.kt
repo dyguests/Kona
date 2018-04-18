@@ -1,6 +1,7 @@
 package com.fanhl.kona.ui.gallery
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -21,7 +22,7 @@ class GalleryActivity : AppCompatActivity() {
         // Note that some of these constants are new as of API 16 (Jelly Bean)
         // and API 19 (KitKat). It is safe to use them, as they are inlined
         // at compile-time and do nothing on earlier devices.
-        fullscreen_content.systemUiVisibility =
+        photo_view.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -57,12 +58,14 @@ class GalleryActivity : AppCompatActivity() {
         mVisible = true
 
         // Set up the user interaction to manually show or hide the system UI.
-        fullscreen_content.setOnClickListener { toggle() }
+        photo_view.setOnClickListener { toggle() }
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         dummy_button.setOnTouchListener(mDelayHideTouchListener)
+
+        initData()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -72,6 +75,9 @@ class GalleryActivity : AppCompatActivity() {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
+    }
+
+    private fun initData() {
     }
 
     private fun toggle() {
@@ -95,7 +101,7 @@ class GalleryActivity : AppCompatActivity() {
 
     private fun show() {
         // Show the system bar
-        fullscreen_content.systemUiVisibility =
+        photo_view.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         mVisible = true
@@ -133,8 +139,12 @@ class GalleryActivity : AppCompatActivity() {
          */
         private val UI_ANIMATION_DELAY = 300
 
+        private const val EXTRA_POST = "EXTRA_POST"
+
         fun launch(context: Context, post: Post) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            context.startActivity(Intent(context, GalleryActivity::class.java).apply {
+                putExtra(EXTRA_POST, post)
+            })
         }
     }
 }
