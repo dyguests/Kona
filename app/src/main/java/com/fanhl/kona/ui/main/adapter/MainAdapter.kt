@@ -22,6 +22,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 
             Glide.with(itemView.img_cover)
                     .load(data.previewUrl)
+                    .apply(RequestOptions().centerCrop())
                     .into(itemView.img_cover)
         }
     }

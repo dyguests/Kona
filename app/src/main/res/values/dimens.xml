@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="unit">8dp</dimen>
+    <dimen name="unit_half">4dp</dimen>
+    <dimen name="unit_quarter">2dp</dimen>
 </resources>
