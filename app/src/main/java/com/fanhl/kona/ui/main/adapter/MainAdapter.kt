@@ -2,6 +2,7 @@ package com.fanhl.kona.ui.main.adapter
 
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
@@ -20,7 +21,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
             this.data = data
 
             Glide.with(itemView.img_cover)
-                    .load("http:" + data.previewUrl)
+                    .load(data.previewUrl)
                     .into(itemView.img_cover)
         }
     }
