@@ -19,7 +19,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 
         fun bind(data: Post) {
             this.data = data
-//return
+
             Glide.with(itemView.img_cover)
                     .load(data.previewUrl)
                     .apply(RequestOptions().dontTransform())

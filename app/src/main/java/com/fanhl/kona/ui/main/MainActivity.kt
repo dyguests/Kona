@@ -3,6 +3,7 @@ package com.fanhl.kona.ui.main
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -76,6 +77,7 @@ class MainActivity : BaseActivity() {
     private fun loadData(loadMore: Boolean = false) {
         app.client.postService
                 .getPost(
+                        tags = "boy",
                         page = page
                 )
                 .subscribeOn(Schedulers.io())
