@@ -1,3 +1,5 @@
+package com.fanhl.kona.net
+
 import retrofit2.Retrofit
 
 class KonaClient {
