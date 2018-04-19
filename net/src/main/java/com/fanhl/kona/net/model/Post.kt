@@ -1,11 +1,13 @@
 package com.fanhl.kona.net.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 /**
  * 图片帖
  */
-
+@Parcelize
 data class Post(
         @SerializedName("id") val id: Int?, //263791
         @SerializedName("tags") val tags: String?, //2girls aqua_eyes blonde_hair breasts cleavage demon dress elizabeth_bathory_(fate) fate/extra fate/grand_order fate_(series) feixiang_de_huojiren gloves horns long_hair microphone red_hair saber saber_extra short_hair tail
@@ -39,7 +41,7 @@ data class Post(
         @SerializedName("height") val height: Int?, //1000
         @SerializedName("is_held") val isHeld: Boolean?, //false
         @SerializedName("frames_pending_string") val framesPendingString: String?,
-        @SerializedName("frames_pending") val framesPending: List<Any?>?,
-        @SerializedName("frames_string") val framesString: String?,
-        @SerializedName("frames") val frames: List<Any?>?
-)
+//        @SerializedName("frames_pending") val framesPending: List<Any?>?,
+//        @SerializedName("frames") val frames: List<Any?>?,
+        @SerializedName("frames_string") val framesString: String?
+) : Parcelable

@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import kotlinx.android.synthetic.main.activity_gallery.*
@@ -49,11 +51,15 @@ class GalleryActivity : AppCompatActivity() {
         false
     }
 
+    /** 输入Post */
+    var post: Post? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_gallery)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        post = intent.getParcelableExtra(EXTRA_POST)
 
         mVisible = true
 
@@ -78,6 +84,10 @@ class GalleryActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        Glide.with(photo_view)
+                .load(post?.fileUrl ?: return)
+                .apply(RequestOptions().dontTransform())
+                .into(photo_view)
     }
 
     private fun toggle() {
