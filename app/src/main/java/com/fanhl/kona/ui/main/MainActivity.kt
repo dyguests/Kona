@@ -2,11 +2,14 @@ package com.fanhl.kona.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.fanhl.kona.R
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.subscribeBy
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,11 +22,17 @@ class MainActivity : BaseActivity() {
     private val adapter by lazy {
         MainAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
-                (adapter as MainAdapter).data[position]
-                toast("tap cover $")
+                val post = (adapter as MainAdapter).data[position]
+                GalleryActivity.launch(this@MainActivity, post)
             }
+            setEnableLoadMore(true)
+            setOnLoadMoreListener({
+                loadData(true)
+            }, recycler_view)
         }
     }
+
+    private var page: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,17 +65,41 @@ class MainActivity : BaseActivity() {
                     .setAction("Action", null).show()
         }
 
+        swipe_refresh_layout.setOnRefreshListener { refreshData() }
         recycler_view.adapter = adapter
     }
 
     private fun refreshData() {
+        swipe_refresh_layout.apply { post { isRefreshing = true } }
+        page = 1
+        loadData()
+    }
+
+    private fun loadData(loadMore: Boolean = false) {
         app.client.postService
-                .getPost()
+                .getPost(
+                        page = page
+                )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            adapter.setNewData(it)
+                            if (loadMore) {
+                                adapter.addData(it)
+                            } else {
+                                adapter.setNewData(it)
+                            }
+                            adapter.loadMoreComplete()
+
+                            page++
+//                            adapter.loadMoreEnd()
+                        },
+                        onError = {
+                            swipe_refresh_layout.apply { post { isRefreshing = false } }
+                            adapter.loadMoreFail()
+                        },
+                        onComplete = {
+                            swipe_refresh_layout.apply { post { isRefreshing = false } }
                         }
                 )
     }
