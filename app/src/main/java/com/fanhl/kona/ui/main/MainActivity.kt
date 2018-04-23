@@ -78,6 +78,7 @@ class MainActivity : BaseActivity() {
     private fun loadData(loadMore: Boolean = false) {
         app.client.postService
                 .getPost(
+                        tags = "landscape",
                         page = page
                 )
                 .subscribeOn(Schedulers.io())
