@@ -52,7 +52,7 @@ class GalleryActivity : AppCompatActivity() {
     }
 
     /** 输入Post */
-    var post: Post? = null
+    private var post: Post? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

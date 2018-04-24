@@ -5,7 +5,6 @@
     <string name="grid_layout_manager">android.support.v7.widget.GridLayoutManager</string>
     <string name="staggered_grid_layout_manager">android.support.v7.widget.StaggeredGridLayoutManager</string>
 
-    <string name="title_activity_gallery">GalleryActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

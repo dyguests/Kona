@@ -23,8 +23,7 @@
         <activity
             android:name=".ui.gallery.GalleryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_gallery"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/AppTheme.Fullscreen" />
     </application>
 
 </manifest>
