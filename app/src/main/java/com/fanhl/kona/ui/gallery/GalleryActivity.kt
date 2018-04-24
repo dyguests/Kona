@@ -12,13 +12,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
+import com.fanhl.kona.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_gallery.*
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
-class GalleryActivity : AppCompatActivity() {
+class GalleryActivity : BaseActivity() {
     private val mHideHandler = Handler()
     private val mHidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -71,6 +68,7 @@ class GalleryActivity : AppCompatActivity() {
         mVisible = true
 
         // Set up the user interaction to manually show or hide the system UI.
+        constraint_layout.setOnClickListener { toggle() }
         photo_view.setOnClickListener { toggle() }
 
         // Upon interacting with UI controls, delay any scheduled hide()
@@ -79,15 +77,6 @@ class GalleryActivity : AppCompatActivity() {
         dummy_button.setOnTouchListener(mDelayHideTouchListener)
 
         initData()
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
     }
 
     private fun initData() {
