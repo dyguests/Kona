@@ -22,7 +22,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 
             Glide.with(itemView.img_cover)
                     .load(data.previewUrl)
-                    .apply(RequestOptions().dontTransform())
+                    .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
         }
     }
