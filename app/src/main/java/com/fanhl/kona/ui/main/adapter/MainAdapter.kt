@@ -24,6 +24,8 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
                     .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
+
+            itemView.tv_size.text = "${data.width}×${data.height}"
         }
     }
 }
