@@ -5,6 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
-    <color name="text_translucent">#66ffffff</color>
     <color name="text_shadow">@color/black_overlay</color>
 </resources>
