@@ -3,8 +3,6 @@ package com.fanhl.kona.ui.gallery
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -13,6 +11,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.ui.gallery.GalleryActivity.Companion.AUTO_HIDE
+import com.fanhl.kona.ui.gallery.GalleryActivity.Companion.AUTO_HIDE_DELAY_MILLIS
 import kotlinx.android.synthetic.main.activity_gallery.*
 
 class GalleryActivity : BaseActivity() {
@@ -38,17 +38,6 @@ class GalleryActivity : BaseActivity() {
     }
     private var mVisible: Boolean = false
     private val mHideRunnable = Runnable { hide() }
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private val mDelayHideTouchListener = View.OnTouchListener { _, _ ->
-        if (AUTO_HIDE) {
-            delayedHide(AUTO_HIDE_DELAY_MILLIS)
-        }
-        false
-    }
 
     /** 输入Post */
     private var post: Post? = null
@@ -74,7 +63,12 @@ class GalleryActivity : BaseActivity() {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        dummy_button.setOnTouchListener(mDelayHideTouchListener)
+        dummy_button.setOnTouchListener { _, _ ->
+            if (AUTO_HIDE) {
+                delayedHide(AUTO_HIDE_DELAY_MILLIS)
+            }
+            false
+        }
 
         initData()
     }
