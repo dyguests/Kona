@@ -60,6 +60,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun assignViews() {
+        tv_tags.setText("landscape")//fixme test
+
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -78,7 +80,7 @@ class MainActivity : BaseActivity() {
     private fun loadData(loadMore: Boolean = false) {
         app.client.postService
                 .getPost(
-                        tags = "landscape",
+                        tags = tv_tags.text.toString(),
                         page = page
                 )
                 .subscribeOn(Schedulers.io())

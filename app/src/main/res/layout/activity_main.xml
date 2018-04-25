@@ -21,10 +21,22 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="48dp"
                 android:background="@android:color/transparent"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
+                <EditText
+                    android:id="@+id/tv_tags"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="@string/tags"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingEnd="@dimen/unit"
+                    android:paddingStart="@dimen/unit"
+                    android:theme="@style/AppTheme" />
             </android.support.v7.widget.Toolbar>
         </android.support.v7.widget.CardView>
     </android.support.design.widget.AppBarLayout>
