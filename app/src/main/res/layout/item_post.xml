@@ -37,8 +37,9 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:elevation="8dp"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="1234×2345" />
+            tools:text="@string/image_size" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

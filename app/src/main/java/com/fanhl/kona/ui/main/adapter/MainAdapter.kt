@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.util.SpanUtils
+import com.fanhl.util.px
 import kotlinx.android.synthetic.main.item_post.view.*
 
 class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item_post) {
@@ -26,9 +27,9 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
                     .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
-
+//            itemView.tv_size.text = itemView.tv_size.context.resources.getString(R.string.image_size, data.width, data.height)
             itemView.tv_size.text = SpanUtils()
-                    .append("${data.width}×${data.height}")/*.setShadow(24f, 8f, 8f, ContextCompat.getColor(itemView.context, R.color.text_shadow))*/
+                    .append("${data.width}×${data.height}").setShadow(2.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, R.color.text_shadow))
                     .create()
         }
     }
