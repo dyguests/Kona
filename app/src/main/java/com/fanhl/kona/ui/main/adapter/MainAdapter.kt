@@ -24,9 +24,14 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
             this.data = data
 
             Glide.with(itemView.img_cover)
-                    .load(data.previewUrl + "test")
+                    .load(data.previewUrl)
+//                    .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
+            itemView.tv_size.text = SpanUtils()
+                    .append(data.tags ?: "")
+                    .setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, R.color.text_shadow))
+                    .create()
             itemView.tv_size.text = SpanUtils()
                     .append("${data.width}×${data.height}").setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, R.color.text_shadow))
                     .create()
