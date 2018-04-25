@@ -21,7 +21,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
             this.data = data
 
             Glide.with(itemView.img_cover)
-                    .load(data.previewUrl)
+                    .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
         }
