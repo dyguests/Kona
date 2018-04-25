@@ -28,7 +28,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 //                    .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
-            itemView.tv_size.text = SpanUtils()
+            itemView.tv_tags.text = SpanUtils()
                     .append(data.tags ?: "")
                     .setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, R.color.text_shadow))
                     .create()
