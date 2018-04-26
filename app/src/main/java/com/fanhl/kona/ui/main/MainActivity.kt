@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.animation.OvershootInterpolator
 import com.fanhl.kona.R
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
@@ -14,6 +15,7 @@ import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.subscribeBy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
@@ -69,6 +71,7 @@ class MainActivity : BaseActivity() {
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
         recycler_view.adapter = adapter
+        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f))
     }
 
     private fun refreshData() {
