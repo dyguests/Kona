@@ -61,7 +61,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun assignViews() {
-        tv_tags.setText("landscape")//fixme test
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .filter { it.actionId() == EditorInfo.IME_ACTION_SEARCH }
@@ -70,6 +69,8 @@ class MainActivity : BaseActivity() {
                     refreshData()
                 }
 
+        tv_tags.setText("landscape")//fixme test
+
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -77,7 +78,12 @@ class MainActivity : BaseActivity() {
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
         recycler_view.adapter = adapter
-        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f))
+//        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f)).apply {
+//            addDuration = 1000
+//            changeDuration = 1000
+//            moveDuration = 1000
+//            removeDuration = 1000
+//        }
     }
 
     private fun refreshData() {

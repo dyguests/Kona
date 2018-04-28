@@ -1,8 +1,10 @@
 package com.fanhl.kona.ui.gallery
 
+import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -11,13 +13,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
-import com.fanhl.kona.ui.gallery.GalleryActivity.Companion.AUTO_HIDE
-import com.fanhl.kona.ui.gallery.GalleryActivity.Companion.AUTO_HIDE_DELAY_MILLIS
 import com.fanhl.kona.util.rxClicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
-import android.app.WallpaperManager
-import android.graphics.drawable.BitmapDrawable
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
@@ -121,33 +119,7 @@ class GalleryActivity : BaseActivity() {
 //        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
-    /**
-     * Schedules a call to hide() in [delayMillis], canceling any
-     * previously scheduled calls.
-     */
-    private fun delayedHide(delayMillis: Int) {
-        mHideHandler.removeCallbacks(mHideRunnable)
-//        mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
-    }
-
     companion object {
-        /**
-         * Whether or not the system UI should be auto-hidden after
-         * [AUTO_HIDE_DELAY_MILLIS] milliseconds.
-         */
-        private const val AUTO_HIDE = true
-
-        /**
-         * If [AUTO_HIDE] is set, the number of milliseconds to wait after
-         * user interaction before hiding the system UI.
-         */
-        private const val AUTO_HIDE_DELAY_MILLIS = 3000
-
-        /**
-         * Some older devices needs a small delay between UI widget updates
-         * and a change of the status and navigation bar.
-         */
-        private const val UI_ANIMATION_DELAY = 300
 
         private const val EXTRA_POST = "EXTRA_POST"
 
