@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -29,9 +28,6 @@ class GalleryActivity : BaseActivity() {
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-    private val mShowPart2Runnable = Runnable {
-        supportActionBar?.show()
     }
     private var mVisible: Boolean = false
 
@@ -76,7 +72,6 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun initData() {
-        mVisible = true
     }
 
     private fun toggle() {
