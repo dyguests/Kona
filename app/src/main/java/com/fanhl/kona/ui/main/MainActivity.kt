@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         assignViews()
-
+        initData()
         refreshData()
     }
 
@@ -63,8 +63,6 @@ class MainActivity : BaseActivity() {
                     SystemUtils.hideSoftInput(tv_tags)
                 }
 
-        tv_tags.setText("landscape")//fixme test
-
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
         swipe_refresh_layout.setColorSchemeResources(R.color.accent)
         recycler_view.adapter = adapter
@@ -74,6 +72,11 @@ class MainActivity : BaseActivity() {
 //            moveDuration = 1000
 //            removeDuration = 1000
 //        }
+    }
+
+    private fun initData() {
+        //fixme test
+        tv_tags.setText("landscape")
     }
 
     private fun refreshData() {
