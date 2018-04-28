@@ -16,6 +16,10 @@ import com.fanhl.kona.ui.gallery.GalleryActivity.Companion.AUTO_HIDE_DELAY_MILLI
 import com.fanhl.kona.util.rxClicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
+import android.app.WallpaperManager
+import com.bumptech.glide.request.target.Target
+import java.net.URL
+
 
 class GalleryActivity : BaseActivity() {
     private val mHideHandler = Handler()
@@ -54,21 +58,32 @@ class GalleryActivity : BaseActivity() {
 
         post = intent.getParcelableExtra(EXTRA_POST)
 
-        mVisible = true
+        assignViews()
+        initData()
+    }
 
+    private fun assignViews() {
         Observable.merge(
                 constraint_layout.rxClicks,
                 photo_view.rxClicks
         ).subscribe { toggle() }
 
-        initData()
-    }
-
-    private fun initData() {
         Glide.with(photo_view)
                 .load(post?.fileUrl ?: return)
                 .apply(RequestOptions().dontTransform())
                 .into(photo_view)
+
+        dummy_button.setOnClickListener {
+
+            WallpaperManager
+                    .getInstance(this)
+                    .setBitmap(photo_view.drawingCache)
+//                    .setStream(URL(post?.fileUrl ?: return@setOnClickListener).openStream())
+        }
+    }
+
+    private fun initData() {
+        mVisible = true
     }
 
     private fun toggle() {
