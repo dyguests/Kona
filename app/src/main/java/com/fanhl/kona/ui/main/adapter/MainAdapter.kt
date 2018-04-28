@@ -30,10 +30,10 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
                     .into(itemView.img_cover)
             itemView.tv_tags.text = SpanUtils()
                     .append(data.tags ?: "")
-                    .setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, R.color.text_shadow))
+                    .setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, android.R.color.black))
                     .create()
             itemView.tv_size.text = SpanUtils()
-                    .append("${data.width}×${data.height}").setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, R.color.text_shadow))
+                    .append("${data.width}×${data.height}").setShadow(1.px.toFloat(), 0f, 0f, android.R.color.black)
                     .create()
         }
     }
