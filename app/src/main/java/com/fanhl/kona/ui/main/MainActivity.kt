@@ -64,8 +64,11 @@ class MainActivity : BaseActivity() {
         tv_tags.setText("landscape")//fixme test
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)
-                .filter { it.actionId() == EditorInfo.IME_ACTION_DONE }
-                .subscribe { refreshData() }
+                .filter { it.actionId() == EditorInfo.IME_ACTION_SEARCH }
+                .subscribe {
+                    tv_tags.clearFocus()
+                    refreshData()
+                }
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
