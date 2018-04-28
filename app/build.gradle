@@ -65,4 +65,5 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.1.3'
     implementation project(path: ':util')
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
 }
