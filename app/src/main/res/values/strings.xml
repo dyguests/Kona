@@ -9,5 +9,5 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="tags">tags</string>
     <string name="image_size">%1$d×%2$d</string>
-    <string name="wallpaper_has_been_set">Wallpaper has been set</string>
+    <string name="wallpaper_will_been_set_soon">Wallpaper will be set soon</string>
 </resources>

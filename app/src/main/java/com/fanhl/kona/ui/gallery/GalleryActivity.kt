@@ -17,14 +17,9 @@ import com.fanhl.kona.util.rxClicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
 import android.app.WallpaperManager
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import com.bumptech.glide.request.target.BitmapImageViewTarget
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.target.Target
-import org.jetbrains.anko.imageBitmap
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
-import java.net.URL
 
 
 class GalleryActivity : BaseActivity() {
@@ -80,11 +75,14 @@ class GalleryActivity : BaseActivity() {
                 .into(photo_view)
 
         dummy_button.setOnClickListener {
-            WallpaperManager
-                    .getInstance(this)
-                    .setBitmap((photo_view.drawable as? BitmapDrawable)?.bitmap
-                            ?: return@setOnClickListener)
-            toast(R.string.wallpaper_has_been_set)
+            val bitmap = ((photo_view.drawable as? BitmapDrawable)?.bitmap
+                    ?: return@setOnClickListener)
+            doAsync {
+                WallpaperManager
+                        .getInstance(this@GalleryActivity)
+                        .setBitmap(bitmap)
+            }
+            toast(R.string.wallpaper_will_been_set_soon)
         }
     }
 
