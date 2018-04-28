@@ -3,7 +3,6 @@ package com.fanhl.kona.ui.gallery
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
@@ -22,13 +21,11 @@ class GalleryActivity : BaseActivity() {
     /** 输入Post */
     private var post: Post? = null
 
-    private var mVisible = false
+    private var fullscreen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = uiHide
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+        toggle()
 
         setContentView(R.layout.activity_gallery)
 
@@ -65,13 +62,8 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun toggle() {
-        if (mVisible) {
-            window.decorView.systemUiVisibility = uiHide
-            mVisible = false
-        } else {
-            window.decorView.systemUiVisibility = uiShow
-            mVisible = true
-        }
+        fullscreen = !fullscreen
+        window.decorView.systemUiVisibility = if (fullscreen) uiHide else uiShow
     }
 
     companion object {
