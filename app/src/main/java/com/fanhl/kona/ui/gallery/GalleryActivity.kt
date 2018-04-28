@@ -30,6 +30,9 @@ class GalleryActivity : BaseActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
+    private val mShowPart2Runnable = Runnable {
+        supportActionBar?.show()
+    }
     private var mVisible: Boolean = false
 
     /** 输入Post */
@@ -37,14 +40,7 @@ class GalleryActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
 
@@ -80,7 +76,7 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun initData() {
-//        mVisible = true
+        mVisible = true
     }
 
     private fun toggle() {
@@ -93,8 +89,6 @@ class GalleryActivity : BaseActivity() {
 
     private fun hide() {
         mVisible = false
-
-//        mHideHandler.removeCallbacks(mShowPart2Runnable)
     }
 
     private fun show() {
@@ -102,8 +96,6 @@ class GalleryActivity : BaseActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         mVisible = true
-
-//        mHideHandler.removeCallbacks(mHidePart2Runnable)
     }
 
     companion object {
