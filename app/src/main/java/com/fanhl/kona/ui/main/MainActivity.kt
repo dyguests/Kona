@@ -1,21 +1,18 @@
 package com.fanhl.kona.ui.main
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.EditorInfo
 import com.fanhl.kona.R
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
+import com.fanhl.kona.util.SystemUtils
 import com.fanhl.kona.util.subscribeBy
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
-
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
@@ -63,6 +60,7 @@ class MainActivity : BaseActivity() {
                 .subscribe {
                     tv_tags.clearFocus()
                     refreshData()
+                    SystemUtils.hideSoftInput(tv_tags)
                 }
 
         tv_tags.setText("landscape")//fixme test
