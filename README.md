@@ -2,7 +2,7 @@
 
 A android Wallpaper app for [Konachan](https://konachan.com/).
 
-![sample](/graphics/device-2018-04-29-073643.png)
+![sample](/graphics/device-2018-04-29-073643.png | width=100)
 ![sample](/graphics/device-2018-04-29-074341.png)
 ![sample](/graphics/device-2018-04-29-073851.png)
 
