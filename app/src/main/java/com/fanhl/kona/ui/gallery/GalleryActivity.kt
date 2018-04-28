@@ -18,25 +18,15 @@ import kotlinx.android.synthetic.main.activity_gallery.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
-
 class GalleryActivity : BaseActivity() {
-    private val mHidePart2Runnable = Runnable {
-        photo_view.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-    private var mVisible: Boolean = false
-
     /** 输入Post */
     private var post: Post? = null
 
+    private var mVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        window.decorView.systemUiVisibility = uiHide
         window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.TRANSPARENT
 
@@ -83,19 +73,28 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun hide() {
+        photo_view.systemUiVisibility = uiHide
         mVisible = false
     }
 
     private fun show() {
-        photo_view.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        photo_view.systemUiVisibility = uiShow
         mVisible = true
     }
 
     companion object {
-
         private const val EXTRA_POST = "EXTRA_POST"
+
+        private const val uiHide =
+                View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                        View.SYSTEM_UI_FLAG_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        private const val uiShow =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         fun launch(context: Context, post: Post) {
             context.startActivity(Intent(context, GalleryActivity::class.java).apply {
