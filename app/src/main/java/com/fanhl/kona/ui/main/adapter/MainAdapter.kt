@@ -33,7 +33,7 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 //                    .setShadow(1.px.toFloat(), 0f, 0f, ContextCompat.getColor(itemView.context, android.R.color.black))
 //                    .create()
             itemView.tv_size.text = SpanUtils()
-                    .append("${data.width}×${data.height}").setShadow(1.px.toFloat(), 0f, 0f, android.R.color.black)
+                    .append("${data.width}×${data.height}").setShadow(2.px.toFloat(), 0f, 0f, android.R.color.black)
                     .create()
         }
     }
