@@ -66,20 +66,12 @@ class GalleryActivity : BaseActivity() {
 
     private fun toggle() {
         if (mVisible) {
-            hide()
+            window.decorView.systemUiVisibility = uiHide
+            mVisible = false
         } else {
-            show()
+            window.decorView.systemUiVisibility = uiShow
+            mVisible = true
         }
-    }
-
-    private fun hide() {
-        photo_view.systemUiVisibility = uiHide
-        mVisible = false
-    }
-
-    private fun show() {
-        photo_view.systemUiVisibility = uiShow
-        mVisible = true
     }
 
     companion object {
