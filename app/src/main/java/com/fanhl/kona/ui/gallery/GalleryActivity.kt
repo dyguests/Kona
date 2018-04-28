@@ -75,8 +75,8 @@ class GalleryActivity : BaseActivity() {
                 .into(photo_view)
 
         dummy_button.setOnClickListener {
-            val bitmap = ((photo_view.drawable as? BitmapDrawable)?.bitmap
-                    ?: return@setOnClickListener)
+            val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap
+                    ?: return@setOnClickListener
             doAsync {
                 WallpaperManager
                         .getInstance(this@GalleryActivity)
