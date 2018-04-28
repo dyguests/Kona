@@ -2,6 +2,7 @@ package com.fanhl.kona.net
 
 import android.printservice.PrintService
 import com.fanhl.kona.net.service.PostService
+import com.fanhl.kona.net.service.TagService
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,6 +17,7 @@ class KonaClient {
     }
 
     val postService by lazy { retrofit.create(PostService::class.java)!! }
+    val tagService by lazy { retrofit.create(TagService::class.java)!! }
 
     companion object {
         private const val BASE_URL_EXPLICIT = "https://konachan.com/"
