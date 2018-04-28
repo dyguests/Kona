@@ -30,6 +30,7 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="@string/tags"
+                android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingEnd="@dimen/unit"

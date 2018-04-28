@@ -2,23 +2,22 @@ package com.fanhl.kona.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.StaggeredGridLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.animation.OvershootInterpolator
+import android.view.inputmethod.EditorInfo
 import com.fanhl.kona.R
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.subscribeBy
+import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.toast
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
     private val adapter by lazy {
@@ -63,6 +62,10 @@ class MainActivity : BaseActivity() {
 
     private fun assignViews() {
         tv_tags.setText("landscape")//fixme test
+        RxTextView.editorActionEvents(tv_tags)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .filter { it.actionId() == EditorInfo.IME_ACTION_DONE }
+                .subscribe { refreshData() }
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
