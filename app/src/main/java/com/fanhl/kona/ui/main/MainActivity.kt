@@ -66,6 +66,7 @@ class MainActivity : BaseActivity() {
         tv_tags.setText("landscape")//fixme test
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
+        swipe_refresh_layout.setColorSchemeResources(R.color.accent)
         recycler_view.adapter = adapter
 //        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f)).apply {
 //            addDuration = 1000
