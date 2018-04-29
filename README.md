@@ -8,6 +8,10 @@
 <img src="./graphics/device-2018-04-29-074341.png" width="40%"/>
 <img src="./graphics/device-2018-04-29-073851.png" width="40%"/>
 
+# TODO
+
+- [ ] fitsSystemWindows for fab not work in GalleryActivity.
+
 # Api
 
 [https://konachan.com/help/api](https://konachan.com/help/api)
