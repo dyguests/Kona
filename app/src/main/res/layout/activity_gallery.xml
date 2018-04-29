@@ -17,6 +17,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:padding="@dimen/unit_quarter"
+        app:layoutManager="@string/linear_layout_manager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fab_wallpaper"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/item_tag" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_wallpaper"
         android:layout_width="wrap_content"

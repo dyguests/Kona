@@ -39,8 +39,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/image_size"
-            tools:textColor="@android:color/black" />
+            tools:text="@string/image_size" />
 
         <TextView
             android:id="@+id/tv_tags"
@@ -55,7 +54,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="tags"
-            tools:textColor="@android:color/black" />
+            tools:text="tags" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

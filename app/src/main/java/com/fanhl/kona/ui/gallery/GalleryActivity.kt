@@ -10,16 +10,27 @@ import android.os.Bundle
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.util.rxClicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
+import kotlinx.android.synthetic.main.item_tag.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 class GalleryActivity : BaseActivity() {
+    private val adapter by lazy {
+        object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_tag) {
+            override fun convert(helper: BaseViewHolder?, item: String?) {
+                helper?.itemView?.tv_tag?.text = item
+            }
+        }
+    }
+
     private lateinit var viewModel: ViewModel
 
     private var fullscreen = false
@@ -45,11 +56,6 @@ class GalleryActivity : BaseActivity() {
                 photo_view.rxClicks
         ).subscribe { toggle() }
 
-        Glide.with(photo_view)
-                .load(viewModel.post.value?.fileUrl ?: return)
-                .apply(RequestOptions().dontTransform())
-                .into(photo_view)
-
         fab_wallpaper.setOnClickListener {
             val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap
                     ?: return@setOnClickListener
@@ -63,6 +69,13 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun initData() {
+        Glide.with(photo_view)
+                .load(viewModel.post.value?.fileUrl ?: return)
+                .apply(RequestOptions().dontTransform())
+                .into(photo_view)
+
+        recycler_view.adapter = adapter
+        adapter.setNewData(viewModel.post.value?.tags?.split(" "))
     }
 
     private fun toggle() {
