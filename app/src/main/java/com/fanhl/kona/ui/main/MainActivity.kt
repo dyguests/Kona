@@ -1,7 +1,6 @@
 package com.fanhl.kona.ui.main
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.Menu
@@ -59,6 +58,7 @@ class MainActivity : BaseActivity() {
 
     private fun prepareData() {
         viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
+        viewModel.page.value = 1
     }
 
     private fun assignViews() {
@@ -129,6 +129,6 @@ class MainActivity : BaseActivity() {
     }
 
     class ViewModel : android.arch.lifecycle.ViewModel() {
-        val page by lazy { MutableLiveData<Int>().apply { value = 1 } }
+        val page by lazy { MutableLiveData<Int>() }
     }
 }

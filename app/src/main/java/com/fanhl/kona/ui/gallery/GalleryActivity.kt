@@ -1,6 +1,8 @@
 package com.fanhl.kona.ui.gallery
 
 import android.app.WallpaperManager
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
@@ -18,21 +20,23 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 class GalleryActivity : BaseActivity() {
-    /** 输入Post */
-    private var post: Post? = null
+    private lateinit var viewModel: ViewModel
 
     private var fullscreen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toggle()
-
         setContentView(R.layout.activity_gallery)
 
-        post = intent.getParcelableExtra(EXTRA_POST)
-
+        prepareData()
         assignViews()
         initData()
+    }
+
+    private fun prepareData() {
+        viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
+        viewModel.post.value = intent.getParcelableExtra(EXTRA_POST)
     }
 
     private fun assignViews() {
@@ -42,7 +46,7 @@ class GalleryActivity : BaseActivity() {
         ).subscribe { toggle() }
 
         Glide.with(photo_view)
-                .load(post?.fileUrl ?: return)
+                .load(viewModel.post.value?.fileUrl ?: return)
                 .apply(RequestOptions().dontTransform())
                 .into(photo_view)
 
@@ -83,5 +87,10 @@ class GalleryActivity : BaseActivity() {
                 putExtra(EXTRA_POST, post)
             })
         }
+    }
+
+    class ViewModel : android.arch.lifecycle.ViewModel() {
+        /** 输入Post */
+        val post by lazy { MutableLiveData<Post>() }
     }
 }
