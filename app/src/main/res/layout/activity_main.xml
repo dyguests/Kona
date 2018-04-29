@@ -19,7 +19,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_marginTop="18dp"
+            android:layout_marginEnd="@dimen/main_toolbar_margin_horizontal"
+            android:layout_marginStart="@dimen/main_toolbar_margin_horizontal"
+            android:layout_marginTop="@dimen/main_toolbar_margin_top"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="enterAlways|scroll|snap"
             app:popupTheme="@style/AppTheme.PopupOverlay">
@@ -53,7 +55,7 @@
             android:orientation="vertical"
             android:padding="@dimen/unit_quarter"
             app:layoutManager="@string/staggered_grid_layout_manager"
-            app:spanCount="2"
+            app:spanCount="@integer/main_recycler_view_span_count"
             tools:listitem="@layout/item_post" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

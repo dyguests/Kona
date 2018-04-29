@@ -3,4 +3,6 @@
     <dimen name="unit">8dp</dimen>
     <dimen name="unit_half">4dp</dimen>
     <dimen name="unit_quarter">2dp</dimen>
+    <dimen name="main_toolbar_margin_top">18dp</dimen>
+    <dimen name="main_toolbar_margin_horizontal">0dp</dimen>
 </resources>
