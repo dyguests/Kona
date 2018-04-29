@@ -22,9 +22,9 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 
         fun bind(data: Post) {
             this.data = data
-            itemView.img_cover.layoutParams = (itemView.img_cover.layoutParams as ConstraintLayout.LayoutParams).apply {
-                dimensionRatio = "w,${data.width ?: return}:${data.height ?: return}"
-            }
+//            itemView.img_cover.layoutParams = (itemView.img_cover.layoutParams as ConstraintLayout.LayoutParams).apply {
+//                dimensionRatio = "w,${data.width ?: return}:${data.height ?: return}"
+//            }
             Glide.with(itemView.img_cover)
                     .load(data.previewUrl)
 //                    .load(data.previewUrl + "test")

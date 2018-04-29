@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
-            android:maxHeight="400dp"
+            android:maxHeight="800dp"
             android:minHeight="100dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
