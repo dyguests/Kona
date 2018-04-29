@@ -1,6 +1,5 @@
 package com.fanhl.kona.net
 
-import android.printservice.PrintService
 import com.fanhl.kona.net.service.PostService
 import com.fanhl.kona.net.service.TagService
 import retrofit2.Retrofit
