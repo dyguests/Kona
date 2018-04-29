@@ -6,14 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/primary"
     android:descendantFocusability="beforeDescendants"
-    android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
     tools:context=".ui.main.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:elevation="0dp">
 
@@ -22,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:fitsSystemWindows="true"
             app:layout_scrollFlags="enterAlways|scroll|snap"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -45,7 +42,6 @@
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
