@@ -98,12 +98,12 @@ class GalleryActivity : BaseActivity() {
             window.decorView.systemUiVisibility = uiHide
             TransitionManager.beginDelayedTransition(constraint_layout)
             recycler_view.visibility = View.GONE
-            fab_wallpaper.visibility = View.GONE
+//            fab_wallpaper.visibility = View.GONE
         } else {
             window.decorView.systemUiVisibility = uiShow
             TransitionManager.beginDelayedTransition(constraint_layout)
             recycler_view.visibility = View.VISIBLE
-            fab_wallpaper.visibility = View.VISIBLE
+//            fab_wallpaper.visibility = View.VISIBLE
         }
     }
 
