@@ -79,6 +79,8 @@ class MainActivity : BaseActivity() {
                         val tag = data?.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
                         tv_tags.setText(tag)
                         refreshData()
+
+                        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
                     }
                     else -> {
                     }
@@ -155,10 +157,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun actionSearch() {
-        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
         tv_tags.clearFocus()
         refreshData()
         SystemUtils.hideSoftInput(tv_tags)
+
+        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
     }
 
     companion object {
