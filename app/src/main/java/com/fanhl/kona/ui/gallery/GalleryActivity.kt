@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.transition.TransitionManager
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -46,11 +47,11 @@ class GalleryActivity : BaseActivity() {
 
     private lateinit var viewModel: ViewModel
 
-    private var fullscreen = false
+    private var fullscreen = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        toggle()
+        window.decorView.systemUiVisibility = uiHide
         setContentView(R.layout.activity_gallery)
 
         prepareData()
@@ -93,7 +94,15 @@ class GalleryActivity : BaseActivity() {
 
     private fun toggle() {
         fullscreen = !fullscreen
-        window.decorView.systemUiVisibility = if (fullscreen) uiHide else uiShow
+        if (fullscreen) {
+            window.decorView.systemUiVisibility = uiHide
+            TransitionManager.beginDelayedTransition(constraint_layout)
+            recycler_view.visibility = View.INVISIBLE
+        } else {
+            window.decorView.systemUiVisibility = uiShow
+            TransitionManager.beginDelayedTransition(constraint_layout)
+            recycler_view.visibility = View.VISIBLE
+        }
     }
 
     companion object {
