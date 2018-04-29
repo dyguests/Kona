@@ -66,4 +66,7 @@ dependencies {
     implementation project(path: ':util')
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 }
