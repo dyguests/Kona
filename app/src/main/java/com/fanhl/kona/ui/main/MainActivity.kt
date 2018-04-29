@@ -1,7 +1,9 @@
 package com.fanhl.kona.ui.main
 
+import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -24,7 +26,7 @@ class MainActivity : BaseActivity() {
         MainAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
                 val post = (adapter as MainAdapter).data[position]
-                GalleryActivity.launch(this@MainActivity, post)
+                GalleryActivity.launchForResult(this@MainActivity, REQUEST_CODE_MAIN, post)
             }
             setEnableLoadMore(true)
             setOnLoadMoreListener({
@@ -55,6 +57,26 @@ class MainActivity : BaseActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_CODE_MAIN -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        val tag = data?.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
+                        tv_tags.setText(tag)
+                        refreshData()
+                    }
+                    else -> {
+                    }
+                }
+            }
+            else -> {
+            }
         }
     }
 
@@ -128,6 +150,8 @@ class MainActivity : BaseActivity() {
     companion object {
         /** TAG */
         private val TAG = MainActivity::class.java.simpleName!!
+
+        private const val REQUEST_CODE_MAIN = 20001
     }
 
     class ViewModel : android.arch.lifecycle.ViewModel() {

@@ -1,9 +1,9 @@
 package com.fanhl.kona.ui.gallery
 
+import android.app.Activity
 import android.app.WallpaperManager
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -27,6 +27,13 @@ class GalleryActivity : BaseActivity() {
         object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_tag) {
             override fun convert(helper: BaseViewHolder?, item: String?) {
                 helper?.itemView?.tv_tag?.text = item
+            }
+        }.apply {
+            onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+                setResult(Activity.RESULT_OK, intent.apply {
+                    putExtra(RESULT_DATA_TAG, adapter.data[position] as String)
+                })
+                finish()
             }
         }
     }
@@ -85,6 +92,7 @@ class GalleryActivity : BaseActivity() {
 
     companion object {
         private const val EXTRA_POST = "EXTRA_POST"
+         const val RESULT_DATA_TAG = "RESULT_DATA_TAG"
 
         private const val uiHide = View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -95,10 +103,13 @@ class GalleryActivity : BaseActivity() {
         private const val uiShow = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
-        fun launch(context: Context, post: Post) {
-            context.startActivity(Intent(context, GalleryActivity::class.java).apply {
-                putExtra(EXTRA_POST, post)
-            })
+        fun launchForResult(activity: Activity, requestCode: Int, post: Post) {
+            activity.startActivityForResult(
+                    Intent(activity, GalleryActivity::class.java).apply {
+                        putExtra(EXTRA_POST, post)
+                    },
+                    requestCode
+            )
         }
     }
 
