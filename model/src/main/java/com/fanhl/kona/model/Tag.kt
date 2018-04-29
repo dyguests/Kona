@@ -5,9 +5,11 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity
 data class Tag(
-        val id: Int? = null,
-        val name: String?,
-        val count: Int? = null,
-        val type: Int? = null,
-        val ambiguous: Boolean? = null
-)
+        var id: Int? = null,
+        var name: String?,
+        var count: Int? = null,
+        var type: Int? = null,
+        var ambiguous: Boolean? = null
+) {
+    constructor() : this(name = "")
+}
