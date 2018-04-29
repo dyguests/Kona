@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Kona</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_clear">Clear</string>
+
     <string name="linear_layout_manager">android.support.v7.widget.LinearLayoutManager</string>
     <string name="grid_layout_manager">android.support.v7.widget.GridLayoutManager</string>
     <string name="staggered_grid_layout_manager">android.support.v7.widget.StaggeredGridLayoutManager</string>
