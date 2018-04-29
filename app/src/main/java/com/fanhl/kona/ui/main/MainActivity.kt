@@ -55,6 +55,14 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_clear -> {
+                tv_tags.setText("")
+                true
+            }
+            R.id.action_search -> {
+                actionSearch()
+                true
+            }
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
@@ -90,9 +98,7 @@ class MainActivity : BaseActivity() {
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .filter { it.actionId() == EditorInfo.IME_ACTION_SEARCH }
                 .subscribe {
-                    tv_tags.clearFocus()
-                    refreshData()
-                    SystemUtils.hideSoftInput(tv_tags)
+                    actionSearch()
                 }
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
@@ -145,6 +151,12 @@ class MainActivity : BaseActivity() {
                             swipe_refresh_layout.apply { post { isRefreshing = false } }
                         }
                 )
+    }
+
+    private fun actionSearch() {
+        tv_tags.clearFocus()
+        refreshData()
+        SystemUtils.hideSoftInput(tv_tags)
     }
 
     companion object {
