@@ -27,13 +27,12 @@
         android:layout_marginStart="12dp"
         android:clipToPadding="false"
         android:fitsSystemWindows="true"
-        android:maxHeight="128dp"
         android:orientation="horizontal"
         android:padding="@dimen/unit_quarter"
-        android:visibility="gone"
         app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/anchor_1"
         app:layout_constraintEnd_toStartOf="@+id/fab_wallpaper"
+        app:layout_constraintHeight_max="128dp"
         app:layout_constraintStart_toStartOf="parent"
         tools:listitem="@layout/item_tag" />
 
@@ -63,6 +62,7 @@
         android:id="@+id/anchor_2"
         android:layout_width="12dp"
         android:layout_height="12dp"
+        android:layout_marginBottom="140dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:visibility="invisible"
@@ -71,5 +71,4 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:background="#234"
         tools:visibility="visible" />
-    <!--android:layout_marginBottom="140dp"-->
 </android.support.constraint.ConstraintLayout>

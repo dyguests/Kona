@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.constraint.ConstraintSet
 import android.support.transition.TransitionManager
 import android.view.View
 import com.bumptech.glide.Glide
@@ -27,6 +28,9 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 class GalleryActivity : BaseActivity() {
+    val fullscreenConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery) } }
+    val normalConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery_alt) } }
+
     private val adapter by lazy {
         object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_tag) {
             override fun convert(helper: BaseViewHolder?, item: String?) {
@@ -97,13 +101,11 @@ class GalleryActivity : BaseActivity() {
         if (fullscreen) {
             window.decorView.systemUiVisibility = uiHide
             TransitionManager.beginDelayedTransition(constraint_layout)
-            recycler_view.visibility = View.GONE
-//            fab_wallpaper.visibility = View.GONE
+            fullscreenConstraintSet.applyTo(constraint_layout)
         } else {
             window.decorView.systemUiVisibility = uiShow
             TransitionManager.beginDelayedTransition(constraint_layout)
-            recycler_view.visibility = View.VISIBLE
-//            fab_wallpaper.visibility = View.VISIBLE
+            normalConstraintSet.applyTo(constraint_layout)
         }
     }
 
