@@ -97,7 +97,7 @@ class GalleryActivity : BaseActivity() {
         if (fullscreen) {
             window.decorView.systemUiVisibility = uiHide
             TransitionManager.beginDelayedTransition(constraint_layout)
-            recycler_view.visibility = View.INVISIBLE
+            recycler_view.visibility = View.GONE
         } else {
             window.decorView.systemUiVisibility = uiShow
             TransitionManager.beginDelayedTransition(constraint_layout)

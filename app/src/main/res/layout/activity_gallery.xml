@@ -28,7 +28,7 @@
         android:maxHeight="128dp"
         android:orientation="horizontal"
         android:padding="@dimen/unit_quarter"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fab_wallpaper"
