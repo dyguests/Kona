@@ -89,6 +89,7 @@ class GalleryActivity : BaseActivity() {
     private fun initData() {
         Glide.with(photo_view)
                 .load(viewModel.post.value?.fileUrl ?: return)
+                .thumbnail(.1f)
                 .apply(RequestOptions().dontTransform())
                 .into(photo_view)
 
