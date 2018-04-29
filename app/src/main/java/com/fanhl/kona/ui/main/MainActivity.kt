@@ -112,7 +112,7 @@ class MainActivity : BaseActivity() {
                             }
                             adapter.loadMoreComplete()
 
-                            viewModel.page.value = viewModel.page.value ?: 0 + 1
+                            viewModel.page.value = viewModel.page.value!! + 1
 //                            adapter.loadMoreEnd()
                         },
                         onError = {
