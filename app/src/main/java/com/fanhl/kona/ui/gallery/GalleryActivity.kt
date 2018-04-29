@@ -29,7 +29,7 @@ class GalleryActivity : BaseActivity() {
                 helper?.itemView?.tv_tag?.text = item
             }
         }.apply {
-            onItemChildClickListener = BaseQuickAdapter.OnItemChildClickListener { adapter, view, position ->
+            onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
                 setResult(Activity.RESULT_OK, intent.apply {
                     putExtra(RESULT_DATA_TAG, adapter.data[position] as String)
                 })
@@ -92,7 +92,7 @@ class GalleryActivity : BaseActivity() {
 
     companion object {
         private const val EXTRA_POST = "EXTRA_POST"
-         const val RESULT_DATA_TAG = "RESULT_DATA_TAG"
+        const val RESULT_DATA_TAG = "RESULT_DATA_TAG"
 
         private const val uiHide = View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
