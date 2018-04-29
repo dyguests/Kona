@@ -1,5 +1,8 @@
 package com.fanhl.kona.ui.main
 
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -30,12 +33,13 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private var page: Int = 1
+    private lateinit var viewModel: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        prepareData()
         assignViews()
         initData()
         refreshData()
@@ -51,6 +55,10 @@ class MainActivity : BaseActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun prepareData() {
+        viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
     }
 
     private fun assignViews() {
@@ -81,7 +89,7 @@ class MainActivity : BaseActivity() {
 
     private fun refreshData() {
         swipe_refresh_layout.apply { post { isRefreshing = true } }
-        page = 1
+        viewModel.page.value = 1
         loadData()
     }
 
@@ -89,7 +97,7 @@ class MainActivity : BaseActivity() {
         app.client.postService
                 .getPost(
                         tags = tv_tags.text.toString(),
-                        page = page
+                        page = viewModel.page.value
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -102,7 +110,7 @@ class MainActivity : BaseActivity() {
                             }
                             adapter.loadMoreComplete()
 
-                            page++
+                            viewModel.page.value = viewModel.page.value ?: 0 + 1
 //                            adapter.loadMoreEnd()
                         },
                         onError = {
@@ -118,5 +126,9 @@ class MainActivity : BaseActivity() {
     companion object {
         /** TAG */
         private val TAG = MainActivity::class.java.simpleName!!
+    }
+
+    class ViewModel : android.arch.lifecycle.ViewModel() {
+        val page by lazy { MutableLiveData<Int>().apply { value = 1 } }
     }
 }
