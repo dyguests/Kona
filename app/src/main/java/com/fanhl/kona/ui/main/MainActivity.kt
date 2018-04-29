@@ -80,7 +80,7 @@ class MainActivity : BaseActivity() {
                         tv_tags.setText(tag)
                         refreshData()
 
-                        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+//                        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
                     }
                     else -> {
                     }
