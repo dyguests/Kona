@@ -27,7 +27,7 @@
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:padding="@dimen/unit_quarter"
-        app:layoutManager="@string/linear_layout_manager"
+        app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fab_wallpaper"
         app:layout_constraintStart_toStartOf="parent"

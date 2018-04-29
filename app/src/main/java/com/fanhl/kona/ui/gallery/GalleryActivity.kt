@@ -16,6 +16,7 @@ import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.util.rxClicks
+import com.google.android.flexbox.FlexboxLayoutManager
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.item_tag.view.*
