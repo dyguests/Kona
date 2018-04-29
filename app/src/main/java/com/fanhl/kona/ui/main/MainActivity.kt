@@ -12,6 +12,7 @@ import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
 import com.fanhl.kona.util.subscribeBy
+import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        StatusBarUtil.setTransparent(this)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         prepareData()
