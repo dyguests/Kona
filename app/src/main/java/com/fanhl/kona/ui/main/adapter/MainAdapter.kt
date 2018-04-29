@@ -1,6 +1,6 @@
 package com.fanhl.kona.ui.main.adapter
 
-import android.support.v4.content.ContextCompat
+import android.support.constraint.ConstraintLayout
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -22,7 +22,9 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 
         fun bind(data: Post) {
             this.data = data
-
+            itemView.img_cover.layoutParams = (itemView.img_cover.layoutParams as ConstraintLayout.LayoutParams).apply {
+                dimensionRatio = "w,${data.width ?: return}:${data.height ?: return}"
+            }
             Glide.with(itemView.img_cover)
                     .load(data.previewUrl)
 //                    .load(data.previewUrl + "test")

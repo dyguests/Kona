@@ -28,8 +28,8 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
 class GalleryActivity : BaseActivity() {
-    val fullscreenConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery) } }
-    val normalConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery_alt) } }
+    private val fullscreenConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery) } }
+    private val normalConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery_alt) } }
 
     private val adapter by lazy {
         object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_tag) {
