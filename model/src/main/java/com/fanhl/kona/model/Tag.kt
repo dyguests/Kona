@@ -1,5 +1,4 @@
-package com.fanhl.kona.net.model
-
+package com.fanhl.kona.model
 
 data class Tag(
         val id: Int?,
