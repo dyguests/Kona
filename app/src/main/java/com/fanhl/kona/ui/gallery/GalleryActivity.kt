@@ -16,6 +16,8 @@ import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.util.rxClicks
+import com.fanhl.util.SpanUtils
+import com.fanhl.util.px
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
@@ -27,7 +29,10 @@ class GalleryActivity : BaseActivity() {
     private val adapter by lazy {
         object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_tag) {
             override fun convert(helper: BaseViewHolder?, item: String?) {
-                helper?.itemView?.tv_tag?.text = item
+                helper?.itemView?.tv_tag?.text = SpanUtils()
+                        .append(item ?: return)
+                        .setShadow(2.px.toFloat(), 0f, 0f, R.color.text_shadow)
+                        .create()
             }
         }.apply {
             onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
