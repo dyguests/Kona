@@ -55,6 +55,5 @@
             app:layoutManager="@string/staggered_grid_layout_manager"
             app:spanCount="2"
             tools:listitem="@layout/item_post" />
-
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>
