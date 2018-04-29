@@ -12,7 +12,7 @@ abstract class KonaDatabase : RoomDatabase() {
     abstract fun tagDao(): TagDao
 
     companion object {
-        const val DATABASE_NAME = "kona"
+        private const val DATABASE_NAME = "kona"
 
         fun create(applicationContext: Context) = Room.databaseBuilder(applicationContext, KonaDatabase::class.java, KonaDatabase.DATABASE_NAME).build()
     }

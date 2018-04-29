@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.fanhl.kona.R
+import com.fanhl.kona.model.Tag
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
@@ -154,6 +155,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun actionSearch() {
+        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
         tv_tags.clearFocus()
         refreshData()
         SystemUtils.hideSoftInput(tv_tags)
