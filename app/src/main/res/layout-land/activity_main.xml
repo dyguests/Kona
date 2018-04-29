@@ -26,7 +26,7 @@
             app:layout_scrollFlags="enterAlways|scroll|snap"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/tv_tags"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
