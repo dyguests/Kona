@@ -3,6 +3,7 @@ package com.fanhl.kona.ui.main
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedListAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -17,6 +18,7 @@ import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
 import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -28,7 +30,9 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
     /**tags历史记录列表*/
-    private val tagAdapter by lazy { ArrayAdapter<String>(this, R.layout.item_tag_dropdown) }
+    private val tagAdapter by lazy {
+        ArrayAdapter<String>(this, R.layout.item_tag_dropdown)
+    }
 
     /**cover列表*/
     private val adapter by lazy {
@@ -109,6 +113,16 @@ class MainActivity : BaseActivity() {
 
     private fun assignViews() {
         tv_tags.setAdapter(tagAdapter)
+//        RxTextView.textChanges(tv_tags)
+//                .toFlowable(BackpressureStrategy.LATEST)
+//                .flatMap {
+//                    app.db.tagDao().getAllLikeName(it.toString())
+//                }
+//                .map { it.map { it.name } }
+//                .subscribe {
+//                    tagAdapter.clear()
+//                    tagAdapter.addAll(it)
+//                }
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .filter { it.actionId() == EditorInfo.IME_ACTION_SEARCH }
@@ -141,10 +155,6 @@ class MainActivity : BaseActivity() {
                             tagAdapter.addAll(it)
                         }
                 )
-        doAsync {
-            app.db.tagDao().getAll()
-            tagAdapter.addAll()
-        }
     }
 
     private fun refreshData() {
