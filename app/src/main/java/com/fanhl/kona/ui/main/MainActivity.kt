@@ -94,7 +94,7 @@ class MainActivity : BaseActivity() {
                         refreshData()
 
                         doAsync {
-                            //                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
                         }
                     }
                     else -> {
