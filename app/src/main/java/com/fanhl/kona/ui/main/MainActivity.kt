@@ -3,7 +3,6 @@ package com.fanhl.kona.ui.main
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedListAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -18,8 +17,6 @@ import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
 import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
