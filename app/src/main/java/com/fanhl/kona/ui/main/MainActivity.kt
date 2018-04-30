@@ -22,8 +22,17 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.TimeUnit
+import android.widget.ArrayAdapter
+import io.reactivex.Flowable
+import io.reactivex.rxkotlin.subscribeBy
+
 
 class MainActivity : BaseActivity() {
+    /**tags历史记录列表*/
+    private val tagAdapter by lazy {
+        ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line)
+    }
+    /**cover列表*/
     private val adapter by lazy {
         MainAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
@@ -100,6 +109,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun assignViews() {
+        tv_tags.setAdapter(tagAdapter)
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .filter { it.actionId() == EditorInfo.IME_ACTION_SEARCH }
@@ -121,6 +131,24 @@ class MainActivity : BaseActivity() {
     private fun initData() {
         //fixme test
         tv_tags.setText("landscape")
+
+        Flowable
+                .unsafeCreate<List<Tag>> {
+                    it.onNext(app.db.tagDao().getAll())
+                }
+                .subscribeOn(Schedulers.io())
+                .map { it.map { it.name } }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = {
+                            tagAdapter.clear()
+                            tagAdapter.addAll(it)
+                        }
+                )
+        doAsync {
+            app.db.tagDao().getAll()
+            tagAdapter.addAll()
+        }
     }
 
     private fun refreshData() {
