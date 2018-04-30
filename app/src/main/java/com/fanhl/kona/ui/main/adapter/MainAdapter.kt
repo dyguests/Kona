@@ -1,6 +1,5 @@
 package com.fanhl.kona.ui.main.adapter
 
-import android.support.constraint.ConstraintLayout
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions

@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Tag
+import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
@@ -230,5 +231,6 @@ class MainActivity : BaseActivity() {
     class ViewModel : android.arch.lifecycle.ViewModel() {
         val tag by lazy { MutableLiveData<String>() }
         val page by lazy { MutableLiveData<Int>() }
+//        val posts by lazy { MutableLiveData<List<Post>>() }
     }
 }
