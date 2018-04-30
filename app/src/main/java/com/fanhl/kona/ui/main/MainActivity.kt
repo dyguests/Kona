@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.support.v7.util.DiffUtil
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Tag
@@ -19,6 +21,7 @@ import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
 import com.fanhl.kona.util.observe
 import com.jaeger.library.StatusBarUtil
+import com.jakewharton.rxbinding2.widget.RxAutoCompleteTextView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -112,7 +115,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun assignViews() {
-        tv_tags.setAdapter(tagAdapter)
 //        RxTextView.textChanges(tv_tags)
 //                .toFlowable(BackpressureStrategy.LATEST)
 //                .flatMap {
@@ -129,6 +131,19 @@ class MainActivity : BaseActivity() {
                 .subscribe {
                     actionSearch()
                 }
+        RxAutoCompleteTextView.itemClickEvents(tv_tags)
+                .subscribe { actionSearch() }
+//        tv_tags.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//            }
+//
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+////                parent?.adapter?.getItem(position) as String
+//                actionSearch()
+//            }
+//
+//        }
+        tv_tags.setAdapter(tagAdapter)
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
         swipe_refresh_layout.setColorSchemeResources(R.color.accent)
@@ -203,9 +218,9 @@ class MainActivity : BaseActivity() {
                 .subscribeBy(
                         onNext = {
                             if (loadMore) {
-                                viewModel.posts.value = it
-                            } else {
                                 viewModel.posts.value = viewModel.posts.value.orEmpty().toMutableList().apply { addAll(it) }
+                            } else {
+                                viewModel.posts.value = it
                             }
                             adapter.loadMoreComplete()
 
