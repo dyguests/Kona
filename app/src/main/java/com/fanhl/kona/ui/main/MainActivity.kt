@@ -190,9 +190,13 @@ class MainActivity : BaseActivity() {
         refreshData()
         SystemUtils.hideSoftInput(tv_tags)
 
-        doAsync {
-            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
-        }
+        Flowable
+                .fromCallable {
+                    app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
     }
 
     companion object {
