@@ -5,7 +5,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.util.AdapterListUpdateCallback
 import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -157,27 +159,45 @@ class MainActivity : BaseActivity() {
 //        }
 
         viewModel.tag.observe(this) { tv_tags.setText(it) }
-        viewModel.posts.observe(this) {
-            DiffUtil
-                    .calculateDiff(object : DiffUtil.Callback() {
-                        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = adapter.data[oldItemPosition].id == it?.get(newItemPosition)?.id ?: -1
-
-                        override fun getOldListSize() = adapter.data.size
-
-                        override fun getNewListSize() = it?.size ?: 0
-
-                        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                            val oldPost = adapter.data[oldItemPosition]
-                            val newPost = it?.get(newItemPosition)
-                            return newPost != null
-                                    && oldPost.previewUrl == newPost.previewUrl
-                                    && oldPost.width == newPost.width
-                                    && oldPost.height == newPost.height
-                        }
-                    })
-                    .dispatchUpdatesTo(adapter)
-            adapter.setNewData(it)
-        }
+// BRVAH not support DiffUtil.OTL
+//        viewModel.posts.observe(this) {
+//            DiffUtil
+//                    .calculateDiff(object : DiffUtil.Callback() {
+//                        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = adapter.data[oldItemPosition].id == it?.get(newItemPosition)?.id ?: -1
+//
+//                        override fun getOldListSize() = adapter.data.size
+//
+//                        override fun getNewListSize() = it?.size ?: 0
+//
+//                        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+//                            val oldPost = adapter.data[oldItemPosition]
+//                            val newPost = it?.get(newItemPosition)
+//                            return newPost != null
+//                                    && oldPost.previewUrl == newPost.previewUrl
+//                                    && oldPost.width == newPost.width
+//                                    && oldPost.height == newPost.height
+//                        }
+//                    })
+////                    .dispatchUpdatesTo(adapter)
+//                    .dispatchUpdatesTo(object : ListUpdateCallback {
+//                        override fun onChanged(position: Int, count: Int, payload: Any?) {
+//                        }
+//
+//                        override fun onMoved(fromPosition: Int, toPosition: Int) {
+//                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//                        }
+//
+//                        override fun onInserted(position: Int, count: Int) {
+//                            adapter.add
+//                        }
+//
+//                        override fun onRemoved(position: Int, count: Int) {
+//                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//                        }
+//                    })
+////            adapter.setNewData(it)
+//            adapter.replaceData()
+//        }
     }
 
     private fun initData() {
@@ -200,6 +220,8 @@ class MainActivity : BaseActivity() {
                             tagAdapter.addAll(it)
                         }
                 )
+
+        adapter.setNewData(viewModel.posts.value)
     }
 
     private fun refreshData() {
@@ -219,8 +241,10 @@ class MainActivity : BaseActivity() {
                 .subscribeBy(
                         onNext = {
                             if (loadMore) {
+                                adapter.addData(it)
                                 viewModel.posts.value = viewModel.posts.value.orEmpty().toMutableList().apply { addAll(it) }
                             } else {
+                                adapter.setNewData(it)
                                 viewModel.posts.value = it
                             }
                             adapter.loadMoreComplete()
