@@ -74,6 +74,7 @@ class MainActivity : BaseActivity() {
         return when (item.itemId) {
             R.id.action_clear -> {
                 tv_tags.setText("")
+                actionSearch()
                 true
             }
             R.id.action_search -> {
