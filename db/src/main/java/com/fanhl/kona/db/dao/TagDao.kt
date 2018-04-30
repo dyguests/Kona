@@ -13,4 +13,8 @@ interface TagDao {
 
     @Insert
     fun insertAll(vararg tags: Tag)
+
+//    fun insertAllAsync(vararg tags: Tag): Flowable<Unit> {
+//        return Flowable.fromCallable { insertAll(*tags) }
+//    }
 }

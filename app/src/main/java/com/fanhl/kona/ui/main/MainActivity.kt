@@ -34,7 +34,8 @@ class MainActivity : BaseActivity() {
     private val adapter by lazy {
         MainAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
-                val post = (adapter as MainAdapter).data[position]
+                val post = (adapter as MainAdapter).data.getOrNull(position)
+                        ?: return@setOnItemClickListener
                 GalleryActivity.launchForResult(this@MainActivity, REQUEST_CODE_MAIN, post)
             }
             setEnableLoadMore(true)
@@ -89,7 +90,7 @@ class MainActivity : BaseActivity() {
                         refreshData()
 
                         doAsync {
-                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+                            //                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
                         }
                     }
                     else -> {
