@@ -13,7 +13,5 @@ data class Tag(
 ) {
     constructor() : this(System.currentTimeMillis(), "", 0, 0, false)
 
-//    var createTime: Long? = null
-//
-//    var upateTime: Long? = null
+    var updateTime: Long? = System.currentTimeMillis()
 }

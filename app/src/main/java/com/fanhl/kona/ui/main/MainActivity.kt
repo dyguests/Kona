@@ -139,8 +139,14 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initData() {
-        //fixme test
-        tv_tags.setText("landscape")
+        app.db.tagDao().getLast()
+                .subscribeOn(Schedulers.io())
+                .map { it.name }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = { tv_tags.setText(it) },
+                        onError = { tv_tags.setText("landscape") }
+                )
 
         app.db.tagDao().getAll()
                 .subscribeOn(Schedulers.io())
