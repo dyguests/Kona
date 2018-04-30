@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
 import com.fanhl.kona.net.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.util.observe
 import com.fanhl.kona.util.rxClicks
 import com.fanhl.util.SpanUtils
 import com.fanhl.util.px
@@ -84,17 +85,20 @@ class GalleryActivity : BaseActivity() {
             }
             toast(R.string.wallpaper_will_been_set_soon)
         }
+
+        viewModel.post.observe(this) {
+            Glide.with(photo_view)
+                    .load(it?.fileUrl ?: return@observe)
+                    .thumbnail(.1f)
+                    .apply(RequestOptions().dontTransform())
+                    .into(photo_view)
+
+            recycler_view.adapter = adapter
+            adapter.setNewData(it.tags?.split(" "))
+        }
     }
 
     private fun initData() {
-        Glide.with(photo_view)
-                .load(viewModel.post.value?.fileUrl ?: return)
-                .thumbnail(.1f)
-                .apply(RequestOptions().dontTransform())
-                .into(photo_view)
-
-        recycler_view.adapter = adapter
-        adapter.setNewData(viewModel.post.value?.tags?.split(" "))
     }
 
     private fun toggle() {
