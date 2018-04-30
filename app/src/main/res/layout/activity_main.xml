@@ -39,6 +39,7 @@
                 android:paddingEnd="@dimen/unit"
                 android:paddingStart="@dimen/unit"
                 android:textColor="@android:color/white"
+                android:textColorHint="@color/text_color_hint"
                 android:theme="@style/ThemeOverlay.AppCompat.Light" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
