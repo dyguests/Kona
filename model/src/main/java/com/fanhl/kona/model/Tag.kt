@@ -12,4 +12,7 @@ data class Tag(
         var ambiguous: Boolean? = null
 ) {
     constructor() : this(System.currentTimeMillis(), "", 0, 0, false)
+
+    var createTime: Long? = null
+    var upateTime: Long? = null
 }

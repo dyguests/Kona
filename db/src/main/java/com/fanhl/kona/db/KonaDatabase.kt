@@ -7,7 +7,7 @@ import android.content.Context
 import com.fanhl.kona.db.dao.TagDao
 import com.fanhl.kona.model.Tag
 
-@Database(entities = [Tag::class], version = 3)
+@Database(entities = [Tag::class], version = 4)
 abstract class KonaDatabase : RoomDatabase() {
     abstract fun tagDao(): TagDao
 
