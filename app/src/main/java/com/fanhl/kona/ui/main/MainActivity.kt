@@ -174,8 +174,11 @@ class MainActivity : BaseActivity() {
                             }
                             adapter.loadMoreComplete()
 
-                            viewModel.page.value = viewModel.page.value!! + 1
-//                            adapter.loadMoreEnd()
+                            if (it.isNotEmpty()) {
+                                viewModel.page.value = viewModel.page.value!! + 1
+                            } else {
+                                adapter.loadMoreEnd()
+                            }
                         },
                         onError = {
                             swipe_refresh_layout.apply { post { isRefreshing = false } }
