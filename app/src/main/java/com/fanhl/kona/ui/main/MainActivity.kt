@@ -2,7 +2,6 @@ package com.fanhl.kona.ui.main
 
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -16,11 +15,10 @@ import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
+import com.fanhl.kona.util.observe
 import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -140,9 +138,7 @@ class MainActivity : BaseActivity() {
 //            removeDuration = 1000
 //        }
 
-        viewModel.tag.observe(this, Observer<String> {
-            tv_tags.setText(it)
-        })
+        viewModel.tag.observe(this) { tv_tags.setText(it) }
     }
 
     private fun initData() {
