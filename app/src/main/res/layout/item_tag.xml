@@ -15,5 +15,4 @@
     android:paddingTop="@dimen/unit_quarter"
     android:textColor="@android:color/white"
     android:textSize="12sp"
-    tools:showIn="@layout/activity_gallery"
-    tools:text="tag" />
+    tools:text="gtag" />
