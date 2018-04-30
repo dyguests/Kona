@@ -20,6 +20,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
@@ -80,7 +81,9 @@ class MainActivity : BaseActivity() {
                         tv_tags.setText(tag)
                         refreshData()
 
-//                        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+                        doAsync {
+                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+                        }
                     }
                     else -> {
                     }
@@ -161,7 +164,9 @@ class MainActivity : BaseActivity() {
         refreshData()
         SystemUtils.hideSoftInput(tv_tags)
 
-        app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+        doAsync {
+            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+        }
     }
 
     companion object {
