@@ -78,5 +78,5 @@ dependencies {
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt "android.arch.persistence.room:compiler:1.0.0"
     // Paging
-    implementation 'android.arch.paging:runtime:1.0.0-rc1'
+//    implementation 'android.arch.paging:runtime:1.0.0-rc1'
 }
