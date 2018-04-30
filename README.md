@@ -13,6 +13,9 @@
 # TODO
 
 - [ ] fitsSystemWindows for fab not work in GalleryActivity.
+- [ ] Main tv_tag filter.
+- [ ] Gallery Toolbar.
+- [ ] Gallery fab.
 
 # Api
 
