@@ -28,9 +28,8 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
     /**tags历史记录列表*/
-    private val tagAdapter by lazy {
-        ArrayAdapter<String>(this, R.layout.item_tag_dropdown)
-    }
+    private val tagAdapter by lazy { ArrayAdapter<String>(this, R.layout.item_tag_dropdown) }
+
     /**cover列表*/
     private val adapter by lazy {
         MainAdapter().apply {
@@ -108,7 +107,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun assignViews() {
-        tv_tags.setDropDownBackgroundResource(R.drawable.bg_tags_dropdown)
         tv_tags.setAdapter(tagAdapter)
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)

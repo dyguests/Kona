@@ -37,7 +37,9 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingEnd="@dimen/unit"
-                android:paddingStart="@dimen/unit" />
+                android:paddingStart="@dimen/unit"
+                android:textColor="@android:color/white"
+                android:theme="@style/ThemeOverlay.AppCompat.Light" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
