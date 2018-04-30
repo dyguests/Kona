@@ -8,29 +8,28 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Tag
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
-import com.fanhl.kona.util.subscribeBy
 import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.TimeUnit
-import android.widget.ArrayAdapter
-import io.reactivex.Flowable
-import io.reactivex.rxkotlin.subscribeBy
 
 
 class MainActivity : BaseActivity() {
     /**tags历史记录列表*/
     private val tagAdapter by lazy {
-        ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line)
+        ArrayAdapter<String>(this, R.layout.item_tag_dropdown)
     }
     /**cover列表*/
     private val adapter by lazy {
@@ -109,6 +108,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun assignViews() {
+        tv_tags.setDropDownBackgroundResource(R.drawable.bg_tags_dropdown)
         tv_tags.setAdapter(tagAdapter)
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)
