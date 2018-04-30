@@ -2,6 +2,7 @@ package com.fanhl.kona.ui.main
 
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -17,7 +18,9 @@ import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.SystemUtils
 import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -136,6 +139,10 @@ class MainActivity : BaseActivity() {
 //            moveDuration = 1000
 //            removeDuration = 1000
 //        }
+
+        viewModel.tag.observe(this, Observer<String> {
+            tv_tags.setText(it)
+        })
     }
 
     private fun initData() {
@@ -144,8 +151,8 @@ class MainActivity : BaseActivity() {
                 .map { it.name }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
-                        onNext = { tv_tags.setText(it) },
-                        onError = { tv_tags.setText("landscape") }
+                        onNext = { viewModel.tag.value = it },
+                        onError = { viewModel.tag.value = "landscape" }
                 )
 
         app.db.tagDao().getLast(1000)
@@ -225,6 +232,7 @@ class MainActivity : BaseActivity() {
     }
 
     class ViewModel : android.arch.lifecycle.ViewModel() {
+        val tag by lazy { MutableLiveData<String>() }
         val page by lazy { MutableLiveData<Int>() }
     }
 }
