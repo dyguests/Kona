@@ -130,10 +130,7 @@ class MainActivity : BaseActivity() {
         //fixme test
         tv_tags.setText("landscape")
 
-        Flowable
-                .unsafeCreate<List<Tag>> {
-                    it.onNext(app.db.tagDao().getAll())
-                }
+        app.db.tagDao().getAll()
                 .subscribeOn(Schedulers.io())
                 .map { it.map { it.name } }
                 .observeOn(AndroidSchedulers.mainThread())
