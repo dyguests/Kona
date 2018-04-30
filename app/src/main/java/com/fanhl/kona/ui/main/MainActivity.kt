@@ -148,7 +148,7 @@ class MainActivity : BaseActivity() {
                         onError = { tv_tags.setText("landscape") }
                 )
 
-        app.db.tagDao().getAll()
+        app.db.tagDao().getLast(1000)
                 .subscribeOn(Schedulers.io())
                 .map { it.map { it.name } }
                 .observeOn(AndroidSchedulers.mainThread())

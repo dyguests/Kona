@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 
 @Dao
 interface TagDao {
-    @Query("SELECT * FROM Tag ")
+    @Query("SELECT * FROM Tag ORDER BY updateTime")
     fun getAll(): Flowable<List<Tag>>
 
     @Query("SELECT * FROM Tag WHERE name LIKE :name")
@@ -18,6 +18,9 @@ interface TagDao {
 
     @Query("SELECT * FROM Tag ORDER BY updateTime DESC LIMIT 1")
     fun getLast(): Flowable<Tag>
+
+    @Query("SELECT * FROM Tag ORDER BY updateTime DESC LIMIT :limit")
+    fun getLast(limit: Int? = 1): Flowable<List<Tag>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg tags: Tag)
