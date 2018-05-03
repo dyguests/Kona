@@ -19,9 +19,9 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_clear_black_24px" />
+                            <entry key="outputName" value="ic_account_circle_white_24px" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/ChromeDownloads/ic_clear_black_24px.svg" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/ChromeDownloads/ic_account_circle_white_24px.svg" />
                           </map>
                         </option>
                       </PersistentState>
