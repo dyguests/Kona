@@ -30,6 +30,10 @@
             android:name=".ui.gallery.GalleryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.Fullscreen" />
+        <activity
+            android:name=".ui.account.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
