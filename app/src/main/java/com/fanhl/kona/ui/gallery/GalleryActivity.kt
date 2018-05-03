@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.support.constraint.ConstraintSet
 import android.support.transition.TransitionManager
@@ -84,6 +85,24 @@ class GalleryActivity : BaseActivity() {
                         .setBitmap(bitmap)
             }
             toast(R.string.wallpaper_will_been_set_soon)
+        }
+
+        fab_wallpaper.setOnLongClickListener {
+            val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap
+                    ?: return@setOnLongClickListener true
+            doAsync {
+                WallpaperManager
+                        .getInstance(this@GalleryActivity)
+                        .setBitmap(bitmap)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    WallpaperManager
+                            .getInstance(this@GalleryActivity)
+                            .setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK)
+                }
+            }
+            toast(R.string.wallpaper_will_been_set_soon)
+
+            true
         }
 
         viewModel.post.observe(this) {

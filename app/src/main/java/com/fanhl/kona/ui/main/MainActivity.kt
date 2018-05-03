@@ -61,6 +61,8 @@ class MainActivity : BaseActivity() {
         StatusBarUtil.setTransparent(this)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_account_circle_white_24px)
         prepareData()
         assignViews()
         initData()
@@ -72,20 +74,21 @@ class MainActivity : BaseActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_clear -> {
-                tv_tags.setText("")
-                actionSearch()
-                true
-            }
-            R.id.action_search -> {
-                actionSearch()
-                true
-            }
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            true
         }
+        R.id.action_clear -> {
+            tv_tags.setText("")
+            actionSearch()
+            true
+        }
+        R.id.action_search -> {
+            actionSearch()
+            true
+        }
+        R.id.action_settings -> true
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
