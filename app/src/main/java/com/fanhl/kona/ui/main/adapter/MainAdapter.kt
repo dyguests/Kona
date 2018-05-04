@@ -25,8 +25,8 @@ class MainAdapter : BaseQuickAdapter<Post, MainAdapter.ViewHolder>(R.layout.item
 //                dimensionRatio = "w,${data.width ?: return}:${data.height ?: return}"
 //            }
             Glide.with(itemView.img_cover)
-//                    .load(data.previewUrl)
-                    .load(data.previewUrl + "test")
+                    .load(data.previewUrl)
+//                    .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
 //            itemView.tv_tags.text = SpanUtils()
