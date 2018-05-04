@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.fanhl.kona.R
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_mine.*
 
-class LoginActivity : AppCompatActivity() {
+class MineActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_mine)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         fun launch(context: Context, bundle: Bundle? = null) {
-            context.startActivity(Intent(context, LoginActivity::class.java), bundle)
+            context.startActivity(Intent(context, MineActivity::class.java), bundle)
         }
     }
 }

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.account.LoginActivity"
-    tools:showIn="@layout/activity_login">
+    tools:context=".ui.account.MineActivity"
+    tools:showIn="@layout/activity_mine">
 
     <TextView
         android:layout_width="wrap_content"

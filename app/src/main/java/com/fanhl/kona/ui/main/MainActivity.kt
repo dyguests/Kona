@@ -5,19 +5,14 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.util.AdapterListUpdateCallback
-import android.support.v7.util.DiffUtil
-import android.support.v7.util.ListUpdateCallback
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Tag
 import com.fanhl.kona.net.model.Post
-import com.fanhl.kona.ui.account.LoginActivity
+import com.fanhl.kona.ui.account.MineActivity
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
@@ -77,7 +72,7 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            LoginActivity.launch(this)
+            MineActivity.launch(this)
             true
         }
         R.id.action_clear -> {
