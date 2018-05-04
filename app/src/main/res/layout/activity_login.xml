@@ -30,6 +30,10 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            <include
+                android:id="@+id/login_form"
+                layout="@layout/partial_login_form"
+                app:layout_collapseMode="parallax" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
