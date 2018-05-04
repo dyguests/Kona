@@ -72,7 +72,8 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            MineActivity.launch(this)
+//            没时间做这个了
+//            MineActivity.launch(this)
             true
         }
         R.id.action_clear -> {
