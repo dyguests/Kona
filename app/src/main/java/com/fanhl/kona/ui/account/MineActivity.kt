@@ -63,20 +63,20 @@ class MineActivity : BaseActivity() {
         private val adapter by lazy {
             HistoryAdapter().apply {
                 setOnItemClickListener { adapter, view, position ->
-                    val post = (adapter as MainAdapter).data.getOrNull(position)
+                    val post = (adapter as HistoryAdapter).data.getOrNull(position)
                             ?: return@setOnItemClickListener
                     onItemClick(post)
                 }
                 setOnItemLongClickListener { adapter, view, position ->
-                    val post = (adapter as MainAdapter).data.getOrNull(position)
+                    val post = (adapter as HistoryAdapter).data.getOrNull(position)
                             ?: return@setOnItemLongClickListener true
 
-                    Snackbar.make(root.recycler_view, R.string.confirm_delete_post, Snackbar.LENGTH_SHORT).setAction(R.string.delete, {
+                    Snackbar.make(root.recycler_view, R.string.confirm_delete_post, Snackbar.LENGTH_SHORT).setAction(R.string.delete) {
                         doAsync {
                             root.app.db.postDao().delete(post)
                         }
                         adapter.remove(position)
-                    }).show()
+                    }.show()
                     return@setOnItemLongClickListener true
                 }
             }
