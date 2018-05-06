@@ -3,6 +3,7 @@ package com.fanhl.kona.ui.account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.SnapHelper
 import android.view.View
@@ -18,6 +19,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_mine.*
 import kotlinx.android.synthetic.main.partial_mine_item.view.*
+import org.jetbrains.anko.doAsync
 
 class MineActivity : BaseActivity() {
     private val historyViewHolder by lazy {
@@ -64,6 +66,18 @@ class MineActivity : BaseActivity() {
                     val post = (adapter as MainAdapter).data.getOrNull(position)
                             ?: return@setOnItemClickListener
                     onItemClick(post)
+                }
+                setOnItemLongClickListener { adapter, view, position ->
+                    val post = (adapter as MainAdapter).data.getOrNull(position)
+                            ?: return@setOnItemLongClickListener true
+
+                    Snackbar.make(root.recycler_view, R.string.confirm_delete_post, Snackbar.LENGTH_SHORT).setAction(R.string.delete, {
+                        doAsync {
+                            root.app.db.postDao().delete(post)
+                        }
+                        adapter.remove(position)
+                    }).show()
+                    return@setOnItemLongClickListener true
                 }
             }
         }

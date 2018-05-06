@@ -104,4 +104,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="history">History</string>
+    <string name="confirm_delete_post">Confirm to delete the post.</string>
+    <string name="delete">Delete</string>
 </resources>

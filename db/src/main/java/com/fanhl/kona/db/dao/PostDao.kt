@@ -6,6 +6,8 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import com.fanhl.kona.model.Post
 import io.reactivex.Flowable
+import android.arch.persistence.room.Delete
+
 
 @Dao
 interface PostDao {
@@ -19,7 +21,10 @@ interface PostDao {
     fun getLast(limit: Int? = 1): Flowable<List<Post>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg tags: Post)
+    fun insertAll(vararg posts: Post)
+
+    @Delete
+    fun delete(post: Post)
 
     companion object {
 
