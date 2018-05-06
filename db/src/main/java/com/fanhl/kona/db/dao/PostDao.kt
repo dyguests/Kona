@@ -12,10 +12,16 @@ interface PostDao {
     @Query("SELECT * FROM Post ORDER BY updateTime")
     fun getAll(): Flowable<List<Post>>
 
+    @Query("SELECT * FROM Post ORDER BY updateTime DESC LIMIT 1")
+    fun getLast(): Flowable<Post>
+
+    @Query("SELECT * FROM Post ORDER BY updateTime DESC LIMIT :limit")
+    fun getLast(limit: Int? = 1): Flowable<List<Post>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg tags: Post)
 
     companion object {
-    
+
     }
 }

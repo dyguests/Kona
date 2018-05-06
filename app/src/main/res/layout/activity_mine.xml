@@ -52,7 +52,9 @@
             android:orientation="vertical"
             android:padding="@dimen/unit_half">
 
-            <include layout="@layout/partial_mine_item" />
+            <include
+                android:id="@+id/history"
+                layout="@layout/partial_mine_item" />
 
             <TextView
                 android:layout_width="wrap_content"
