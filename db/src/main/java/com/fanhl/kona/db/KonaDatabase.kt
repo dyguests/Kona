@@ -6,12 +6,15 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
+import com.fanhl.kona.db.dao.PostDao
 import com.fanhl.kona.db.dao.TagDao
+import com.fanhl.kona.model.Post
 import com.fanhl.kona.model.Tag
 
-@Database(entities = [Tag::class], version = 5)
+@Database(entities = [Post::class, Tag::class], version = 6)
 abstract class KonaDatabase : RoomDatabase() {
     abstract fun tagDao(): TagDao
+    abstract fun postDao(): PostDao
 
     companion object {
         private const val DATABASE_NAME = "kona"

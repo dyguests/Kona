@@ -16,13 +16,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
-import com.fanhl.kona.net.model.Post
+import com.fanhl.kona.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.util.observe
 import com.fanhl.kona.util.rxClicks
 import com.fanhl.util.SpanUtils
 import com.fanhl.util.px
-import com.google.android.flexbox.FlexboxLayoutManager
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.item_tag.view.*
@@ -118,6 +117,10 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun initData() {
+        doAsync {
+            app.db.postDao().insertAll(viewModel.post.value ?: return@doAsync)
+        }
+
     }
 
     private fun toggle() {

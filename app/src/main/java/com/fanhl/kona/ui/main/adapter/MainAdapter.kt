@@ -6,7 +6,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
-import com.fanhl.kona.net.model.Post
+import com.fanhl.kona.model.Post
 import com.fanhl.util.SpanUtils
 import com.fanhl.util.px
 import kotlinx.android.synthetic.main.item_post.view.*

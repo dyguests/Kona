@@ -39,4 +39,5 @@ dependencies {
     // Room (use 1.1.0-beta3 for latest beta)
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt "android.arch.persistence.room:compiler:1.0.0"
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 }

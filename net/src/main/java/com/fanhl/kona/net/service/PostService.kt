@@ -1,6 +1,6 @@
 package com.fanhl.kona.net.service
 
-import com.fanhl.kona.net.model.Post
+import com.fanhl.kona.model.Post
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query

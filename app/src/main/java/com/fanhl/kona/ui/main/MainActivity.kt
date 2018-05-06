@@ -11,8 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Tag
-import com.fanhl.kona.net.model.Post
-import com.fanhl.kona.ui.account.MineActivity
+import com.fanhl.kona.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
