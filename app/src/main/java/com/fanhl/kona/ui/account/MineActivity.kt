@@ -4,15 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearSnapHelper
-import android.support.v7.widget.SnapHelper
 import android.view.View
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Post
 import com.fanhl.kona.ui.account.adapter.HistoryAdapter
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
-import com.fanhl.kona.ui.main.adapter.MainAdapter
 import com.fanhl.kona.util.app
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
