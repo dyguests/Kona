@@ -20,4 +20,6 @@
     <string name="history">History</string>
     <string name="confirm_delete_post">Confirm to delete the post.</string>
     <string name="delete">Delete</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
 </resources>
