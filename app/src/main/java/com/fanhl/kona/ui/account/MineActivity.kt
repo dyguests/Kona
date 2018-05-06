@@ -3,6 +3,8 @@ package com.fanhl.kona.ui.account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.LinearSnapHelper
+import android.support.v7.widget.SnapHelper
 import android.view.View
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Post
@@ -36,7 +38,7 @@ class MineActivity : BaseActivity() {
     }
 
     private fun assignViews() {
-        historyViewHolder
+        historyViewHolder.assignViews()
     }
 
     private fun initData() {
@@ -64,6 +66,10 @@ class MineActivity : BaseActivity() {
                     onItemClick(post)
                 }
             }
+        }
+
+        fun assignViews() {
+//            LinearSnapHelper().attachToRecyclerView(root.recycler_view)
         }
 
         fun initData() {
