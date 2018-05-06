@@ -32,7 +32,7 @@
             android:theme="@style/AppTheme.Fullscreen" />
         <activity
             android:name=".ui.account.MineActivity"
-            android:label="@string/title_activity_login"
+            android:label="@string/title_activity_mine"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -13,7 +13,7 @@
     <string name="tags">tags</string>
     <string name="image_size">%1$d×%2$d</string>
     <string name="wallpaper_will_been_set_soon">Wallpaper will be set soon</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_mine">Mine</string>
     <string name="large_text">
         This is a android Wallpaper app for Konachan.
     </string>
