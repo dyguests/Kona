@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Tag
 import com.fanhl.kona.model.Post
+import com.fanhl.kona.ui.account.MineActivity
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.ui.main.adapter.MainAdapter
@@ -71,8 +72,7 @@ class MainActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-//            没时间做这个了
-//            MineActivity.launch(this)
+            MineActivity.launch(this)
             true
         }
         R.id.action_clear -> {
