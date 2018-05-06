@@ -3,6 +3,7 @@ package com.fanhl.kona.ui.account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.Snackbar
 import android.view.View
 import com.fanhl.kona.R
@@ -17,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_mine.*
 import kotlinx.android.synthetic.main.partial_mine_item.view.*
 import org.jetbrains.anko.doAsync
+
 
 class MineActivity : BaseActivity() {
     private val historyViewHolder by lazy {
@@ -37,6 +39,24 @@ class MineActivity : BaseActivity() {
     }
 
     private fun assignViews() {
+        app_bar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            internal var isShow = true
+            internal var scrollRange = -1
+
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.totalScrollRange
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    toolbar_layout.title = getString(R.string.title_activity_mine)
+                    isShow = true
+                } else if (isShow) {
+                    toolbar_layout.title = " "//carefull there should a space between double quote otherwise it wont work
+                    isShow = false
+                }
+            }
+        })
+
         historyViewHolder.assignViews()
     }
 

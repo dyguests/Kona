@@ -33,7 +33,8 @@
         <activity
             android:name=".ui.account.MineActivity"
             android:label="@string/title_activity_mine"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>
