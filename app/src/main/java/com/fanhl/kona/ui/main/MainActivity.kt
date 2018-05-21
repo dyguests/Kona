@@ -41,7 +41,8 @@ class MainActivity : BaseActivity() {
             setOnItemClickListener { adapter, view, position ->
                 val post = (adapter as MainAdapter).data.getOrNull(position)
                         ?: return@setOnItemClickListener
-                GalleryActivity.launchForResult(this@MainActivity, REQUEST_CODE_MAIN, post)
+//                GalleryActivity.launchForResult(this@MainActivity, REQUEST_CODE_MAIN, post)
+                GalleryActivity.launch(this@MainActivity, post)
             }
             setEnableLoadMore(true)
             setOnLoadMoreListener({
@@ -88,29 +89,29 @@ class MainActivity : BaseActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            REQUEST_CODE_MAIN -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        val tag = data?.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
-                        tv_tags.setText(tag)
-                        refreshData()
-
-                        doAsync {
-                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
-                        }
-                    }
-                    else -> {
-                    }
-                }
-            }
-            else -> {
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        when (requestCode) {
+//            REQUEST_CODE_MAIN -> {
+//                when (resultCode) {
+//                    Activity.RESULT_OK -> {
+//                        val tag = data?.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
+//                        tv_tags.setText(tag)
+//                        refreshData()
+//
+//                        doAsync {
+//                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
+//                        }
+//                    }
+//                    else -> {
+//                    }
+//                }
+//            }
+//            else -> {
+//            }
+//        }
+//    }
 
     private fun prepareData() {
         viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
@@ -159,56 +160,22 @@ class MainActivity : BaseActivity() {
 //        }
 
         viewModel.tag.observe(this) { tv_tags.setText(it) }
-// BRVAH not support DiffUtil.OTL
-//        viewModel.posts.observe(this) {
-//            DiffUtil
-//                    .calculateDiff(object : DiffUtil.Callback() {
-//                        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = adapter.data[oldItemPosition].id == it?.get(newItemPosition)?.id ?: -1
-//
-//                        override fun getOldListSize() = adapter.data.size
-//
-//                        override fun getNewListSize() = it?.size ?: 0
-//
-//                        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-//                            val oldPost = adapter.data[oldItemPosition]
-//                            val newPost = it?.get(newItemPosition)
-//                            return newPost != null
-//                                    && oldPost.previewUrl == newPost.previewUrl
-//                                    && oldPost.width == newPost.width
-//                                    && oldPost.height == newPost.height
-//                        }
-//                    })
-////                    .dispatchUpdatesTo(adapter)
-//                    .dispatchUpdatesTo(object : ListUpdateCallback {
-//                        override fun onChanged(position: Int, count: Int, payload: Any?) {
-//                        }
-//
-//                        override fun onMoved(fromPosition: Int, toPosition: Int) {
-//                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//                        }
-//
-//                        override fun onInserted(position: Int, count: Int) {
-//                            adapter.add
-//                        }
-//
-//                        override fun onRemoved(position: Int, count: Int) {
-//                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//                        }
-//                    })
-////            adapter.setNewData(it)
-//            adapter.replaceData()
-//        }
     }
 
     private fun initData() {
-        app.db.tagDao().getLast()
-                .subscribeOn(Schedulers.io())
-                .map { it.name }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                        onNext = { viewModel.tag.value = it },
-                        onError = { viewModel.tag.value = "landscape" }
-                )
+        val tagFromIntent = intent.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
+        if (tagFromIntent == null) {
+            app.db.tagDao().getLast()
+                    .subscribeOn(Schedulers.io())
+                    .map { it.name }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeBy(
+                            onNext = { viewModel.tag.value = it },
+                            onError = { viewModel.tag.value = "landscape" }
+                    )
+        } else {
+            viewModel.tag.value = tagFromIntent
+        }
 
         app.db.tagDao().getLast(1000)
                 .subscribeOn(Schedulers.io())
@@ -287,7 +254,13 @@ class MainActivity : BaseActivity() {
         /** TAG */
         private val TAG = MainActivity::class.java.simpleName!!
 
-        private const val REQUEST_CODE_MAIN = 20001
+        fun launch(activity: Activity, tag: String) {
+            activity.startActivity(
+                    Intent(activity, MainActivity::class.java).apply {
+                        putExtra(GalleryActivity.RESULT_DATA_TAG, tag)
+                    }
+            )
+        }
     }
 
     class ViewModel : android.arch.lifecycle.ViewModel() {

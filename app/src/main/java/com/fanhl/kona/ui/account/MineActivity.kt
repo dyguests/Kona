@@ -23,12 +23,12 @@ import org.jetbrains.anko.doAsync
 class MineActivity : BaseActivity() {
     private val favoriteViewHolder by lazy {
         FavoriteViewHolder(favorite) {
-            GalleryActivity.launchForResult(this@MineActivity, REQUEST_CODE_MINE, it)
+            GalleryActivity.launch(this@MineActivity, it)
         }
     }
     private val historyViewHolder by lazy {
         HistoryViewHolder(history) {
-            GalleryActivity.launchForResult(this@MineActivity, REQUEST_CODE_MINE, it)
+            GalleryActivity.launch(this@MineActivity, it)
         }
     }
 
@@ -77,8 +77,6 @@ class MineActivity : BaseActivity() {
     }
 
     companion object {
-        private const val REQUEST_CODE_MINE = 20002
-
         fun launch(context: Context, bundle: Bundle? = null) {
             context.startActivity(Intent(context, MineActivity::class.java), bundle)
         }

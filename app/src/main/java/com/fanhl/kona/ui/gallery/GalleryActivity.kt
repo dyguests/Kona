@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
+import com.fanhl.kona.ui.main.MainActivity
 import com.fanhl.kona.util.observe
 import com.fanhl.kona.util.rxClicks
 import com.fanhl.util.SpanUtils
@@ -46,9 +47,10 @@ class GalleryActivity : BaseActivity() {
             }
         }.apply {
             onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
-                setResult(Activity.RESULT_OK, intent.apply {
-                    putExtra(RESULT_DATA_TAG, adapter.data[position] as String)
-                })
+                //                setResult(Activity.RESULT_OK, intent.apply {
+                //                    putExtra(RESULT_DATA_TAG, adapter.data[position] as String)
+                //                })
+                MainActivity.launch(this@GalleryActivity, adapter.data[position] as String)
                 finish()
             }
         }
@@ -172,12 +174,11 @@ class GalleryActivity : BaseActivity() {
         private const val uiShow = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
-        fun launchForResult(activity: Activity, requestCode: Int, post: Post) {
-            activity.startActivityForResult(
+        fun launch(activity: Activity, post: Post) {
+            activity.startActivity(
                     Intent(activity, GalleryActivity::class.java).apply {
                         putExtra(EXTRA_POST, post)
-                    },
-                    requestCode
+                    }
             )
         }
     }
