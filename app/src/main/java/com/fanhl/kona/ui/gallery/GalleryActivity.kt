@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.constraint.ConstraintSet
 import android.support.transition.TransitionManager
+import android.support.v4.content.ContextCompat
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -68,7 +69,12 @@ class GalleryActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
         viewModel.post.value = intent.getParcelableExtra(EXTRA_POST)
 
-
+        doAsync {
+            val post = app.db.postDao().findByName(viewModel.post.value?.id ?: return@doAsync)
+            viewModel.post.value = viewModel.post.value?.apply {
+                favorite = post.favorite
+            }
+        }
     }
 
     private fun assignViews() {
@@ -76,6 +82,15 @@ class GalleryActivity : BaseActivity() {
                 constraint_layout.rxClicks,
                 photo_view.rxClicks
         ).subscribe { toggle() }
+
+        fab_favorite.setOnClickListener {
+            viewModel.post.value = viewModel.post.value?.apply {
+                favorite = favorite != true
+            }
+            doAsync {
+                app.db.postDao().insertAll(viewModel.post.value ?: return@doAsync)
+            }
+        }
 
         fab_wallpaper.setOnClickListener {
             val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap
@@ -116,6 +131,8 @@ class GalleryActivity : BaseActivity() {
 
             recycler_view.adapter = adapter
             adapter.setNewData(it?.tags?.split(" "))
+
+            fab_favorite.setImageDrawable(ContextCompat.getDrawable(this@GalleryActivity, if (it?.favorite == true) R.drawable.ic_baseline_favorite_24px else R.drawable.ic_baseline_favorite_border_24px))
         }
     }
 

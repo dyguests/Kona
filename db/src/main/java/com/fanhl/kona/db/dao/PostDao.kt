@@ -20,8 +20,8 @@ interface PostDao {
     @Query("SELECT * FROM Post ORDER BY updateTime DESC LIMIT :limit")
     fun getLast(limit: Int? = 1): Flowable<List<Post>>
 
-    @Query("SELECT * FROM Post WHERE id = :first LIMIT 1")
-    fun findByName(first: String): Post
+    @Query("SELECT * FROM Post WHERE id = :id LIMIT 1")
+    fun findByName(id: Long): Post
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg posts: Post)
