@@ -66,6 +66,14 @@ class MainActivity : BaseActivity() {
         refreshData()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val tagFromIntent = intent?.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
+        if (tagFromIntent != null) {
+            viewModel.tag.value = tagFromIntent
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -89,46 +97,12 @@ class MainActivity : BaseActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        when (requestCode) {
-//            REQUEST_CODE_MAIN -> {
-//                when (resultCode) {
-//                    Activity.RESULT_OK -> {
-//                        val tag = data?.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
-//                        tv_tags.setText(tag)
-//                        refreshData()
-//
-//                        doAsync {
-//                            app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
-//                        }
-//                    }
-//                    else -> {
-//                    }
-//                }
-//            }
-//            else -> {
-//            }
-//        }
-//    }
-
     private fun prepareData() {
         viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
         viewModel.page.value = 1
     }
 
     private fun assignViews() {
-//        RxTextView.textChanges(tv_tags)
-//                .toFlowable(BackpressureStrategy.LATEST)
-//                .flatMap {
-//                    app.db.tagDao().getAllLikeName(it.toString())
-//                }
-//                .map { it.map { it.name } }
-//                .subscribe {
-//                    tagAdapter.clear()
-//                    tagAdapter.addAll(it)
-//                }
         RxTextView.editorActionEvents(tv_tags)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .filter { it.actionId() == EditorInfo.IME_ACTION_SEARCH }
@@ -137,16 +111,7 @@ class MainActivity : BaseActivity() {
                 }
         RxAutoCompleteTextView.itemClickEvents(tv_tags)
                 .subscribe { actionSearch() }
-//        tv_tags.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-////                parent?.adapter?.getItem(position) as String
-//                actionSearch()
-//            }
-//
-//        }
+
         tv_tags.setAdapter(tagAdapter)
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
@@ -159,23 +124,20 @@ class MainActivity : BaseActivity() {
 //            removeDuration = 1000
 //        }
 
-        viewModel.tag.observe(this) { tv_tags.setText(it) }
+        viewModel.tag.observe(this) {
+            tv_tags.setText(it)
+        }
     }
 
     private fun initData() {
-        val tagFromIntent = intent.getStringExtra(GalleryActivity.RESULT_DATA_TAG)
-        if (tagFromIntent == null) {
-            app.db.tagDao().getLast()
-                    .subscribeOn(Schedulers.io())
-                    .map { it.name }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(
-                            onNext = { viewModel.tag.value = it },
-                            onError = { viewModel.tag.value = "landscape" }
-                    )
-        } else {
-            viewModel.tag.value = tagFromIntent
-        }
+        app.db.tagDao().getLast()
+                .subscribeOn(Schedulers.io())
+                .map { it.name }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = { viewModel.tag.value = it },
+                        onError = { viewModel.tag.value = "landscape" }
+                )
 
         app.db.tagDao().getLast(1000)
                 .subscribeOn(Schedulers.io())
