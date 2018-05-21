@@ -113,7 +113,7 @@ class MineActivity : BaseActivity() {
 
         fun initData() {
             root.apply {
-                tv_title.setText(R.string.history)
+                tv_title.setText(R.string.favorite)
                 recycler_view.adapter = adapter
             }
         }
