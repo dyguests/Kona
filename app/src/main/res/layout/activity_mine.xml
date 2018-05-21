@@ -52,6 +52,10 @@
             android:padding="@dimen/unit_half">
 
             <include
+                android:id="@+id/favorite"
+                layout="@layout/partial_mine_item" />
+
+            <include
                 android:id="@+id/history"
                 layout="@layout/partial_mine_item" />
 

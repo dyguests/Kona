@@ -8,7 +8,7 @@ import android.support.design.widget.Snackbar
 import android.view.View
 import com.fanhl.kona.R
 import com.fanhl.kona.model.Post
-import com.fanhl.kona.ui.account.adapter.HistoryAdapter
+import com.fanhl.kona.ui.account.adapter.PostHorizontalAdapter
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.gallery.GalleryActivity
 import com.fanhl.kona.util.app
@@ -21,6 +21,11 @@ import org.jetbrains.anko.doAsync
 
 
 class MineActivity : BaseActivity() {
+    private val favoriteViewHolder by lazy {
+        FavoriteViewHolder(favorite) {
+            GalleryActivity.launchForResult(this@MineActivity, REQUEST_CODE_MINE, it)
+        }
+    }
     private val historyViewHolder by lazy {
         HistoryViewHolder(history) {
             GalleryActivity.launchForResult(this@MineActivity, REQUEST_CODE_MINE, it)
@@ -57,14 +62,17 @@ class MineActivity : BaseActivity() {
             }
         })
 
+        favoriteViewHolder.assignViews()
         historyViewHolder.assignViews()
     }
 
     private fun initData() {
+        favoriteViewHolder.initData()
         historyViewHolder.initData()
     }
 
     private fun refreshData() {
+        favoriteViewHolder.refreshData()
         historyViewHolder.refreshData()
     }
 
@@ -76,16 +84,63 @@ class MineActivity : BaseActivity() {
         }
     }
 
-    class HistoryViewHolder(private val root: View, onItemClick: (Post) -> Unit) {
+    class FavoriteViewHolder(private val root: View, onItemClick: (Post) -> Unit) {
         private val adapter by lazy {
-            HistoryAdapter().apply {
+            PostHorizontalAdapter().apply {
                 setOnItemClickListener { adapter, view, position ->
-                    val post = (adapter as HistoryAdapter).data.getOrNull(position)
+                    val post = (adapter as PostHorizontalAdapter).data.getOrNull(position)
                             ?: return@setOnItemClickListener
                     onItemClick(post)
                 }
                 setOnItemLongClickListener { adapter, view, position ->
-                    val post = (adapter as HistoryAdapter).data.getOrNull(position)
+                    val post = (adapter as PostHorizontalAdapter).data.getOrNull(position)
+                            ?: return@setOnItemLongClickListener true
+
+                    Snackbar.make(root.recycler_view, R.string.confirm_delete_post, Snackbar.LENGTH_SHORT).setAction(R.string.delete) {
+                        doAsync {
+                            root.app.db.postDao().delete(post)
+                        }
+                        adapter.remove(position)
+                    }.show()
+                    return@setOnItemLongClickListener true
+                }
+            }
+        }
+
+        fun assignViews() {
+//            LinearSnapHelper().attachToRecyclerView(root.recycler_view)
+        }
+
+        fun initData() {
+            root.apply {
+                tv_title.setText(R.string.history)
+                recycler_view.adapter = adapter
+            }
+        }
+
+        fun refreshData() {
+            root.app.db.postDao().getLastFavorites(1000)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeBy(
+                            onNext = {
+                                adapter.setNewData(it)
+                            },
+                            onError = {}
+                    )
+        }
+    }
+
+    class HistoryViewHolder(private val root: View, onItemClick: (Post) -> Unit) {
+        private val adapter by lazy {
+            PostHorizontalAdapter().apply {
+                setOnItemClickListener { adapter, view, position ->
+                    val post = (adapter as PostHorizontalAdapter).data.getOrNull(position)
+                            ?: return@setOnItemClickListener
+                    onItemClick(post)
+                }
+                setOnItemLongClickListener { adapter, view, position ->
+                    val post = (adapter as PostHorizontalAdapter).data.getOrNull(position)
                             ?: return@setOnItemLongClickListener true
 
                     Snackbar.make(root.recycler_view, R.string.confirm_delete_post, Snackbar.LENGTH_SHORT).setAction(R.string.delete) {

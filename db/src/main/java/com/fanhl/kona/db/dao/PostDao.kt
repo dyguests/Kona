@@ -23,6 +23,9 @@ interface PostDao {
     @Query("SELECT * FROM Post WHERE id = :id LIMIT 1")
     fun findByName(id: Long): Post
 
+    @Query("SELECT * FROM Post where favorite = 1 ORDER BY updateTime DESC LIMIT :limit")
+    fun getLastFavorites(limit: Int? = 1): Flowable<List<Post>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplaceAll(vararg posts: Post)
 

@@ -11,7 +11,7 @@ import com.fanhl.util.SpanUtils
 import com.fanhl.util.px
 import kotlinx.android.synthetic.main.item_post_horizontal.view.*
 
-class HistoryAdapter : BaseQuickAdapter<Post, HistoryAdapter.ViewHolder>(R.layout.item_post_horizontal) {
+class PostHorizontalAdapter : BaseQuickAdapter<Post, PostHorizontalAdapter.ViewHolder>(R.layout.item_post_horizontal) {
     override fun convert(helper: ViewHolder?, item: Post?) {
         helper?.bind(item ?: return)
     }
@@ -25,8 +25,8 @@ class HistoryAdapter : BaseQuickAdapter<Post, HistoryAdapter.ViewHolder>(R.layou
 //                dimensionRatio = "w,${data.width ?: return}:${data.height ?: return}"
 //            }
             Glide.with(itemView.img_cover)
-                    .load(data.previewUrl)
-//                    .load(data.previewUrl + "test")
+//                    .load(data.previewUrl)
+                    .load(data.previewUrl + "test")
                     .apply(RequestOptions().dontTransform().placeholder(R.drawable.ic_launcher_foreground))
                     .into(itemView.img_cover)
 //            itemView.tv_tags.text = SpanUtils()

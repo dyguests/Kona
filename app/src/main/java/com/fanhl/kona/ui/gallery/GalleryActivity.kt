@@ -36,7 +36,7 @@ class GalleryActivity : BaseActivity() {
     private val fullscreenConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery) } }
     private val normalConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery_alt) } }
 
-    private val adapter by lazy {
+    private val tagAdapter by lazy {
         object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_tag) {
             override fun convert(helper: BaseViewHolder?, item: String?) {
                 helper?.itemView?.tv_tag?.text = SpanUtils()
@@ -132,8 +132,8 @@ class GalleryActivity : BaseActivity() {
                     .apply(RequestOptions().dontTransform())
                     .into(photo_view)
 
-            recycler_view.adapter = adapter
-            adapter.setNewData(it?.tags?.split(" "))
+            recycler_view.adapter = tagAdapter
+            tagAdapter.setNewData(it?.tags?.split(" "))
 
             fab_favorite.setImageDrawable(ContextCompat.getDrawable(this@GalleryActivity, if (it?.favorite == true) R.drawable.ic_baseline_favorite_24px else R.drawable.ic_baseline_favorite_border_24px))
         }

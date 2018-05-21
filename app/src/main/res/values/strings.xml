@@ -17,6 +17,7 @@
     <string name="large_text">
         This is a android Wallpaper app for Konachan.
     </string>
+    <string name="favorite">Favorite</string>
     <string name="history">History</string>
     <string name="confirm_delete_post">Confirm to delete the post.</string>
     <string name="delete">Delete</string>
