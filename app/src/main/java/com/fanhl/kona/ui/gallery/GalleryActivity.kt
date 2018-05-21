@@ -67,6 +67,8 @@ class GalleryActivity : BaseActivity() {
     private fun prepareData() {
         viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
         viewModel.post.value = intent.getParcelableExtra(EXTRA_POST)
+
+
     }
 
     private fun assignViews() {
@@ -106,13 +108,14 @@ class GalleryActivity : BaseActivity() {
 
         viewModel.post.observe(this) {
             Glide.with(photo_view)
-                    .load(it?.fileUrl ?: return@observe)
+//                    .load(it?.fileUrl ?: return@observe)
+                    .load("http://img0.imgtn.bdimg.com/it/u=4236860535,1526027473&fm=27&gp=0.jpg")
                     .thumbnail(.1f)
                     .apply(RequestOptions().dontTransform())
                     .into(photo_view)
 
             recycler_view.adapter = adapter
-            adapter.setNewData(it.tags?.split(" "))
+            adapter.setNewData(it?.tags?.split(" "))
         }
     }
 

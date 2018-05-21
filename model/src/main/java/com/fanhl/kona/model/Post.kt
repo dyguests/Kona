@@ -84,5 +84,6 @@ data class Post(
             null
     )
 
+    var like: Boolean? = null
     var updateTime: Long? = System.currentTimeMillis()
 }
