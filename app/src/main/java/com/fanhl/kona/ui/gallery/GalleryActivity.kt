@@ -29,6 +29,9 @@ import kotlinx.android.synthetic.main.item_tag.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 
+/**
+ * 图库页面
+ */
 class GalleryActivity : BaseActivity() {
     private val fullscreenConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery) } }
     private val normalConstraintSet by lazy { ConstraintSet().apply { clone(this@GalleryActivity, R.layout.activity_gallery_alt) } }
@@ -88,7 +91,7 @@ class GalleryActivity : BaseActivity() {
                 favorite = favorite != true
             }
             doAsync {
-                app.db.postDao().insertAll(viewModel.post.value ?: return@doAsync)
+                app.db.postDao().insertOrReplaceAll(viewModel.post.value ?: return@doAsync)
             }
         }
 
@@ -138,7 +141,7 @@ class GalleryActivity : BaseActivity() {
 
     private fun initData() {
         doAsync {
-            app.db.postDao().insertAll(viewModel.post.value ?: return@doAsync)
+            app.db.postDao().insertOrIgnoreAll(viewModel.post.value ?: return@doAsync)
         }
 
     }

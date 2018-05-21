@@ -24,7 +24,10 @@ interface PostDao {
     fun findByName(id: Long): Post
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg posts: Post)
+    fun insertOrReplaceAll(vararg posts: Post)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnoreAll(vararg posts: Post)
 
     @Delete
     fun delete(post: Post)
