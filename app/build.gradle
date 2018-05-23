@@ -10,8 +10,8 @@ android {
         applicationId "com.fanhl.kona"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 5
-        versionName "1.5"
+        versionCode 6
+        versionName "1.5.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         setProperty("archivesBaseName", "Kona-$versionName")
