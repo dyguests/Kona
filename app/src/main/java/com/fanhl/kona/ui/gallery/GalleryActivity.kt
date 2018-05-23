@@ -128,8 +128,8 @@ class GalleryActivity : BaseActivity() {
 
         viewModel.post.observe(this) {
             Glide.with(photo_view)
-//                    .load(it?.fileUrl ?: return@observe)
-                    .load("http://img0.imgtn.bdimg.com/it/u=4236860535,1526027473&fm=27&gp=0.jpg")
+                    .load(it?.fileUrl ?: return@observe)
+//                    .load("http://img0.imgtn.bdimg.com/it/u=4236860535,1526027473&fm=27&gp=0.jpg")
                     .thumbnail(.1f)
                     .apply(RequestOptions().dontTransform())
                     .into(photo_view)
