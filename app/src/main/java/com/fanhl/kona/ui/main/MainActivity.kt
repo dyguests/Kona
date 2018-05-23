@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import com.fanhl.kona.R
@@ -24,6 +25,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import java.util.concurrent.TimeUnit
@@ -63,7 +65,7 @@ class MainActivity : BaseActivity() {
         prepareData()
         assignViews()
         initData()
-        refreshData()
+//        refreshData()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -110,22 +112,25 @@ class MainActivity : BaseActivity() {
                     actionSearch()
                 }
         RxAutoCompleteTextView.itemClickEvents(tv_tags)
-                .subscribe { actionSearch() }
+                .subscribe {
+                    actionSearch()
+                }
 
         tv_tags.setAdapter(tagAdapter)
 
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
         swipe_refresh_layout.setColorSchemeResources(R.color.accent)
         recycler_view.adapter = adapter
-//        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f)).apply {
-//            addDuration = 1000
-//            changeDuration = 1000
-//            moveDuration = 1000
-//            removeDuration = 1000
-//        }
+        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f)).apply {
+            addDuration = 1000
+            changeDuration = 1000
+            moveDuration = 1000
+            removeDuration = 1000
+        }
 
         viewModel.tag.observe(this) {
             tv_tags.setText(it)
+            actionSearch()
         }
     }
 
@@ -133,6 +138,7 @@ class MainActivity : BaseActivity() {
         app.db.tagDao().getLast()
                 .subscribeOn(Schedulers.io())
                 .map { it.name }
+                .distinct()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = { viewModel.tag.value = it },
@@ -198,14 +204,6 @@ class MainActivity : BaseActivity() {
         tv_tags.clearFocus()
         refreshData()
         SystemUtils.hideSoftInput(tv_tags)
-
-//        Flowable
-//                .fromCallable {
-//                    app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
-//                }
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe()
 
         doAsync {
             app.db.tagDao().insertAll(Tag(name = tv_tags.text.toString()))
