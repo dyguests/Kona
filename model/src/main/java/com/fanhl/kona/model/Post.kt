@@ -46,7 +46,10 @@ data class Post(
         @SerializedName("frames_pending_string") var framesPendingString: String? = null,
 //        @SerializedName("frames_pending") var framesPending: List<Any?>?,
 //        @SerializedName("frames") var frames: List<Any?>?,
-        @SerializedName("frames_string") var framesString: String? = null
+        @SerializedName("frames_string") var framesString: String? = null,
+
+        var favorite: Boolean? = null,
+        var updateTime: Long? = System.currentTimeMillis()
 ) : Parcelable {
     constructor() : this(
             System.currentTimeMillis(),
@@ -83,7 +86,4 @@ data class Post(
             null,
             null
     )
-
-    var favorite: Boolean? = null
-    var updateTime: Long? = System.currentTimeMillis()
 }

@@ -11,7 +11,7 @@ import com.fanhl.kona.db.dao.TagDao
 import com.fanhl.kona.model.Post
 import com.fanhl.kona.model.Tag
 
-@Database(entities = [Post::class, Tag::class], version = 6)
+@Database(entities = [Post::class, Tag::class], version = 7)
 abstract class KonaDatabase : RoomDatabase() {
     abstract fun tagDao(): TagDao
     abstract fun postDao(): PostDao
