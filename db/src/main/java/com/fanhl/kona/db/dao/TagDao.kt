@@ -19,6 +19,9 @@ interface TagDao {
     @Query("SELECT * FROM Tag ORDER BY updateTime DESC LIMIT 1")
     fun getLast(): Flowable<Tag>
 
+    @Query("SELECT * FROM Tag ORDER BY updateTime DESC LIMIT 1")
+    fun getLastSync(): Tag?
+
     @Query("SELECT * FROM Tag ORDER BY updateTime DESC LIMIT :limit")
     fun getLast(limit: Int? = 1): Flowable<List<Tag>>
 

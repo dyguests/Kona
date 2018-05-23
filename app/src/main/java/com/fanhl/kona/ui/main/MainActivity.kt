@@ -22,7 +22,10 @@ import com.fanhl.kona.util.observe
 import com.jaeger.library.StatusBarUtil
 import com.jakewharton.rxbinding2.widget.RxAutoCompleteTextView
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Flowables
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
@@ -129,9 +132,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initData() {
-        app.db.tagDao().getLast()
+        Observable
+                .create<String> {
+                    it.onNext(app.db.tagDao().getLastSync()?.name ?: Tag.TAG_SAMPLE)
+                    it.onComplete()
+                }
                 .subscribeOn(Schedulers.io())
-                .map { it.name }
                 .distinct()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
