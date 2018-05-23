@@ -25,6 +25,9 @@ interface TagDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg tags: Tag)
 
+    @Query("SELECT count(*) FROM TAG")
+    fun getCount(): Flowable<Long>
+
 //    fun insertAllAsync(vararg tags: Tag): Flowable<Unit> {
 //        return Flowable.fromCallable { insertAll(*tags) }
 //    }

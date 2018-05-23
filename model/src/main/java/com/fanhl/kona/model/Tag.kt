@@ -9,9 +9,12 @@ data class Tag(
         @PrimaryKey var name: String,
         var count: Int? = null,
         var type: Int? = null,
-        var ambiguous: Boolean? = null
+        var ambiguous: Boolean? = null,
+        var updateTime: Long? = System.currentTimeMillis()
 ) {
     constructor() : this(System.currentTimeMillis(), "", 0, 0, false)
 
-    var updateTime: Long? = System.currentTimeMillis()
+    companion object {
+        const val TAG_SAMPLE = "landscape"
+    }
 }

@@ -136,7 +136,7 @@ class MainActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = { viewModel.tag.value = it },
-                        onError = { viewModel.tag.value = "landscape" }
+                        onError = { viewModel.tag.value = Tag.TAG_SAMPLE }
                 )
 
         app.db.tagDao().getLast(1000)
