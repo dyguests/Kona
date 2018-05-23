@@ -121,12 +121,6 @@ class MainActivity : BaseActivity() {
         swipe_refresh_layout.setOnRefreshListener { refreshData() }
         swipe_refresh_layout.setColorSchemeResources(R.color.accent)
         recycler_view.adapter = adapter
-        recycler_view.itemAnimator = SlideInUpAnimator(OvershootInterpolator(1f)).apply {
-            addDuration = 1000
-            changeDuration = 1000
-            moveDuration = 1000
-            removeDuration = 1000
-        }
 
         viewModel.tag.observe(this) {
             tv_tags.setText(it)
