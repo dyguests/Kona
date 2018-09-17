@@ -25,6 +25,7 @@ import com.fanhl.kona.R
 import com.fanhl.kona.model.Post
 import com.fanhl.kona.ui.common.BaseActivity
 import com.fanhl.kona.ui.main.MainActivity
+import com.fanhl.kona.util.FileUtils
 import com.fanhl.kona.util.observe
 import com.fanhl.kona.util.rxClicks
 import com.fanhl.util.SpanUtils
@@ -143,7 +144,7 @@ class GalleryActivity : BaseActivity() {
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            resource
+                            FileUtils.save(it.id,(resource as? BitmapDrawable)?.bitmap ?: return false)
                             return false
                         }
                     })
