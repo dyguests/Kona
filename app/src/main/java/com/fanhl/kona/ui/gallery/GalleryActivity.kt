@@ -136,7 +136,7 @@ class GalleryActivity : BaseActivity() {
             Glide.with(photo_view)
                     .load(it?.fileUrl ?: return@observe)
 //                    .load("http://img0.imgtn.bdimg.com/it/u=4236860535,1526027473&fm=27&gp=0.jpg")
-                    .thumbnail(.1f)
+                    .thumbnail(Glide.with(this).load(it.previewUrl))
                     .apply(RequestOptions().dontTransform())
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
@@ -144,7 +144,8 @@ class GalleryActivity : BaseActivity() {
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            FileUtils.save(it.id,(resource as? BitmapDrawable)?.bitmap ?: return false)
+                            FileUtils.save(it.id, (resource as? BitmapDrawable)?.bitmap
+                                    ?: return false)
                             return false
                         }
                     })

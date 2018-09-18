@@ -3,6 +3,7 @@ package com.fanhl.kona.util
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
 import android.os.Environment
+import android.util.Log
 import com.fanhl.kona.BuildConfig
 import org.jetbrains.anko.doAsync
 import java.io.File
@@ -10,21 +11,21 @@ import java.io.FileOutputStream
 
 
 object FileUtils {
+    private val TAG = FileUtils::class.java.simpleName
     private const val PHOTOS = "photos"
 
-    fun getSavePath(): File {
-        val path: File
-        if (hasSDCard()) { // SD card
-            path = File(getSDCardPath() + "/${BuildConfig.APPLICATION_ID}/")
-            path.mkdirs()
-        } else {
-            path = Environment.getDataDirectory()
+    private fun getSavePath() = if (hasSDCard()) { // SD card
+        File(getSDCardPath() + "/${BuildConfig.APPLICATION_ID}/").apply {
+            if (!exists()) {
+                mkdirs()
+            }
         }
-        return path
+    } else {
+        Environment.getDataDirectory()
     }
 
-    fun getPhotoSavePath(): File {
-        return File(getSavePath(), PHOTOS).apply {
+    private fun getPhotoSavePath() = File(getSavePath(), PHOTOS).apply {
+        if (!exists()) {
             mkdirs()
         }
     }
@@ -45,6 +46,7 @@ object FileUtils {
             out = FileOutputStream(filename)
             bmp.compress(CompressFormat.PNG, 100, out)
         } catch (e: Exception) {
+            Log.e(TAG, "saveToFile: ", e)
         } finally {
             try {
                 out?.flush()
