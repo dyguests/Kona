@@ -84,4 +84,5 @@ dependencies {
 //    implementation "android.arch.lifecycle:reactivestreams:1.1.1"
 //    // RxJava support for Paging
 //    implementation "android.arch.paging:rxjava2:1.0.0-alpha1"
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }

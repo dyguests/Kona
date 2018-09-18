@@ -1,10 +1,12 @@
 package com.fanhl.kona.ui.gallery
 
+import android.Manifest
 import android.app.Activity
 import android.app.WallpaperManager
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -30,6 +32,7 @@ import com.fanhl.kona.util.observe
 import com.fanhl.kona.util.rxClicks
 import com.fanhl.util.SpanUtils
 import com.fanhl.util.px
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.item_tag.view.*
@@ -65,6 +68,8 @@ class GalleryActivity : BaseActivity() {
     private lateinit var viewModel: ViewModel
 
     private var fullscreen = true
+
+    val rxPermission by lazy { RxPermissions(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,31 +109,13 @@ class GalleryActivity : BaseActivity() {
         }
 
         fab_wallpaper.setOnClickListener {
-            val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap
-                    ?: return@setOnClickListener
-            doAsync {
-                WallpaperManager
-                        .getInstance(this@GalleryActivity)
-                        .setBitmap(bitmap)
-            }
-            toast(R.string.wallpaper_will_been_set_soon)
+            val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap ?: return@setOnClickListener
+            putWallpaper(bitmap)
         }
 
         fab_wallpaper.setOnLongClickListener {
-            val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap
-                    ?: return@setOnLongClickListener true
-            doAsync {
-                WallpaperManager
-                        .getInstance(this@GalleryActivity)
-                        .setBitmap(bitmap)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    WallpaperManager
-                            .getInstance(this@GalleryActivity)
-                            .setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK)
-                }
-            }
-            toast(R.string.wallpaper_will_been_set_soon)
-
+            val bitmap = (photo_view.drawable as? BitmapDrawable)?.bitmap ?: return@setOnLongClickListener true
+            putWallpaper(bitmap, true)
             true
         }
 
@@ -144,17 +131,15 @@ class GalleryActivity : BaseActivity() {
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            FileUtils.savePhoto(it.id, (resource as? BitmapDrawable)?.bitmap
-                                    ?: return false)
                             return false
                         }
                     })
                     .into(photo_view)
 
             recycler_view.adapter = tagAdapter
-            tagAdapter.setNewData(it?.tags?.split(" "))
+            tagAdapter.setNewData(it.tags?.split(" "))
 
-            fab_favorite.setImageDrawable(ContextCompat.getDrawable(this@GalleryActivity, if (it?.favorite == true) R.drawable.ic_baseline_favorite_24px else R.drawable.ic_baseline_favorite_border_24px))
+            fab_favorite.setImageDrawable(ContextCompat.getDrawable(this@GalleryActivity, if (it.favorite == true) R.drawable.ic_baseline_favorite_24px else R.drawable.ic_baseline_favorite_border_24px))
         }
     }
 
@@ -163,6 +148,35 @@ class GalleryActivity : BaseActivity() {
             app.db.postDao().insertOrIgnoreAll(viewModel.post.value ?: return@doAsync)
         }
 
+    }
+
+    /**
+     * 设置为wallpaper
+     *
+     * @param lock 是否包含锁屏
+     */
+    private fun putWallpaper(bitmap: Bitmap, lock: Boolean = false) {
+        rxPermission.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe { granted ->
+                    if (granted) {
+                        FileUtils.savePhoto(viewModel.post.value?.id ?: return@subscribe, bitmap)
+                    } else {
+                        toast(R.string.msg_permission_defined)
+                    }
+                }
+
+        doAsync {
+            WallpaperManager
+                    .getInstance(this@GalleryActivity)
+                    .setBitmap(bitmap)
+
+            if (lock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                WallpaperManager
+                        .getInstance(this@GalleryActivity)
+                        .setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK)
+            }
+        }
+        toast(R.string.wallpaper_will_been_set_soon)
     }
 
     private fun toggle() {

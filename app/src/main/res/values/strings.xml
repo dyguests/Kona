@@ -23,4 +23,5 @@
     <string name="delete">Delete</string>
     <string name="name">Name</string>
     <string name="password">Password</string>
+    <string name="msg_permission_defined">Permission defined</string>
 </resources>
