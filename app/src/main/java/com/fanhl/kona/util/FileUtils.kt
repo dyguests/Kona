@@ -40,13 +40,13 @@ object FileUtils {
         return path.absolutePath
     }
 
-    fun saveToFile(filename: String, bmp: Bitmap) {
+    private fun saveBitmap(filename: String, bmp: Bitmap) {
         var out: FileOutputStream? = null
         try {
             out = FileOutputStream(filename)
             bmp.compress(CompressFormat.PNG, 100, out)
         } catch (e: Exception) {
-            Log.e(TAG, "saveToFile: ", e)
+            Log.e(TAG, "saveBitmap: ", e)
         } finally {
             try {
                 out?.flush()
@@ -56,13 +56,13 @@ object FileUtils {
         }
     }
 
-    fun save(photoId: Long, bitmap: Bitmap) {
+    fun savePhoto(photoId: Long, bitmap: Bitmap) {
         val file = File(getPhotoSavePath(), "$photoId.jpg")
         if (file.exists()) {
             return
         }
         doAsync {
-            saveToFile(file.absolutePath, bitmap)
+            saveBitmap(file.absolutePath, bitmap)
         }
     }
 }

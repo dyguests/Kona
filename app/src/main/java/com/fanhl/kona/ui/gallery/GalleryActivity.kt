@@ -144,7 +144,7 @@ class GalleryActivity : BaseActivity() {
                         }
 
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            FileUtils.save(it.id, (resource as? BitmapDrawable)?.bitmap
+                            FileUtils.savePhoto(it.id, (resource as? BitmapDrawable)?.bitmap
                                     ?: return false)
                             return false
                         }
