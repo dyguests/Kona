@@ -44,7 +44,7 @@ object FileUtils {
         var out: FileOutputStream? = null
         try {
             out = FileOutputStream(filename)
-            bmp.compress(CompressFormat.PNG, 100, out)
+            bmp.compress(CompressFormat.JPEG, 100, out)
         } catch (e: Exception) {
             Log.e(TAG, "saveBitmap: ", e)
         } finally {
