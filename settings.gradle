@@ -1,1 +1,1 @@
-include ':app', ':net', ':util', ':db', ':model'
+include ':app'
