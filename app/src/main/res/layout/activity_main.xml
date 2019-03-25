@@ -13,7 +13,10 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="@dimen/unit_half"
+            android:paddingBottom="@dimen/unit_half"
             android:clipToPadding="false"
+            tools:listitem="@layout/item_main_cover"
             android:orientation="vertical"
             app:layoutManager="@string/linear_layout_manager"/>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

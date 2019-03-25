@@ -34,4 +34,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
     implementation "androidx.recyclerview:recyclerview:${versions.androidx}"
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:${versions.rvAdapterHelper}"
+    implementation 'androidx.cardview:cardview:1.0.0'
 }
