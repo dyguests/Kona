@@ -1,4 +1,17 @@
 package com.fanhl.kona.di
 
-interface AppComponent {
-}
+import com.fanhl.kona.App
+import com.fanhl.kona.base.di.BaseModule
+import com.fanhl.kona.net.di.NetModule
+import dagger.Component
+import dagger.android.AndroidInjector
+import javax.inject.Singleton
+
+@Singleton
+@Component(
+    modules = [
+        BaseModule::class,
+        NetModule::class
+    ]
+)
+interface AppComponent : AndroidInjector<App>

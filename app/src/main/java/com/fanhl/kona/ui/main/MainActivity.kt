@@ -1,13 +1,13 @@
 package com.fanhl.kona.ui.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.fanhl.kona.R
+import com.fanhl.kona.base.ui.BaseActivity
 import com.fanhl.kona.domain.data.Cover
 import com.fanhl.kona.ui.main.adapter.MainAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val adapter by lazy { MainAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
