@@ -1,7 +1,8 @@
-package com.fanhl.kona
+package com.fanhl.kona.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.fanhl.kona.R
 
 class MainActivity : AppCompatActivity() {
 
