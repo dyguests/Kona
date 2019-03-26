@@ -9,7 +9,7 @@ fun ImageView.setImage(
     url: String,
     @DrawableRes placeHolder: Int? = null
 ) {
-    Glide.with(this)
+    Glide.with(this.context)
         .load(url)
         .apply {
             if (placeHolder != null) {

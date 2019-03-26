@@ -11,7 +11,7 @@ class MainAdapter : BaseQuickAdapter<Cover, BaseViewHolder>(R.layout.item_main_c
     override fun convert(helper: BaseViewHolder?, item: Cover?) {
         helper?.itemView?.apply {
             img_cover.setImage(
-                "https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=179474400,2264175345&fm=58&bpow=1440&bpoh=900",
+                "https://github.com/bumptech/glide/raw/master/static/glide_logo.png",
                 R.drawable.ic_launcher_foreground
             )
         }
