@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply from: '../gradle/dependencies/dagger.gradle'
+apply from: '../gradle/dependencies/glide.gradle'
 apply from: '../gradle/dependencies/retrofit.gradle'
 
 android {
