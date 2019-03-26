@@ -11,7 +11,7 @@ class MainAdapter : BaseQuickAdapter<Cover, BaseViewHolder>(R.layout.item_main_c
     override fun convert(helper: BaseViewHolder?, item: Cover?) {
         helper?.itemView?.apply {
             img_cover.setImage(
-                "http://n.sinaimg.cn/sinacn13/240/w640h400/20180522/d164-hawmaua7321776.jpg",
+                "https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2402068196,3438361974&fm=85&app=52&f=PNG?w=121&h=75&s=119E3C72AED07FE14D75D4C4030070B3",
                 R.drawable.ic_launcher_foreground
             )
         }
