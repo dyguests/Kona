@@ -1,7 +1,7 @@
 package com.fanhl.kona.di
 
-import com.fanhl.kona.App
 import com.fanhl.kona.base.di.BaseModule
+import com.fanhl.kona.base.ui.InjectedActivity
 import com.fanhl.kona.net.di.NetModule
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -14,4 +14,4 @@ import javax.inject.Singleton
         NetModule::class
     ]
 )
-interface AppComponent : AndroidInjector<App>
+interface AppComponent : AndroidInjector<InjectedActivity>
