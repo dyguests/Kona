@@ -2,7 +2,7 @@ package com.fanhl.kona.ui.main.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.fanhl.base.extension.setImage
+import com.fanhl.kona.util.setImage
 import com.fanhl.kona.R
 import com.fanhl.kona.domain.data.Cover
 import kotlinx.android.synthetic.main.item_main_cover.view.*
