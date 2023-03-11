@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lin.kona.databinding.FragmentPostBinding
-import com.lin.kona.model.Post
 import com.lin.kona.ui.post.adapter.PostAdapter
 
 class PostFragment : Fragment() {
@@ -20,19 +19,14 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.swiper.setOnRefreshListener { }
+
+        viewModel.posts.observe(viewLifecycleOwner) {
+            postAdapter.addAll(it)
+        }
+
+        binding.swiper.setOnRefreshListener { viewModel.refreshData() }
         binding.postRecycler.adapter = postAdapter
 
-        refreshData()
-    }
-
-    private fun refreshData() {
-        loadData()
-    }
-
-    private fun loadData() {
-        for (i in 1..10) {
-            postAdapter.add(Post())
-        }
+        viewModel.refreshData()
     }
 }

@@ -2,8 +2,13 @@ package com.lin.kona.net.servcie
 
 import com.lin.kona.model.Post
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface PostService {
-    @GET("/quotes")
-    suspend fun getQuotes(): List<Post>
+    @GET("/post.json")
+    suspend fun getPosts(
+        @Query("tags") tags: String? = null,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null
+    ): List<Post>
 }

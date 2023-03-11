@@ -50,6 +50,7 @@ dependencies {
     implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta02"
     implementation 'com.github.bumptech.glide:glide:4.15.0'
     implementation project(path: ':model')
+    implementation project(path: ':net')
     kapt 'com.github.bumptech.glide:compiler:4.15.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
