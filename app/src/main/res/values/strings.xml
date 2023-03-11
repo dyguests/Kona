@@ -1,27 +1,13 @@
 <resources>
     <string name="app_name">Kona</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="action_search">Search</string>
-    <string name="action_clear">Clear</string>
 
-    <string name="linear_layout_manager">android.support.v7.widget.LinearLayoutManager</string>
-    <string name="grid_layout_manager">android.support.v7.widget.GridLayoutManager</string>
-    <string name="staggered_grid_layout_manager">android.support.v7.widget.StaggeredGridLayoutManager</string>
-
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="tags">tags</string>
-    <string name="image_size">%1$d×%2$d</string>
-    <string name="wallpaper_will_been_set_soon">Wallpaper will be set soon</string>
-    <string name="title_activity_mine">Mine</string>
-    <string name="large_text">
-        This is a android Wallpaper app for Konachan.
-    </string>
-    <string name="favorite">Favorite</string>
-    <string name="history">History</string>
-    <string name="confirm_delete_post">Confirm to delete the post.</string>
-    <string name="delete">Delete</string>
-    <string name="name">Name</string>
-    <string name="password">Password</string>
-    <string name="msg_permission_defined">Permission defined</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 </resources>

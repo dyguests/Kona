@@ -1,88 +1,51 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
-    defaultConfig {
-        compileSdkVersion 27
-        buildToolsVersion '27.0.3'
-        applicationId "com.fanhl.kona"
-        minSdkVersion 21
-        targetSdkVersion 27
-        versionCode 7
-        versionName "1.5.3"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    namespace 'com.lin.kona'
+    compileSdk 33
 
-        setProperty("archivesBaseName", "Kona-$versionName")
+    defaultConfig {
+        applicationId "com.lin.kona"
+        minSdk 31
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    signingConfigs {
-        config_release {
-            storeFile file("./../keystore")
-            storePassword "123456"
-            keyAlias "kona"
-            keyPassword "123456"
-        }
-    }
+
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config_release
             minifyEnabled false
-            zipAlignEnabled true
-        }
-        debug {
-            signingConfig signingConfigs.config_release
-            minifyEnabled false
-            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    androidExtensions {
-        experimental = true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
-    implementation project(':net')
-    implementation project(':model')
-    implementation project(':db')
-    implementation project(':util')
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
-    // implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.1'
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
-    implementation 'org.jetbrains.anko:anko:0.10.4'
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
-    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
-    // ViewModel and LiveData
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
-    implementation 'com.jaeger.statusbarutil:library:1.5.1'
-    implementation 'com.google.android:flexbox:0.3.2'
 
-    // Room (use 1.1.0-beta3 for latest beta)
-    implementation 'android.arch.persistence.room:runtime:1.0.0'
-    kapt "android.arch.persistence.room:compiler:1.0.0"
-    // Paging
-    implementation 'android.arch.paging:runtime:1.0.0-rc1'
-//    // ReactiveStreams support for LiveData
-//    implementation "android.arch.lifecycle:reactivestreams:1.1.1"
-//    // RxJava support for Paging
-//    implementation "android.arch.paging:rxjava2:1.0.0-alpha1"
-    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
