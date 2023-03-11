@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_post">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.lin.kona.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_post"
+        android:name="com.lin.kona.ui.post.PostFragment"
+        android:label="@string/menu_post"
+        tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/nav_gallery"

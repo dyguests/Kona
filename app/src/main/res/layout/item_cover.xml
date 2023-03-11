@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/item_margin"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/card_elevation"
-    tools:showIn="@layout/fragment_home">
+    tools:showIn="@layout/fragment_post">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
