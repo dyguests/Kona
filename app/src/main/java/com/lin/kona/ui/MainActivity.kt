@@ -1,4 +1,4 @@
-package com.lin.kona
+package com.lin.kona.ui
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.lin.kona.R
 import com.lin.kona.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#235"
     tools:context=".ui.post.PostFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,12 +13,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+            android:id="@+id/post_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/recycler_padding"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="@integer/gallery_recycler_span_count"
-            tools:listitem="@layout/item_cover" />
+            tools:listitem="@layout/item_post" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

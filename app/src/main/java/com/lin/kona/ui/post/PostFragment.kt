@@ -7,29 +7,32 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lin.kona.databinding.FragmentPostBinding
+import com.lin.kona.model.Post
+import com.lin.kona.ui.post.adapter.PostAdapter
 
 class PostFragment : Fragment() {
     private val viewModel by lazy { ViewModelProvider(this)[PostViewModel::class.java] }
+    private val binding by lazy { FragmentPostBinding.inflate(layoutInflater) }
 
-    private var _binding: FragmentPostBinding? = null
-    private val binding get() = _binding!!
+    private val postAdapter by lazy { PostAdapter() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = binding.root
 
-        _binding = FragmentPostBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.swiper.setOnRefreshListener { }
+        binding.postRecycler.adapter = postAdapter
 
-        // val textView: TextView = binding.textHome
-        // homeViewModel.text.observe(viewLifecycleOwner) {
-        //     textView.text = it
-        // }
-        return root
+        refreshData()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun refreshData() {
+        loadData()
+    }
+
+    private fun loadData() {
+        for (i in 1..10) {
+            postAdapter.add(Post())
+        }
     }
 }
