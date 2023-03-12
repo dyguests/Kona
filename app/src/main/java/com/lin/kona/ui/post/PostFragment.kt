@@ -16,7 +16,14 @@ class PostFragment : Fragment() {
     private val viewModel by lazy { ViewModelProvider(this)[PostViewModel::class.java] }
     private val binding by lazy { FragmentPostBinding.inflate(layoutInflater) }
 
-    private val postAdapter by lazy { PostAdapter() }
+    private val postAdapter by lazy {
+        PostAdapter().apply {
+            setOnItemClickListener { adapter, view, position ->
+                val post = adapter.getItem(position) ?: return@setOnItemClickListener
+
+            }
+        }
+    }
     private val postAdapterHelper by lazy {
         QuickAdapterHelper.Builder(postAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
