@@ -1,5 +1,6 @@
 package com.lin.kona.ui.post
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,11 +16,20 @@ class PostViewModel : ViewModel() {
         loadData()
     }
 
-    private fun loadData(loadMore: Boolean = false) {
+    fun loadData(loadMore: Boolean = false) {
         viewModelScope.launch {
+            Log.d(TAG, "loadData: loadMore:$loadMore")
             KonaClient.postService.getPosts("landscape").whenSuccess {
-                posts.postValue(body())
+                if (loadMore) {
+                    posts.postValue(posts.value!! + body()!!)
+                } else {
+                    posts.postValue(body())
+                }
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "PostViewModel"
     }
 }
