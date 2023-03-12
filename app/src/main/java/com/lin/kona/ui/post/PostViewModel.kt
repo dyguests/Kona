@@ -17,7 +17,7 @@ class PostViewModel : ViewModel() {
 
     private fun loadData(loadMore: Boolean = false) {
         viewModelScope.launch {
-            KonaClient.postService.getPosts().whenSuccess {
+            KonaClient.postService.getPosts("landscape").whenSuccess {
                 posts.postValue(body())
             }
         }
