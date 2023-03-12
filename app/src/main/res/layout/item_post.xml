@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/item_margin"
+    app:cardBackgroundColor="?attr/colorPrimaryContainer"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:cardElevation="@dimen/card_elevation"
+    tools:ignore="PrivateResource"
     tools:showIn="@layout/fragment_post">
 
     <androidx.constraintlayout.widget.ConstraintLayout
