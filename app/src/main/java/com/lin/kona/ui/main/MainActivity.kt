@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.lin.kona.R
 import com.lin.kona.databinding.ActivityMainBinding
+import kotlinx.coroutines.MainScope
 
 class MainActivity : AppCompatActivity() {
 

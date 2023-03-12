@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.lin.kona.model.Post
 import com.lin.kona.net.KonaClient
 import com.lin.kona.net.util.whenSuccess
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newCoroutineContext
 
 class PostViewModel : ViewModel() {
     val isRefreshing = MutableLiveData<Boolean>()

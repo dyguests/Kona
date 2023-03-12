@@ -45,4 +45,11 @@ class CoroutineTest {
             println(23333)
         }
     }
+
+    @Test
+    fun test2() = runBlocking {
+        delay(1)
+    }
+
+    val a by lazy{1}
 }

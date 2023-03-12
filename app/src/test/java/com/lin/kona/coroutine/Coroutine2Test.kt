@@ -1,9 +1,6 @@
 package com.lin.kona.coroutine
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.junit.Test
 
 /**
@@ -59,6 +56,17 @@ class Coroutine2Test {
                 println(444)
             }
             println(555)
+        }
+    }
+
+    @Test
+    fun testFun3() {
+        runBlocking {
+            println(111)
+            withContext(Dispatchers.IO) {
+                println(222)
+            }
+            println(333)
         }
     }
 }
