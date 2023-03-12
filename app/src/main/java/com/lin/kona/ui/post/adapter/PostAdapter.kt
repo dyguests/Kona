@@ -17,7 +17,7 @@ class PostAdapter : BaseQuickAdapter<Post, PostAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Post) {
-            binding.cover.loadBy(R.drawable.img_cover) {
+            binding.cover.loadBy(item.previewUrl) {
                 apply(RequestOptions().dontTransform().placeholder(R.drawable.img_cover))
             }
         }

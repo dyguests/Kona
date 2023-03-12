@@ -16,5 +16,6 @@ object KonaClient {
             .build()
     }
 
+    @Suppress("HasPlatformType")
     val postService by lazy { retrofit.create(PostService::class.java) }
 }

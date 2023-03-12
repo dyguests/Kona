@@ -1,11 +1,11 @@
 package com.lin.kona.ui.post
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lin.kona.model.Post
 import com.lin.kona.net.KonaClient
+import com.lin.kona.net.util.whenSuccess
 import kotlinx.coroutines.launch
 
 class PostViewModel : ViewModel() {
@@ -17,12 +17,9 @@ class PostViewModel : ViewModel() {
 
     private fun loadData(loadMore: Boolean = false) {
         viewModelScope.launch {
-            posts.postValue(KonaClient.postService.getPosts())
+            KonaClient.postService.getPosts().whenSuccess {
+                posts.postValue(body())
+            }
         }
     }
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is post Fragment"
-    }
-    val text: LiveData<String> = _text
 }
