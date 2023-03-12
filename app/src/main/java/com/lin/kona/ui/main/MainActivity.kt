@@ -1,4 +1,4 @@
-package com.lin.kona.ui
+package com.lin.kona.ui.main
 
 import android.os.Bundle
 import android.view.Menu

@@ -1,4 +1,4 @@
-package com.lin.kona.ui.post
+package com.lin.kona.ui.main.post
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,8 @@ import com.chad.library.adapter.base.QuickAdapterHelper
 import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.lin.kona.databinding.FragmentPostBinding
-import com.lin.kona.ui.post.adapter.PostAdapter
+import com.lin.kona.ui.main.post.adapter.PostAdapter
+import com.lin.kona.ui.picture.PictureActivity
 
 class PostFragment : Fragment() {
     private val viewModel by lazy { ViewModelProvider(this)[PostViewModel::class.java] }
@@ -20,7 +21,7 @@ class PostFragment : Fragment() {
         PostAdapter().apply {
             setOnItemClickListener { adapter, view, position ->
                 val post = adapter.getItem(position) ?: return@setOnItemClickListener
-
+                PictureActivity.launch(this@PostFragment, post)
             }
         }
     }

@@ -4,4 +4,9 @@
     <!--        <item name="colorPrimaryVariant">?attr/colorPrimary</item>-->
     <!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
     <!--    </style>-->
+
+    <style name="ThemeOverlay.Kona.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
+        <item name="fullscreenTextColor">@color/light_blue_A400</item>
+    </style>
 </resources>

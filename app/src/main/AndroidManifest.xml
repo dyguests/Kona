@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kona">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Kona.NoActionBar">
             <intent-filter>
@@ -25,5 +25,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".ui.picture.PictureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_picture"
+            android:theme="@style/Theme.Kona.Fullscreen" />
     </application>
 </manifest>

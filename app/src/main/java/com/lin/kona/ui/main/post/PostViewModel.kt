@@ -1,4 +1,4 @@
-package com.lin.kona.ui.post
+package com.lin.kona.ui.main.post
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

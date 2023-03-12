@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_post"
-        android:name="com.lin.kona.ui.post.PostFragment"
+        android:name="com.lin.kona.ui.main.post.PostFragment"
         android:label="@string/menu_post"
         tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.lin.kona.ui.gallery.GalleryFragment"
+        android:name="com.lin.kona.ui.main.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.lin.kona.ui.slideshow.SlideshowFragment"
+        android:name="com.lin.kona.ui.main.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>

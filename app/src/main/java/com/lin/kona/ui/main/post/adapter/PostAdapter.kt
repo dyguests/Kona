@@ -1,4 +1,4 @@
-package com.lin.kona.ui.post.adapter
+package com.lin.kona.ui.main.post.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

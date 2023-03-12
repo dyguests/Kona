@@ -1,4 +1,4 @@
-package com.lin.kona.ui.slideshow
+package com.lin.kona.ui.main.slideshow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

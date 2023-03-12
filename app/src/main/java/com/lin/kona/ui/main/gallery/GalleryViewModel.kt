@@ -1,4 +1,4 @@
-package com.lin.kona.ui.gallery
+package com.lin.kona.ui.main.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
