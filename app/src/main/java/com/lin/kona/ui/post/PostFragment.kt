@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.loadState.leading.LeadingLoadStateAdapter
+import com.chad.library.adapter.base.loadState.LoadState
 import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
 import com.lin.kona.databinding.FragmentPostBinding
 import com.lin.kona.ui.post.adapter.PostAdapter
@@ -19,11 +19,6 @@ class PostFragment : Fragment() {
     private val postAdapter by lazy { PostAdapter() }
     private val postAdapterHelper by lazy {
         QuickAdapterHelper.Builder(postAdapter)
-            .setLeadingLoadStateAdapter(object : LeadingLoadStateAdapter.OnLeadingListener {
-                override fun onLoad() {
-                    viewModel.refreshData()
-                }
-            })
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener {
                 override fun onFailRetry() {
                     viewModel.loadData(true)
@@ -41,11 +36,15 @@ class PostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.isRefreshing.observe(viewLifecycleOwner) {
+            binding.swiper.isRefreshing = it
+        }
         viewModel.posts.observe(viewLifecycleOwner) {
-            postAdapter.addAll(it)
+            postAdapter.submitList(it)
+            postAdapterHelper.trailingLoadState = LoadState.NotLoading(false)
         }
 
-        // binding.swiper.setOnRefreshListener { viewModel.refreshData() }
+        binding.swiper.setOnRefreshListener { viewModel.refreshData() }
         binding.postRecycler.adapter = postAdapterHelper.adapter
 
         viewModel.refreshData()
