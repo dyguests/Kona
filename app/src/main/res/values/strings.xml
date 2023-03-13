@@ -14,4 +14,5 @@
     <string name="title_activity_picture">PictureActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="wallpaper_will_been_set_soon">Wallpaper will be set soon</string>
 </resources>

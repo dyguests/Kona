@@ -1,7 +1,9 @@
 package com.lin.kona.ui.picture
 
 import android.annotation.SuppressLint
+import android.app.WallpaperManager
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,20 +11,23 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.lin.kona.R
 import com.lin.kona.databinding.ActivityPictureBinding
 import com.lin.kona.model.Post
+import com.lin.kona.ui.common.BaseActivity
 import com.lin.kona.util.loadBy
+import com.lin.kona.util.toast
+import kotlinx.coroutines.launch
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class PictureActivity : AppCompatActivity() {
+class PictureActivity : BaseActivity() {
     private val viewModel by lazy { ViewModelProvider(this)[PictureViewModel::class.java] }
     private val binding by lazy { ActivityPictureBinding.inflate(layoutInflater) }
 
@@ -83,6 +88,14 @@ class PictureActivity : AppCompatActivity() {
         }
 
         binding.photoView.setOnClickListener { toggle() }
+        binding.photoView.setOnLongClickListener {
+            val bitmap = (binding.photoView.drawable as? BitmapDrawable)?.bitmap ?: return@setOnLongClickListener true
+            launch {
+                WallpaperManager.getInstance(this@PictureActivity).setBitmap(bitmap)
+            }
+            toast(R.string.wallpaper_will_been_set_soon)
+            true
+        }
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
