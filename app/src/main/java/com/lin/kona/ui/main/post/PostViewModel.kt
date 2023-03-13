@@ -6,15 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.lin.kona.model.Post
 import com.lin.kona.net.KonaClient
 import com.lin.kona.net.util.whenSuccess
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newCoroutineContext
 
 class PostViewModel : ViewModel() {
     val isRefreshing = MutableLiveData<Boolean>()
+    private val page by lazy { MutableLiveData<Int>() }
     val posts = MutableLiveData<List<Post>>()
 
     fun refreshData() {
+        page.value = 1
         loadData()
     }
 
@@ -24,13 +24,18 @@ class PostViewModel : ViewModel() {
                 isRefreshing.postValue(true)
             }
             // Log.d(TAG, "loadData: loadMore:$loadMore")
-            KonaClient.postService.getPosts("landscape").whenSuccess {
-                if (loadMore) {
-                    posts.postValue(posts.value!! + body()!!)
-                } else {
-                    posts.postValue(body())
+            KonaClient.postService.getPosts(
+                "landscape",
+                page.value,
+            )
+                .whenSuccess {
+                    page.value = page.value!! + 1
+                    if (loadMore) {
+                        posts.postValue(posts.value!! + body()!!)
+                    } else {
+                        posts.postValue(body())
+                    }
                 }
-            }
             if (!loadMore) {
                 isRefreshing.postValue(false)
             }
