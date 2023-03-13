@@ -1,8 +1,10 @@
 package com.lin.kona.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class Post(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("tags") var tags: String? = null,
@@ -14,7 +16,7 @@ data class Post(
     @SerializedName("score") var score: Int? = null,
     @SerializedName("md5") var md5: String? = null,
     @SerializedName("file_size") var fileSize: Int? = null,
-    @SerializedName("file_url") var fileUrl: String? = null,
+    @SerializedName("file_url") var fileUrl: String,
     @SerializedName("is_shown_in_index") var isShownInIndex: Boolean? = null,
     @SerializedName("preview_url") var previewUrl: String,
     @SerializedName("preview_width") var previewWidth: Int,
@@ -31,13 +33,13 @@ data class Post(
     @SerializedName("jpeg_file_size") var jpegFileSize: Int? = null,
     @SerializedName("rating") var rating: String? = null,
     @SerializedName("has_children") var hasChildren: Boolean? = null,
-    @SerializedName("parent_id") var parentId: Any? = null,
+    // @SerializedName("parent_id") var parentId: Any? = null,
     @SerializedName("status") var status: String? = null,
     @SerializedName("width") var width: Int? = null,
     @SerializedName("height") var height: Int? = null,
     @SerializedName("is_held") var isHeld: Boolean? = null,
     @SerializedName("frames_pending_string") var framesPendingString: String? = null,
-    @SerializedName("frames_pending") var framesPending: List<*>? = null,
+    // @SerializedName("frames_pending") var framesPending: List<*>? = null,
     @SerializedName("frames_string") var framesString: String? = null,
-    @SerializedName("frames") var frames: List<*>? = null
-)
+    // @SerializedName("frames") var frames: List<*>? = null,
+) : Parcelable

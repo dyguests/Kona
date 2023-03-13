@@ -15,11 +15,9 @@
 - [ ] Gallery Toolbar.
 - [ ] Gallery fab.
 
-# Api
-
-[https://konachan.com/help/api](https://konachan.com/help/api)
-
 # References
 
+- [https://konachan.com/help/api](https://konachan.com/help/api)
+- [https://yande.re/help/api](https://yande.re/help/api)
 - [dyguests/WallMoving](https://github.com/dyguests/WallMoving)
 - [BRVAH](http://www.recyclerview.org/)

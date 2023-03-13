@@ -9,34 +9,32 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.lin.kona.databinding.ActivityPictureBinding
 import com.lin.kona.model.Post
+import com.lin.kona.util.loadBy
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 class PictureActivity : AppCompatActivity() {
+    private val viewModel by lazy { ViewModelProvider(this)[PictureViewModel::class.java] }
+    private val binding by lazy { ActivityPictureBinding.inflate(layoutInflater) }
 
-    private lateinit var binding: ActivityPictureBinding
-    private lateinit var fullscreenContent: TextView
-    private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
         if (Build.VERSION.SDK_INT >= 30) {
-            fullscreenContent.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            binding.photoView.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-            fullscreenContent.systemUiVisibility =
+            binding.photoView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                         View.SYSTEM_UI_FLAG_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -48,9 +46,9 @@ class PictureActivity : AppCompatActivity() {
     private val showPart2Runnable = Runnable {
         // Delayed display of UI elements
         supportActionBar?.show()
-        fullscreenContentControls.visibility = View.VISIBLE
+        binding.fullscreenContentControls.visibility = View.VISIBLE
     }
-    private var isFullscreen: Boolean = false
+    private var isFullscreen = true
 
     private val hideRunnable = Runnable { hide() }
 
@@ -74,24 +72,24 @@ class PictureActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityPictureBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        isFullscreen = true
+        viewModel.post.observe(this) {
+            binding.photoView.loadBy(it.fileUrl) {
+                thumbnail(Glide.with(binding.photoView).load(it.previewUrl))
+                apply(RequestOptions().dontTransform())
+            }
+        }
 
-        // Set up the user interaction to manually show or hide the system UI.
-        fullscreenContent = binding.fullscreenContent
-        fullscreenContent.setOnClickListener { toggle() }
-
-        fullscreenContentControls = binding.fullscreenContentControls
+        binding.photoView.setOnClickListener { toggle() }
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         binding.dummyButton.setOnTouchListener(delayHideTouchListener)
+
+        viewModel.post.value = intent.getParcelableExtra(EXTRA_POST)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -114,7 +112,7 @@ class PictureActivity : AppCompatActivity() {
     private fun hide() {
         // Hide UI first
         supportActionBar?.hide()
-        fullscreenContentControls.visibility = View.GONE
+        binding.fullscreenContentControls.visibility = View.GONE
         isFullscreen = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
@@ -125,9 +123,9 @@ class PictureActivity : AppCompatActivity() {
     private fun show() {
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {
-            fullscreenContent.windowInsetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            binding.photoView.windowInsetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
         } else {
-            fullscreenContent.systemUiVisibility =
+            binding.photoView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
@@ -172,7 +170,7 @@ class PictureActivity : AppCompatActivity() {
             fragment.startActivity(
                 Intent(fragment.activity, PictureActivity::class.java)
                     .apply {
-                        // putExtra(EXTRA_POST, post)
+                        putExtra(EXTRA_POST, post)
                     }
             )
         }

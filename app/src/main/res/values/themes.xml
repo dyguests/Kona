@@ -33,6 +33,7 @@
     <style name="Theme.Kona" parent="MaterialTheme">
         <item name="colorPrimaryVariant">?attr/colorPrimary</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="fullscreenBackgroundColor">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.Kona.NoActionBar">
