@@ -12,13 +12,20 @@ import com.lin.kona.model.Post
 import com.lin.kona.util.loadBy
 
 class PostAdapter : BaseQuickAdapter<Post, PostAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(context: Context, parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(ItemPostBinding.inflate(LayoutInflater.from(context), parent, false))
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, item: Post?) = holder.bind(item!!)
+    override fun onCreateViewHolder(
+        context: Context,
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder = ViewHolder(ItemPostBinding.inflate(LayoutInflater.from(context), parent, false))
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, item: Post?) =
+        holder.bind(item!!)
 
     class ViewHolder(private val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Post) {
             binding.cover.loadBy(item.previewUrl) {
-                apply(RequestOptions().dontTransform().placeholder(R.drawable.img_cover).override(item.previewWidth, item.previewHeight))
+                apply(RequestOptions().override(item.previewWidth, item.previewHeight))
+                apply(RequestOptions().dontTransform().placeholder(R.drawable.img_cover))
             }
         }
     }

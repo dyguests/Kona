@@ -24,10 +24,12 @@ class PostViewModel : ViewModel() {
                 isRefreshing.postValue(true)
             }
             // Log.d(TAG, "loadData: loadMore:$loadMore")
-            KonaClient.postService.getPosts(
-                "landscape",
-                page.value,
-            )
+            KonaClient.postService
+                .getPosts(
+                    // "landscape",
+                    "dark",
+                    page.value,
+                )
                 .whenSuccess {
                     page.value = page.value!! + 1
                     if (loadMore) {
@@ -43,6 +45,6 @@ class PostViewModel : ViewModel() {
     }
 
     companion object {
-        private const val TAG = "PostViewModel"
+        // private const val TAG = "PostViewModel"
     }
 }
