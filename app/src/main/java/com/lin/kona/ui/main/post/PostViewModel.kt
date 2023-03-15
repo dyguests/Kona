@@ -26,8 +26,8 @@ class PostViewModel : ViewModel() {
             // Log.d(TAG, "loadData: loadMore:$loadMore")
             KonaClient.postService
                 .getPosts(
-                    // "landscape",
-                    "dark",
+                    "landscape",
+                    // "dark",
                     page.value,
                 )
                 .whenSuccess {
