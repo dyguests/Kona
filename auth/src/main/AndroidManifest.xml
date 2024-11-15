@@ -5,8 +5,7 @@
         <activity
             android:name=".WelcomeActivity"
             android:exported="true"
-            android:label="@string/title_activity_welcome"
-            android:theme="@style/Theme.Kona">
+            android:theme="@style/FullScreen.Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
