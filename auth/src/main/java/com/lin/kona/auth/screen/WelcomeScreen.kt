@@ -10,7 +10,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.lin.kona.auth.R
-import com.lin.kona.auth.ui.theme.KonaTheme
+import com.lin.kona.common.ui.theme.KonaTheme
 
 @Composable
 fun WelcomeScreen() {
