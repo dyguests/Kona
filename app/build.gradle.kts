@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.lin.kona"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.lin.kona"
