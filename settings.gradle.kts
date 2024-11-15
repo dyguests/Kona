@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Kona"
 include(":app")
+include(":framework")
