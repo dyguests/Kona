@@ -1,5 +1,7 @@
 package com.lin.util
 
-// fun toast(text: String) {
-//     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-// }
+import android.widget.Toast
+
+fun toast(text: String) {
+    Toast.makeText(ApplicationContext.current, text, Toast.LENGTH_SHORT).show()
+}

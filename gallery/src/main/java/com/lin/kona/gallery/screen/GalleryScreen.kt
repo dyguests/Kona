@@ -3,7 +3,6 @@ package com.lin.kona.gallery.screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +32,7 @@ import com.lin.kona.gallery.viewmodel.GalleryUiState
 import com.lin.kona.gallery.viewmodel.GalleryViewModel
 import com.lin.kona.gallery.viewmodel.mockGalleryUiState
 import com.lin.util.rememberDebouncer
+import com.lin.util.toast
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -55,7 +55,6 @@ fun GalleryScreen(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues, navController: NavHostController) {
     val galleryList = uiState.galleryList
@@ -79,7 +78,9 @@ private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            debouncer.invoke { /**/ }
+                            debouncer.invoke {
+                                toast("test")
+                            }
                         },
                 ) {
                     Box {

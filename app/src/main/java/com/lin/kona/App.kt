@@ -1,14 +1,13 @@
-package com.lin.kona;
+package com.lin.kona
 
-import android.app.Application;
-
-import dagger.hilt.android.HiltAndroidApp;
+import android.app.Application
+import com.lin.util.ApplicationContext
+import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-public class App extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        ApplicationContext.init(this);
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        ApplicationContext.init(this)
     }
 }
