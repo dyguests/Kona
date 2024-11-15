@@ -7,7 +7,7 @@
 # TODO
 
 - [ ] kapt to ksp
-- [ ] hello 2024
+- [ ] debouncer 用不了
 
 # References
 

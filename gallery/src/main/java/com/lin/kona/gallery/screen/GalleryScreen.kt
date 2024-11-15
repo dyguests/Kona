@@ -31,8 +31,6 @@ import com.lin.kona.gallery.viewmodel.GalleryUiIntent
 import com.lin.kona.gallery.viewmodel.GalleryUiState
 import com.lin.kona.gallery.viewmodel.GalleryViewModel
 import com.lin.kona.gallery.viewmodel.mockGalleryUiState
-import com.lin.util.rememberDebouncer
-import com.lin.util.toast
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -79,7 +77,8 @@ private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues,
                         .fillMaxWidth()
                         .clickable {
                             // debouncer.invoke {
-                                toast("test")
+                            //     toast("test")
+                            navController.navigate(Photo(it))
                             // }
                         },
                 ) {
