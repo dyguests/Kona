@@ -7,6 +7,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.lin.kona.common.ui.theme.KonaTheme
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Main
 
 @Composable
 fun MainScreen() {

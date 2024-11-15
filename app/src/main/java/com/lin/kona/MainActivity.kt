@@ -3,7 +3,11 @@ package com.lin.kona
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.lin.framework.base.BaseActivity
+import com.lin.kona.screen.Main
 import com.lin.kona.screen.MainScreen
 
 class MainActivity : BaseActivity() {
@@ -18,5 +22,8 @@ class MainActivity : BaseActivity() {
 
 @Composable
 private fun MyApp() {
-    MainScreen()
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = Main) {
+        composable<Main> { MainScreen() }
+    }
 }
