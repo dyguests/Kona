@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.serialization)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
+    // alias(libs.plugins.ksp)
+    id("kotlin-kapt")
 }
 
 android {
@@ -63,7 +64,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
+    // ksp(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
     implementation(project(":auth"))
     implementation(project(":gallery"))
     implementation(project(":framework"))
