@@ -26,7 +26,13 @@ class MainActivity : BaseActivity() {
 private fun MyApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Welcome) {
-        composable<Welcome> { WelcomeScreen() }
+        composable<Welcome> {
+            WelcomeScreen(
+                galleryNavi = {
+                    navController.navigate(Gallery)
+                }
+            )
+        }
         composable<Gallery> { GalleryScreen() }
     }
 }
