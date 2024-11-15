@@ -9,6 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lin.kona.common.ui.theme.KonaTheme
+import com.lin.kona.gallery.viewmodel.GalleryUiIntent
+import com.lin.kona.gallery.viewmodel.GalleryUiState
 import com.lin.kona.gallery.viewmodel.GalleryViewModel
 import kotlinx.serialization.Serializable
 
@@ -20,7 +22,7 @@ fun GalleryScreen() {
     val viewModel = hiltViewModel<GalleryViewModel>()
 
     LaunchedEffect(Unit) {
-        viewModel
+        viewModel.sendIntent(GalleryUiIntent.LoadGallery)
     }
 
     KonaTheme {
