@@ -59,7 +59,7 @@ fun GalleryScreen(navController: NavHostController) {
 private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues, navController: NavHostController) {
     val galleryList = uiState.galleryList
 
-    val debouncer = rememberDebouncer()
+    // val debouncer = rememberDebouncer()
 
     Box(
         modifier = Modifier
@@ -78,9 +78,9 @@ private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            debouncer.invoke {
+                            // debouncer.invoke {
                                 toast("test")
-                            }
+                            // }
                         },
                 ) {
                     Box {

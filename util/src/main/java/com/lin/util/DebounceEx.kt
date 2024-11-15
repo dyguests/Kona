@@ -3,7 +3,6 @@ package com.lin.util
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 
 /**
@@ -18,10 +17,6 @@ fun rememberDebouncer(): Debouncer {
     }
 }
 
-// fun debounceClick(block: () -> Unit) {
-//
-// }
-
 interface Debouncer {
     fun invoke(block: () -> Unit)
 
@@ -31,10 +26,6 @@ interface Debouncer {
         }
     }
 }
-
-// fun Debouncer(): Debouncer {
-//     return DebouncerImpl()
-// }
 
 internal class DebouncerImpl : Debouncer {
     private var lastTime = 0L
@@ -48,20 +39,9 @@ internal class DebouncerImpl : Debouncer {
     }
 
     companion object {
-        /**
-         * To keep current page and current page offset saved
-         */
-        val Saver: Saver<DebouncerImpl, *> = listSaver(
-            save = {
-                listOf(
-                    it.lastTime,
-                )
-            },
-            restore = {
-                DebouncerImpl().apply {
-                    lastTime = it[0]
-                }
-            }
+        val Saver: Saver<DebouncerImpl, *> = Saver(
+            save = { it.lastTime },
+            restore = { DebouncerImpl().apply { lastTime = it } }
         )
     }
 }
