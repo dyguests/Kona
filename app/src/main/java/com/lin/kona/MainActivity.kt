@@ -11,6 +11,8 @@ import com.lin.kona.auth.screen.Welcome
 import com.lin.kona.auth.screen.WelcomeScreen
 import com.lin.kona.gallery.screen.Gallery
 import com.lin.kona.gallery.screen.GalleryScreen
+import com.lin.kona.gallery.screen.Photo
+import com.lin.kona.gallery.screen.PhotoScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,6 +37,7 @@ private fun MyApp() {
                 }
             )
         }
-        composable<Gallery> { GalleryScreen() }
+        composable<Gallery> { GalleryScreen(navController) }
+        composable<Photo> { PhotoScreen() }
     }
 }

@@ -1,5 +1,6 @@
 package com.lin.kona.gallery.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -23,19 +24,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import com.lin.kona.common.ui.theme.KonaTheme
 import com.lin.kona.gallery.viewmodel.GalleryUiIntent
 import com.lin.kona.gallery.viewmodel.GalleryUiState
 import com.lin.kona.gallery.viewmodel.GalleryViewModel
 import com.lin.kona.gallery.viewmodel.mockGalleryUiState
+import com.lin.util.rememberDebouncer
 import kotlinx.serialization.Serializable
 
 @Serializable
 object Gallery
 
 @Composable
-fun GalleryScreen() {
+fun GalleryScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<GalleryViewModel>()
 
     val uiState by viewModel.uiStateFlow.collectAsState()
@@ -46,15 +50,17 @@ fun GalleryScreen() {
 
     KonaTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            GalleryContent(uiState, innerPadding)
+            GalleryContent(uiState, innerPadding, navController)
         }
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues) {
+private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues, navController: NavHostController) {
     val galleryList = uiState.galleryList
+
+    val debouncer = rememberDebouncer()
 
     Box(
         modifier = Modifier
@@ -71,7 +77,10 @@ private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues)
             items(galleryList) {
                 Card(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            debouncer.invoke { /**/ }
+                        },
                 ) {
                     Box {
                         AsyncImage(
@@ -97,7 +106,7 @@ private fun GalleryContent(uiState: GalleryUiState, innerPadding: PaddingValues)
 @Composable
 private fun GalleryContentPreview() {
     KonaTheme {
-        GalleryContent(mockGalleryUiState, PaddingValues())
+        GalleryContent(mockGalleryUiState, PaddingValues(), rememberNavController())
     }
 }
     
