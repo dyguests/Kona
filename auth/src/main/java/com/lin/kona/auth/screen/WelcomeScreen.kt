@@ -11,6 +11,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.lin.kona.auth.R
 import com.lin.kona.common.ui.theme.KonaTheme
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Welcome
 
 @Composable
 fun WelcomeScreen() {

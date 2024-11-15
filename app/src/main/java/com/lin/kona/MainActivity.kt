@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.lin.framework.base.BaseActivity
+import com.lin.kona.auth.screen.Welcome
+import com.lin.kona.auth.screen.WelcomeScreen
 import com.lin.kona.screen.Main
 import com.lin.kona.screen.MainScreen
 
@@ -23,7 +25,8 @@ class MainActivity : BaseActivity() {
 @Composable
 private fun MyApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Main) {
+    NavHost(navController = navController, startDestination = Welcome) {
+        composable<Welcome> { WelcomeScreen() }
         composable<Main> { MainScreen() }
     }
 }
