@@ -11,7 +11,9 @@ import com.lin.kona.auth.screen.Welcome
 import com.lin.kona.auth.screen.WelcomeScreen
 import com.lin.kona.gallery.screen.Gallery
 import com.lin.kona.gallery.screen.GalleryScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
