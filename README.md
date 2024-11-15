@@ -14,3 +14,4 @@
 - [https://yande.re/help/api](https://yande.re/help/api)
 - [dyguests/WallMoving](https://github.com/dyguests/WallMoving)
 - [BRVAH](http://www.recyclerview.org/)
+- [使用 Hilt 注入 WorkManager](https://developer.android.com/training/dependency-injection/hilt-jetpack?hl=zh-cn)

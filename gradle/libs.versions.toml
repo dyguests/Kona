@@ -11,7 +11,6 @@ activityCompose = "1.9.3"
 composeBom = "2024.11.00"
 appcompat = "1.7.0"
 material = "1.12.0"
-hilt = "2.51.1"
 hiltAndroid = "2.51"
 hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.8.4"
@@ -44,6 +43,6 @@ hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", ve
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = 'com.google.devtools.ksp', version.ref = "ksp" }

@@ -16,7 +16,7 @@ object Gallery
 
 @Composable
 fun GalleryScreen() {
-    val viewModel = hiltViewModel<GalleryViewModel>()
+    // val viewModel = hiltViewModel<GalleryViewModel>()
     KonaTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             Text(
