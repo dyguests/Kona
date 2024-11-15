@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     // ksp(libs.hilt.compiler)
     kapt(libs.hilt.compiler)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(project(":framework"))
     implementation(project(":common"))
     testImplementation(libs.junit)

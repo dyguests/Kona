@@ -22,7 +22,15 @@ class GalleryViewModel @Inject constructor(
     private fun loadGallery() {
         viewModelScope.launch {
             delay(1000)
-            sendState { copy(galleryList = listOf("1", "2", "3")) }
+            sendState {
+                copy(
+                    galleryList = listOf(
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWpIU60_Asczj58OQAFyRapji82xX4GJAXoA&s",
+                        "2",
+                        "3",
+                    )
+                )
+            }
         }
     }
 }
