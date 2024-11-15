@@ -1,4 +1,4 @@
-package com.lin.kona.ui.theme
+package com.lin.kona.auth.ui.theme
 
 import android.app.Activity
 import android.os.Build
