@@ -43,5 +43,14 @@ sealed class GalleryUiIntent : IUiIntent {
     data object LoadGallery : GalleryUiIntent()
 }
 
-
 class GalleryUiEffect : IUiEffect
+
+val mockGalleryUiState = GalleryUiState(
+    galleryList = listOf(
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWpIU60_Asczj58OQAFyRapji82xX4GJAXoA&s",
+        "2",
+        "2",
+        "2",
+        "3",
+    )
+)
