@@ -18,14 +18,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            KonaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            MainApp()
+        }
+    }
+
+}
+
+@Composable
+private fun MainApp() {
+    KonaTheme {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            Greeting(
+                name = "Android",
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }
