@@ -25,7 +25,12 @@ class GalleryViewModel @Inject constructor(
             sendState {
                 copy(
                     galleryList = listOf(
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWpIU60_Asczj58OQAFyRapji82xX4GJAXoA&s",
+                        "https://q1.itc.cn/q_70/images03/20240329/23a82de4541a454f85d81e71074a7141.jpeg",
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSndAm8rGbVetP_9R2YzFhvlw1-qmHY5bUGCg&s",
+                        "https://q1.itc.cn/q_70/images03/20240329/23a82de4541a454f85d81e71074a7141.jpeg",
+                        "https://q1.itc.cn/q_70/images03/20240329/23a82de4541a454f85d81e71074a7141.jpeg",
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSndAm8rGbVetP_9R2YzFhvlw1-qmHY5bUGCg&s",
+                        "https://q1.itc.cn/q_70/images03/20240329/23a82de4541a454f85d81e71074a7141.jpeg",
                         "2",
                         "3",
                     )
@@ -47,7 +52,7 @@ class GalleryUiEffect : IUiEffect
 
 val mockGalleryUiState = GalleryUiState(
     galleryList = listOf(
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWpIU60_Asczj58OQAFyRapji82xX4GJAXoA&s",
+        "https://q1.itc.cn/q_70/images03/20240329/23a82de4541a454f85d81e71074a7141.jpeg",
         "2",
         "2",
         "2",
