@@ -20,6 +20,7 @@ fun GalleryScreen() {
     val viewModel = hiltViewModel<GalleryViewModel>()
 
     LaunchedEffect(Unit) {
+        viewModel
     }
 
     KonaTheme {
