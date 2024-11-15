@@ -1,4 +1,4 @@
-package com.lin.kona.screen
+package com.lin.kona.gallery.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,10 +10,10 @@ import com.lin.kona.common.ui.theme.KonaTheme
 import kotlinx.serialization.Serializable
 
 @Serializable
-object Main
+object Gallery
 
 @Composable
-fun MainScreen() {
+fun GalleryScreen() {
     KonaTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             Text(

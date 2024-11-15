@@ -9,8 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.lin.framework.base.BaseActivity
 import com.lin.kona.auth.screen.Welcome
 import com.lin.kona.auth.screen.WelcomeScreen
-import com.lin.kona.screen.Main
-import com.lin.kona.screen.MainScreen
+import com.lin.kona.gallery.screen.Gallery
+import com.lin.kona.gallery.screen.GalleryScreen
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +27,6 @@ private fun MyApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Welcome) {
         composable<Welcome> { WelcomeScreen() }
-        composable<Main> { MainScreen() }
+        composable<Gallery> { GalleryScreen() }
     }
 }

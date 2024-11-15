@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(project(":auth"))
+    implementation(project(":gallery"))
     implementation(project(":framework"))
     implementation(project(":common"))
     testImplementation(libs.junit)
