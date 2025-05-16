@@ -23,4 +23,6 @@ rootProject.name = "Kona"
 include(":app")
 include(":bizMain")
 include(":bizCommon")
+include(":bizKona")
+include(":libHttp")
  

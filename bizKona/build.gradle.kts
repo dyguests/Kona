@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fanhl.kona.bizCommon"
+    namespace = "com.fanhl.kona.bizKona"
     compileSdk = 35
 
     defaultConfig {
@@ -40,9 +40,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":bizCommon"))
+    implementation(project(":libHttp"))
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
