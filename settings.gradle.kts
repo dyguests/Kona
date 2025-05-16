@@ -21,8 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Kona"
 include(":app")
-include(":framework")
-include(":auth")
-include(":common")
-include(":gallery")
-include(":util")
+ 
