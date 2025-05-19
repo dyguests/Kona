@@ -21,10 +21,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -60,6 +63,7 @@ fun MainScreenPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainContent(innerPadding: PaddingValues) {
     val listState = rememberLazyGridState()
@@ -71,6 +75,21 @@ private fun MainContent(innerPadding: PaddingValues) {
             innerPadding = innerPadding,
             listState = listState,
         )
+        
+        AnimatedVisibility(
+            visible = !listState.isScrollInProgress,
+            modifier = Modifier.align(Alignment.TopCenter),
+            enter = slideInVertically(initialOffsetY = { -it }),
+            exit = slideOutVertically(targetOffsetY = { -it })
+        ) {
+            TopAppBar(
+                title = { Text("Kona") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                )
+            )
+        }
+
         AnimatedVisibility(
             visible = !listState.isScrollInProgress,
             modifier = Modifier.align(Alignment.BottomCenter),
