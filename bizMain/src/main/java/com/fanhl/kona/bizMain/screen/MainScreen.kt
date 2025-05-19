@@ -13,7 +13,7 @@ import com.fanhl.kona.bizCommon.ui.theme.KonaTheme
 fun MainScreen() {
     KonaTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Greeting(
+            MainContent(
                 name = "Android",
                 modifier = Modifier.padding(innerPadding)
             )
@@ -22,7 +22,7 @@ fun MainScreen() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun MainContent(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
         modifier = modifier
@@ -33,6 +33,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     KonaTheme {
-        Greeting("Android")
+        MainContent("Android")
     }
 } 
