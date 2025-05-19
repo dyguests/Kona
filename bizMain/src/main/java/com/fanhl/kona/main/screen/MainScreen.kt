@@ -19,10 +19,10 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,17 +34,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fanhl.kona.common.ui.theme.KonaTheme
@@ -93,21 +90,32 @@ private fun MainContent(innerPadding: PaddingValues) {
             TopAppBar(
                 title = {
                     SearchBar(
-                        query = "",
-                        onQueryChange = { /* TODO */ },
-                        onSearch = { /* TODO */ },
-                        active = false,
-                        onActiveChange = { /* TODO */ },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        placeholder = { Text("Search") },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "Search"
+                        inputField = {
+                            TextField(
+                                value = "",
+                                onValueChange = { /* TODO */ },
+                                placeholder = { Text("Search") },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "Search"
+                                    )
+                                },
+                                singleLine = true,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 0.dp),
+                                colors = TextFieldDefaults.colors(
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                    disabledContainerColor = Color.Transparent,
+                                )
                             )
-                        }
+                        },
+                        expanded = false,
+                        onExpandedChange = { /* TODO */ },
+                        modifier = Modifier
+                            .fillMaxWidth(),
                     ) {
                         // Search suggestions can be added here
                     }
@@ -116,11 +124,13 @@ private fun MainContent(innerPadding: PaddingValues) {
                     Surface(
                         shape = CircleShape,
                         color = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(48.dp)
                     ) {
                         IconButton(
                             onClick = { /* TODO */ },
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.fillMaxSize()
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
@@ -133,11 +143,13 @@ private fun MainContent(innerPadding: PaddingValues) {
                     Surface(
                         shape = CircleShape,
                         color = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(48.dp)
                     ) {
                         IconButton(
                             onClick = { /* TODO */ },
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.fillMaxSize()
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
