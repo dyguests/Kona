@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fanhl.kona.bizMain"
+    namespace = "com.fanhl.kona.libUtil"
     compileSdk = 35
 
     defaultConfig {
@@ -40,9 +40,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":bizCommon"))
-    implementation(project(":libUtil"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,11 +49,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.foundation.layout.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 } 

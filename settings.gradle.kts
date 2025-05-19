@@ -25,4 +25,4 @@ include(":bizMain")
 include(":bizCommon")
 include(":bizKona")
 include(":libHttp")
- 
+include(":libUtil")

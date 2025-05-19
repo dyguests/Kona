@@ -36,8 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fanhl.kona.bizCommon.ui.plus
 import com.fanhl.kona.bizCommon.ui.theme.KonaTheme
+import com.fanhl.kona.libUtil.ui.plus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
