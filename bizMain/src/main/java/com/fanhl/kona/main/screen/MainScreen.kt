@@ -42,58 +42,12 @@ import com.fanhl.util.plus
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
-    var showBottomBar by remember { mutableStateOf(true) }
-    var lastScrollPosition by remember { mutableIntStateOf(0) }
 
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            // topBar = {
-            //     Surface(
-            //         modifier = Modifier
-            //             .fillMaxWidth()
-            //             .statusBarsPadding(),
-            //         color = MaterialTheme.colorScheme.background
-            //     ) {
-            //         // 可以在这里添加顶部栏内容
-            //     }
-            // },
-            bottomBar = {
-                AnimatedVisibility(
-                    visible = showBottomBar,
-                    enter = slideInVertically(initialOffsetY = { it }),
-                    exit = slideOutVertically(targetOffsetY = { it })
-                ) {
-                    NavigationBar {
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                            label = { Text("Home") },
-                            selected = true,
-                            onClick = { }
-                        )
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                            label = { Text("Search") },
-                            selected = false,
-                            onClick = { }
-                        )
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-                            label = { Text("Profile") },
-                            selected = false,
-                            onClick = { }
-                        )
-                    }
-                }
-            }
         ) { innerPadding ->
-            WaterfallGrid(
-                innerPadding = innerPadding,
-                onScroll = { position ->
-                    showBottomBar = position <= lastScrollPosition
-                    lastScrollPosition = position
-                }
-            )
+            MainContent(innerPadding)
         }
     }
 }
@@ -103,6 +57,50 @@ fun MainScreen() {
 fun MainScreenPreview() {
     KonaTheme {
         MainScreen()
+    }
+}
+
+@Composable
+private fun MainContent(innerPadding: PaddingValues) {
+    var showBottomBar by remember { mutableStateOf(true) }
+    var lastScrollPosition by remember { mutableIntStateOf(0) }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        WaterfallGrid(
+            innerPadding = innerPadding,
+            onScroll = { position ->
+                showBottomBar = position <= lastScrollPosition
+                lastScrollPosition = position
+            }
+        )
+        AnimatedVisibility(
+            visible = showBottomBar,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            enter = slideInVertically(initialOffsetY = { it }),
+            exit = slideOutVertically(targetOffsetY = { it })
+        ) {
+            NavigationBar {
+                NavigationBarItem(
+                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+                    label = { Text("Home") },
+                    selected = true,
+                    onClick = { }
+                )
+                NavigationBarItem(
+                    icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                    label = { Text("Search") },
+                    selected = false,
+                    onClick = { }
+                )
+                NavigationBarItem(
+                    icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
+                    label = { Text("Profile") },
+                    selected = false,
+                    onClick = { }
+                )
+            }
+        }
     }
 }
 
