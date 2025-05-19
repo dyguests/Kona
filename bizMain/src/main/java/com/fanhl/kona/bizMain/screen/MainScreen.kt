@@ -6,8 +6,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,10 +32,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fanhl.kona.bizCommon.ui.plus
 import com.fanhl.kona.bizCommon.ui.theme.KonaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -125,12 +124,7 @@ fun WaterfallGrid(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(
-            start = 8.dp + innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-            top = 8.dp + innerPadding.calculateTopPadding(),
-            end = 8.dp + innerPadding.calculateEndPadding(LocalLayoutDirection.current),
-            bottom = 8.dp + innerPadding.calculateBottomPadding() + 80.dp
-        ),
+        contentPadding = PaddingValues(8.dp) + innerPadding + PaddingValues(bottom = 80.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = listState,
@@ -145,7 +139,7 @@ fun WaterfallGrid(
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(item)
                 }
