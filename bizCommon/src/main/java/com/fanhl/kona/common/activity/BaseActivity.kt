@@ -1,4 +1,4 @@
-package com.fanhl.kona.bizCommon.activity
+package com.fanhl.kona.common.activity
 
 import android.os.Bundle
 import android.view.WindowManager

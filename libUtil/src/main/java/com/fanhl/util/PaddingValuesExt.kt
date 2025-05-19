@@ -1,4 +1,4 @@
-package com.fanhl.kona.libUtil.ui
+package com.fanhl.util
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding

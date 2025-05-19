@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fanhl.kona.libUtil"
+    namespace = "com.fanhl.util"
     compileSdk = 35
 
     defaultConfig {

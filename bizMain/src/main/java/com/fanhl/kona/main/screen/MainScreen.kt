@@ -1,4 +1,4 @@
-package com.fanhl.kona.bizMain.screen
+package com.fanhl.kona.main.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -36,8 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.fanhl.kona.bizCommon.ui.theme.KonaTheme
-import com.fanhl.kona.libUtil.ui.plus
+import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.util.plus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

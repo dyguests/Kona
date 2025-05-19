@@ -1,4 +1,4 @@
-package com.fanhl.kona.bizCommon.ui.theme
+package com.fanhl.kona.common.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

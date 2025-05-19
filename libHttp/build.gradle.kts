@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fanhl.kona.libHttp"
+    namespace = "com.fanhl.http"
     compileSdk = 35
 
     defaultConfig {
