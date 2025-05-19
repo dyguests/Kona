@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -28,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -62,20 +62,17 @@ fun MainScreenPreview() {
 
 @Composable
 private fun MainContent(innerPadding: PaddingValues) {
-    var showBottomBar by remember { mutableStateOf(true) }
-    var lastScrollPosition by remember { mutableIntStateOf(0) }
+    val listState = rememberLazyGridState()
+
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
         WaterfallGrid(
             innerPadding = innerPadding,
-            onScroll = { position ->
-                showBottomBar = position <= lastScrollPosition
-                lastScrollPosition = position
-            }
+            listState = listState,
         )
         AnimatedVisibility(
-            visible = showBottomBar,
+            visible = !listState.isScrollInProgress,
             modifier = Modifier.align(Alignment.BottomCenter),
             enter = slideInVertically(initialOffsetY = { it }),
             exit = slideOutVertically(targetOffsetY = { it })
@@ -107,18 +104,10 @@ private fun MainContent(innerPadding: PaddingValues) {
 @Composable
 fun WaterfallGrid(
     innerPadding: PaddingValues,
-    onScroll: (Int) -> Unit,
+    listState: LazyGridState,
 ) {
     // Sample data - replace with your actual image data
     val items = List(20) { "Item $it" }
-    val listState = rememberLazyGridState()
-
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex }
-            .collect { index ->
-                onScroll(index)
-            }
-    }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
