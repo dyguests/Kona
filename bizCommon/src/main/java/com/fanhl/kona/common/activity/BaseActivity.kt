@@ -16,6 +16,10 @@ abstract class BaseActivity : ComponentActivity() {
         // Make status bar transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
         
+        // Set window flags for full transparency
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        
         // Set status bar color to transparent and adjust icon color based on theme
         WindowCompat.getInsetsController(window, window.decorView).apply {
             // 检查当前系统主题是否为深色模式
