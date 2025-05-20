@@ -1,5 +1,7 @@
 package com.fanhl.kona.yandere.entity
 
+import com.fanhl.kona.common.entity.Cover
+
 data class YanderePost(
     val id: Int? = null,
     val tags: String? = null,
@@ -45,4 +47,17 @@ data class YanderePost(
     val isNoteLocked: Boolean? = null,
     val lastNotedAt: Long? = null,
     val lastCommentedAt: Long? = null
-) 
+)
+
+fun YanderePost.toCover(): Cover {
+    return Cover(
+        id = id?.toString(),
+        title = tags?.split(" ")?.firstOrNull(),
+        previewUrl = this@toCover.previewUrl,
+        description = tags,
+        author = author,
+        date = createdAt?.let { java.util.Date(it * 1000).toString() },
+        tags = tags?.split(" ")?.filter { it.isNotBlank() },
+        isFavorite = false
+    )
+}

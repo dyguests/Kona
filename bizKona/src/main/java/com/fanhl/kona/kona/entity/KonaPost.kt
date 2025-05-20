@@ -1,5 +1,7 @@
 package com.fanhl.kona.kona.entity
 
+import com.fanhl.kona.common.entity.Cover
+
 data class KonaPost(
     val id: Int? = null,
     val tags: String? = null,
@@ -38,3 +40,16 @@ data class KonaPost(
     val framesString: String? = null,
     val frames: List<String>? = null,
 )
+
+fun KonaPost.toCover(): Cover {
+    return Cover(
+        id = id?.toString(),
+        title = tags?.split(" ")?.firstOrNull(),
+        previewUrl = this@toCover.previewUrl,
+        description = tags,
+        author = author,
+        date = createdAt?.let { java.util.Date(it * 1000).toString() },
+        tags = tags?.split(" ")?.filter { it.isNotBlank() },
+        isFavorite = false
+    )
+}

@@ -3,6 +3,7 @@ package com.fanhl.kona.yandere.repository.datasource
 import com.fanhl.http.get
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.yandere.entity.YanderePost
+import com.fanhl.kona.yandere.entity.toCover
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,16 +21,3 @@ class YandereDataSource @Inject constructor() {
         const val DOMAIN = "https://yande.re/"
     }
 }
-
-private fun YanderePost.toCover(): Cover {
-    return Cover(
-        id = id?.toString(),
-        title = tags?.split(" ")?.firstOrNull(),
-        previewUrl = this@toCover.previewUrl,
-        description = tags,
-        author = author,
-        date = createdAt?.let { java.util.Date(it * 1000).toString() },
-        tags = tags?.split(" ")?.filter { it.isNotBlank() },
-        isFavorite = false
-    )
-} 

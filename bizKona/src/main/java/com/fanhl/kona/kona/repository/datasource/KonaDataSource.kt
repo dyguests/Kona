@@ -3,6 +3,7 @@ package com.fanhl.kona.kona.repository.datasource
 import com.fanhl.http.get
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.kona.entity.KonaPost
+import com.fanhl.kona.kona.entity.toCover
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,17 +20,4 @@ class KonaDataSource @Inject constructor() {
     companion object {
         const val DOMAIN = "https://konachan.net/"
     }
-}
-
-private fun KonaPost.toCover(): Cover {
-    return Cover(
-        id = id?.toString(),
-        title = tags?.split(" ")?.firstOrNull(),
-        previewUrl = this@toCover.previewUrl,
-        description = tags,
-        author = author,
-        date = createdAt?.let { java.util.Date(it * 1000).toString() },
-        tags = tags?.split(" ")?.filter { it.isNotBlank() },
-        isFavorite = false
-    )
 }
