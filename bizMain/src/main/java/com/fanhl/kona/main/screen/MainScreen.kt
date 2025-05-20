@@ -161,6 +161,22 @@ private fun MainContent(
     }
 }
 
+@Composable
+private fun CoverItem(cover: Cover) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(cover.title ?: "")
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaterfallGrid(
@@ -202,18 +218,7 @@ fun WaterfallGrid(
             modifier = Modifier.fillMaxSize()
         ) {
             items(covers) { cover ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(cover.title ?: "")
-                    }
-                }
+                CoverItem(cover = cover)
             }
 
             if (isLoadingMore) {
@@ -422,5 +427,18 @@ private fun BottomBarPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             BottomBar(listState = rememberLazyGridState())
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CoverItemPreview() {
+    KonaTheme {
+        CoverItem(
+            cover = Cover(
+                id = "1",
+                title = "Sample Cover"
+            )
+        )
     }
 }
