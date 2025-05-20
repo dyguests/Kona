@@ -9,10 +9,15 @@ import javax.inject.Singleton
 
 @Singleton
 class YandereDataSource @Inject constructor() {
-    suspend fun getPost(tags: String): List<Cover> {
+    suspend fun getPost(
+        tags: String,
+        page: Int,
+    ): List<Cover> {
         // https://yande.re/post.json?tags=winter_forest&limit=40&page=2
         return get("/post.json")
             .query("tags" to tags)
+            .query("page" to page)
+            // .query("limit" to 20)
             .domain(DOMAIN)
             .await<List<YanderePost>>()
             .map { it.toCover() }

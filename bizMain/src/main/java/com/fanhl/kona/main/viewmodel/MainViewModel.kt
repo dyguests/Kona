@@ -8,8 +8,8 @@ import com.fanhl.kona.common.mvi.IUiIntent
 import com.fanhl.kona.common.mvi.IUiState
 import com.fanhl.kona.main.usecase.GetCoversUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -36,8 +36,13 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             setState { copy(isRefreshing = true) }
             try {
-                val covers = getCoversUseCase.execute("landscape")
-                setState { copy(covers = covers) }
+                val covers = getCoversUseCase.execute("landscape", 1)
+                setState { 
+                    copy(
+                        covers = covers,
+                        currentPage = 1
+                    ) 
+                }
                 setEffect { MainEffect.RefreshSuccess }
             } catch (e: Exception) {
                 setEffect { MainEffect.RefreshError(e.message ?: "Refresh failed") }
@@ -51,8 +56,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             setState { copy(isLoadingMore = true) }
             try {
-                val newCovers = getCoversUseCase.execute("landscape")
-                setState { copy(covers = covers + newCovers) }
+                val nextPage = uiState.value.currentPage + 1
+                val newCovers = getCoversUseCase.execute("landscape", nextPage)
+                setState { 
+                    copy(
+                        covers = covers + newCovers,
+                        currentPage = nextPage
+                    ) 
+                }
                 setEffect { MainEffect.LoadMoreSuccess }
             } catch (e: Exception) {
                 setEffect { MainEffect.LoadMoreError(e.message ?: "Load more failed") }
@@ -74,6 +85,7 @@ data class MainState(
     val searchQuery: String = "",
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,
+    val currentPage: Int = 1,
     val covers: List<Cover> = emptyList(),
 ) : IUiState
 

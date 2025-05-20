@@ -135,7 +135,7 @@ private fun MainContent(
         derivedStateOf {
             val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
             val totalItems = listState.layoutInfo.totalItemsCount
-            lastVisibleItem >= totalItems - loadMoreThreshold
+            totalItems > 0 && lastVisibleItem >= totalItems - loadMoreThreshold
         }
     }
     
