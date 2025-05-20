@@ -5,10 +5,12 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -80,117 +82,8 @@ private fun MainContent(innerPadding: PaddingValues) {
             innerPadding = innerPadding,
             listState = listState,
         )
-        
-        AnimatedVisibility(
-            visible = !listState.isScrollInProgress,
-            modifier = Modifier.align(Alignment.TopCenter),
-            enter = slideInVertically(initialOffsetY = { -it }),
-            exit = slideOutVertically(targetOffsetY = { -it })
-        ) {
-            TopAppBar(
-                title = {
-                    SearchBar(
-                        inputField = {
-                            TextField(
-                                value = "",
-                                onValueChange = { /* TODO */ },
-                                placeholder = { Text("Search") },
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Default.Search,
-                                        contentDescription = "Search"
-                                    )
-                                },
-                                singleLine = true,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 0.dp),
-                                colors = TextFieldDefaults.colors(
-                                    focusedContainerColor = Color.Transparent,
-                                    unfocusedContainerColor = Color.Transparent,
-                                    disabledContainerColor = Color.Transparent,
-                                )
-                            )
-                        },
-                        expanded = false,
-                        onExpandedChange = { /* TODO */ },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    ) {
-                        // Search suggestions can be added here
-                    }
-                },
-                navigationIcon = {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(48.dp)
-                    ) {
-                        IconButton(
-                            onClick = { /* TODO */ },
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Menu"
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(48.dp)
-                    ) {
-                        IconButton(
-                            onClick = { /* TODO */ },
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Notifications,
-                                contentDescription = "Notifications"
-                            )
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f),
-                )
-            )
-        }
-
-        AnimatedVisibility(
-            visible = !listState.isScrollInProgress,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            enter = slideInVertically(initialOffsetY = { it }),
-            exit = slideOutVertically(targetOffsetY = { it })
-        ) {
-            NavigationBar {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
-                    selected = true,
-                    onClick = { }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                    label = { Text("Search") },
-                    selected = false,
-                    onClick = { }
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-                    label = { Text("Profile") },
-                    selected = false,
-                    onClick = { }
-                )
-            }
-        }
+        TopBar(listState)
+        BottomBar(listState)
     }
 }
 
@@ -204,7 +97,10 @@ fun WaterfallGrid(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp) + innerPadding + PaddingValues(bottom = 80.dp),
+        contentPadding = PaddingValues(8.dp) + innerPadding + PaddingValues(
+            top = 64.dp,  // TopAppBar height
+            bottom = 80.dp // NavigationBar height
+        ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         state = listState,
@@ -224,6 +120,128 @@ fun WaterfallGrid(
                     Text(item)
                 }
             }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun BoxScope.TopBar(listState: LazyGridState) {
+    AnimatedVisibility(
+        visible = !listState.isScrollInProgress,
+        modifier = Modifier.align(Alignment.TopCenter),
+        enter = slideInVertically(initialOffsetY = { -it }),
+        exit = slideOutVertically(targetOffsetY = { -it })
+    ) {
+        TopAppBar(
+            title = {
+                SearchBar(
+                    inputField = {
+                        TextField(
+                            value = "",
+                            onValueChange = { /* TODO */ },
+                            placeholder = { Text("Search") },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Search"
+                                )
+                            },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 0.dp),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent,
+                            )
+                        )
+                    },
+                    expanded = false,
+                    onExpandedChange = { /* TODO */ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(y = (-4).dp),
+                ) {
+                    // Search suggestions can be added here
+                }
+            },
+            navigationIcon = {
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(48.dp)
+                ) {
+                    IconButton(
+                        onClick = { /* TODO */ },
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu"
+                        )
+                    }
+                }
+            },
+            actions = {
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(48.dp)
+                ) {
+                    IconButton(
+                        onClick = { /* TODO */ },
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = "Notifications"
+                        )
+                    }
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f),
+            )
+        )
+    }
+}
+
+@Composable
+private fun BoxScope.BottomBar(listState: LazyGridState) {
+    AnimatedVisibility(
+        visible = !listState.isScrollInProgress,
+        modifier = Modifier.align(Alignment.BottomCenter),
+        enter = slideInVertically(initialOffsetY = { it }),
+        exit = slideOutVertically(targetOffsetY = { it })
+    ) {
+        NavigationBar {
+            NavigationBarItem(
+                icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+                label = { Text("Home") },
+                selected = true,
+                onClick = { }
+            )
+            NavigationBarItem(
+                icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                label = { Text("Search") },
+                selected = false,
+                onClick = { }
+            )
+            NavigationBarItem(
+                icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
+                label = { Text("Profile") },
+                selected = false,
+                onClick = { }
+            )
         }
     }
 }
