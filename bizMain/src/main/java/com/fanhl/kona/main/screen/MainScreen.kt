@@ -40,9 +40,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pullrefresh.PullRefreshIndicator
-import androidx.compose.material3.pullrefresh.pullRefresh
-import androidx.compose.material3.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -116,16 +113,16 @@ private fun MainContent(
     val listState = rememberLazyGridState()
     
     // Handle load more
-    LaunchedEffect(listState) {
-        val loadMoreThreshold = 5
-        val shouldLoadMore = remember {
-            derivedStateOf {
-                val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-                val totalItems = listState.layoutInfo.totalItemsCount
-                lastVisibleItem >= totalItems - loadMoreThreshold
-            }
+    val loadMoreThreshold = 5
+    val shouldLoadMore = remember {
+        derivedStateOf {
+            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val totalItems = listState.layoutInfo.totalItemsCount
+            lastVisibleItem >= totalItems - loadMoreThreshold
         }
-        
+    }
+    
+    LaunchedEffect(shouldLoadMore.value) {
         if (shouldLoadMore.value && !uiState.isLoadingMore) {
             viewModel.handleIntent(MainIntent.LoadMore)
         }
@@ -134,27 +131,10 @@ private fun MainContent(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        val pullRefreshState = rememberPullRefreshState(
-            refreshing = uiState.isRefreshing,
-            onRefresh = { viewModel.handleIntent(MainIntent.Refresh) }
+        WaterfallGrid(
+            innerPadding = innerPadding,
+            listState = listState,
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .pullRefresh(pullRefreshState)
-        ) {
-            WaterfallGrid(
-                innerPadding = innerPadding,
-                listState = listState,
-            )
-            
-            PullRefreshIndicator(
-                refreshing = uiState.isRefreshing,
-                state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
         
         TopBar(
             listState = listState,
