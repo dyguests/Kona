@@ -11,8 +11,13 @@ class KonaDataSource @Inject constructor() {
     suspend fun getPost(): List<Cover> {
         // return get("https://konachan.com/post.json")
         return get("/post.json")
+            .domain(DOMAIN)
             .await<List<KonaPost>>()
             .map { it.toCover() }
+    }
+
+    companion object {
+        const val DOMAIN = "https://konachan.net/"
     }
 }
 

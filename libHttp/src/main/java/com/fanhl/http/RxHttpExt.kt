@@ -22,6 +22,11 @@ fun post(url: String): PostParam {
 class GetParam(private val url: String) {
     private val rxHttpParam = RxHttp.get(url)
 
+    fun domain(domain: String): GetParam {
+        rxHttpParam.setDomainIfAbsent(domain)
+        return this
+    }
+
     fun header(vararg pairs: Pair<String, Any>): GetParam {
         for (pair in pairs) {
             rxHttpParam.addHeader(pair.first, pair.second.toString())
@@ -62,6 +67,11 @@ class GetParam(private val url: String) {
 
 class PostParam(private val url: String) {
     private val rxHttpParam = RxHttp.postJson(url)
+
+    fun domain(domain: String): PostParam {
+        rxHttpParam.setDomainIfAbsent(domain)
+        return this
+    }
 
     fun header(vararg pairs: Pair<String, Any>): PostParam {
         for (pair in pairs) {
