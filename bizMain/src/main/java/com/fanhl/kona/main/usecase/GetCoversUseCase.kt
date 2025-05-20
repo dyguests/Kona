@@ -11,7 +11,7 @@ class GetCoversUseCase @Inject constructor(
     private val konaRepository: KonaRepository,
     private val yandereRepository: YandereRepository,
 ) {
-    suspend fun execute(): List<Cover> {
-        return yandereRepository.getPost("landscape")
+    suspend fun execute(tags: String): List<Cover> {
+        return yandereRepository.getPost(tags)
     }
 } 

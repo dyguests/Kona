@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             setState { copy(isRefreshing = true) }
             try {
-                val covers = getCoversUseCase.execute()
+                val covers = getCoversUseCase.execute("landscape")
                 setState { copy(covers = covers) }
                 setEffect { MainEffect.RefreshSuccess }
             } catch (e: Exception) {
@@ -51,7 +51,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             setState { copy(isLoadingMore = true) }
             try {
-                // TODO: Implement load more logic
+                val newCovers = getCoversUseCase.execute("landscape")
+                setState { copy(covers = covers + newCovers) }
                 setEffect { MainEffect.LoadMoreSuccess }
             } catch (e: Exception) {
                 setEffect { MainEffect.LoadMoreError(e.message ?: "Load more failed") }

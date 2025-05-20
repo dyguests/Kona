@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
@@ -153,8 +154,7 @@ private fun MainContent(
             covers = uiState.covers,
             isRefreshing = uiState.isRefreshing,
             onRefresh = onRefresh,
-            isLoadingMore = uiState.isLoadingMore,
-            onLoadMore = onLoadMore
+            isLoadingMore = uiState.isLoadingMore
         )
         
         TopBar(
@@ -218,7 +218,6 @@ fun WaterfallGrid(
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     isLoadingMore: Boolean = false,
-    onLoadMore: () -> Unit = {},
 ) {
     val pullRefreshState = rememberPullToRefreshState()
 
@@ -254,7 +253,7 @@ fun WaterfallGrid(
             }
 
             if (isLoadingMore) {
-                item {
+                item(span = StaggeredGridItemSpan.FullLine) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
