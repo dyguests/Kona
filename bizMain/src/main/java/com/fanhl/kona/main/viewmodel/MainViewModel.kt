@@ -1,16 +1,20 @@
 package com.fanhl.kona.main.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.mvi.BaseViewModel
 import com.fanhl.kona.common.mvi.IUiEffect
 import com.fanhl.kona.common.mvi.IUiIntent
 import com.fanhl.kona.common.mvi.IUiState
+import com.fanhl.kona.main.usecase.GetCoversUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : BaseViewModel<MainIntent, MainState, MainEffect>() {
+class MainViewModel @Inject constructor(
+    private val getCoversUseCase: GetCoversUseCase
+) : BaseViewModel<MainIntent, MainState, MainEffect>() {
 
     override fun createInitialState(): MainState = MainState()
 
@@ -32,7 +36,8 @@ class MainViewModel @Inject constructor() : BaseViewModel<MainIntent, MainState,
         viewModelScope.launch {
             setState { copy(isRefreshing = true) }
             try {
-                // TODO: Implement refresh logic
+                val covers = getCoversUseCase.execute()
+                setState { copy(covers = covers) }
                 setEffect { MainEffect.RefreshSuccess }
             } catch (e: Exception) {
                 setEffect { MainEffect.RefreshError(e.message ?: "Refresh failed") }
@@ -68,6 +73,7 @@ data class MainState(
     val searchQuery: String = "",
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,
+    val covers: List<Cover> = emptyList(),
 ) : IUiState
 
 sealed class MainEffect : IUiEffect {
