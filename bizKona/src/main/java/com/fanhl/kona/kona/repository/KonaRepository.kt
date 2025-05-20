@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class KonaRepository @Inject constructor(
     private val dataSource: KonaDataSource
 ) {
-    suspend fun getCovers(): List<Cover> {
-        return dataSource.getCovers()
+    suspend fun getPost(): List<Cover> {
+        return dataSource.getPost()
     }
 } 

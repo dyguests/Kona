@@ -1,6 +1,7 @@
 package com.fanhl.http
 
 import android.app.Application
+import com.fanhl.http.interceptor.HttpLoggingInterceptor
 import okhttp3.OkHttpClient
 import rxhttp.RxHttpPlugins
 import rxhttp.wrapper.annotation.DefaultDomain
@@ -20,6 +21,7 @@ object HttpClient {
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor()) // 使用自定义的日志拦截器
             .build()
 
         // 配置RxHttp

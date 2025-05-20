@@ -10,6 +10,6 @@ class GetCoversUseCase @Inject constructor(
     private val konaRepository: KonaRepository
 ) {
     suspend fun execute(): List<Cover> {
-        return konaRepository.getCovers()
+        return konaRepository.getPost()
     }
 } 

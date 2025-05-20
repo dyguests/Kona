@@ -22,8 +22,6 @@ class TcHttpParam(
 ) {
     private val rxHttpJsonParam = RxHttp.postJson(url)
 
-    private val bodyMap = mutableMapOf<String, Any?>()
-
     fun header(vararg pairs: Pair<String, Any>): TcHttpParam {
         for (pair in pairs) {
             rxHttpJsonParam.addHeader(pair.first, pair.second.toString())
