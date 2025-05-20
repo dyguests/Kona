@@ -9,6 +9,8 @@ data class Cover(
     val id: String? = null,
     val title: String? = null,
     val previewUrl: String? = null,
+    val previewWidth: Int? = null,
+    val previewHeight: Int? = null,
     val description: String? = null,
     val author: String? = null,
     val date: String? = null,
