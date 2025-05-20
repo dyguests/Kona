@@ -56,6 +56,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.viewmodel.MainEffect
 import com.fanhl.kona.main.viewmodel.MainIntent
@@ -68,7 +69,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
@@ -94,18 +95,14 @@ fun MainScreen(viewModel: MainViewModel) {
         ) { innerPadding ->
             MainContent(
                 innerPadding = innerPadding,
-                viewModel = viewModel,
-                uiState = uiState
+                uiState = uiState,
+                onSearchQueryChange = { query ->
+                    viewModel.handleIntent(MainIntent.UpdateSearchQuery(query))
+                },
+                onRefresh = { viewModel.handleIntent(MainIntent.Refresh) },
+                onLoadMore = { viewModel.handleIntent(MainIntent.LoadMore) }
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    KonaTheme {
-        MainScreen(viewModel = MainViewModel())
     }
 }
 
@@ -113,8 +110,10 @@ fun MainScreenPreview() {
 @Composable
 private fun MainContent(
     innerPadding: PaddingValues,
-    viewModel: MainViewModel,
-    uiState: MainState
+    uiState: MainState,
+    onSearchQueryChange: (String) -> Unit,
+    onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
 ) {
     val listState = rememberLazyGridState()
     
@@ -130,7 +129,7 @@ private fun MainContent(
     
     LaunchedEffect(shouldLoadMore.value) {
         if (shouldLoadMore.value && !uiState.isLoadingMore) {
-            viewModel.handleIntent(MainIntent.LoadMore)
+            onLoadMore()
         }
     }
 
@@ -140,18 +139,17 @@ private fun MainContent(
         WaterfallGrid(
             innerPadding = innerPadding,
             listState = listState,
+            covers = uiState.covers,
             isRefreshing = uiState.isRefreshing,
-            onRefresh = { viewModel.handleIntent(MainIntent.Refresh) },
+            onRefresh = onRefresh,
             isLoadingMore = uiState.isLoadingMore,
-            onLoadMore = { viewModel.handleIntent(MainIntent.LoadMore) }
+            onLoadMore = onLoadMore
         )
         
         TopBar(
             listState = listState,
             searchQuery = uiState.searchQuery,
-            onSearchQueryChange = { query ->
-                viewModel.handleIntent(MainIntent.UpdateSearchQuery(query))
-            }
+            onSearchQueryChange = onSearchQueryChange
         )
         BottomBar(listState)
     }
@@ -162,14 +160,12 @@ private fun MainContent(
 fun WaterfallGrid(
     innerPadding: PaddingValues,
     listState: LazyGridState,
+    covers: List<Cover>,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     isLoadingMore: Boolean = false,
     onLoadMore: () -> Unit = {},
 ) {
-    // Sample data - replace with your actual image data
-    val items = List(20) { "Item $it" }
-
     val pullRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
@@ -199,8 +195,7 @@ fun WaterfallGrid(
             state = listState,
             modifier = Modifier.fillMaxSize()
         ) {
-            items(items) { item ->
-                // Replace this with your actual image item composable
+            items(covers) { cover ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -210,7 +205,7 @@ fun WaterfallGrid(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(item)
+                        Text(cover.title ?: "")
                     }
                 }
             }
