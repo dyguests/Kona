@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -39,16 +39,15 @@ dependencies {
     implementation(libs.material)
     
     // RxHttp
-    implementation("com.github.liujingxing.rxhttp:rxhttp:3.1.0")
-    implementation("com.github.liujingxing.rxhttp:converter-fastjson2:3.1.0")
-    kapt("com.github.liujingxing.rxhttp:rxhttp-compiler:3.1.0")
+    implementation(libs.rxhttp)
+    ksp(libs.rxhttp.compiler)
     
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(libs.okhttp)
     
     // RxJava
-    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

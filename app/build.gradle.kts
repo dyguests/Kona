@@ -40,8 +40,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":bizMain"))
     implementation(project(":bizCommon"))
+    implementation(project(":bizMain"))
+    implementation(project(":libHttp"))
+    implementation(project(":libUtil"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
