@@ -54,6 +54,8 @@ fun YanderePost.toCover(): Cover {
         id = id?.toString(),
         title = tags?.split(" ")?.firstOrNull(),
         previewUrl = this@toCover.previewUrl,
+        previewWidth = previewWidth,
+        previewHeight = previewHeight,
         description = tags,
         author = author,
         date = createdAt?.let { java.util.Date(it * 1000).toString() },

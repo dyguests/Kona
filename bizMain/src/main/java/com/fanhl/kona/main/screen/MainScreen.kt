@@ -3,13 +3,14 @@ package com.fanhl.kona.main.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -167,13 +169,20 @@ private fun MainContent(
 
 @Composable
 private fun CoverItem(cover: Cover) {
+    val aspectRatio = if (cover.previewWidth != null && cover.previewHeight != null) {
+        cover.previewWidth!!.toFloat() / cover.previewHeight!!.toFloat()
+    } else {
+        1f
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(aspectRatio),
             contentAlignment = Alignment.Center
         ) {
             AsyncImage(
@@ -185,18 +194,18 @@ private fun CoverItem(cover: Cover) {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-            // if (cover.title != null) {
-            //     Text(
-            //         text = cover.title ?: "",
-            //         modifier = Modifier
-            //             .align(Alignment.BottomCenter)
-            //             .background(
-            //                 color = Color.Black.copy(alpha = 0.6f),
-            //                 shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
-            //             )
-            //             .padding(8.dp)
-            //     )
-            // }
+            if (cover.title != null) {
+                Text(
+                    text = cover.title ?: "",
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .background(
+                            color = Color.Black.copy(alpha = 0.6f),
+                            shape = RoundedCornerShape(bottomEnd = 8.dp)
+                        )
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
