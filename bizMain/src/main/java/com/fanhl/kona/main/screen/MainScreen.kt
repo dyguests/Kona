@@ -47,12 +47,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.viewmodel.MainViewModel
 import com.fanhl.util.plus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-
+fun MainScreen(viewModel: MainViewModel) {
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -66,7 +66,7 @@ fun MainScreen() {
 @Composable
 fun MainScreenPreview() {
     KonaTheme {
-        MainScreen()
+        MainScreen(viewModel = MainViewModel())
     }
 }
 
