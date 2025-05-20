@@ -8,7 +8,7 @@ package com.fanhl.kona.common.entity
 data class Cover(
     val id: String? = null,
     val title: String? = null,
-    val imageUrl: String? = null,
+    val previewUrl: String? = null,
     val description: String? = null,
     val author: String? = null,
     val date: String? = null,
