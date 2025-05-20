@@ -170,7 +170,7 @@ private fun MainContent(
 @Composable
 private fun CoverItem(cover: Cover) {
     val aspectRatio = if (cover.previewWidth != null && cover.previewHeight != null) {
-        cover.previewWidth!!.toFloat() / cover.previewHeight!!.toFloat()
+        (cover.previewWidth!!.toFloat() / cover.previewHeight!!.toFloat()).coerceIn(0.5f, 2f)
     } else {
         1f
     }

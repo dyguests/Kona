@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":bizKona"))
     implementation(project(":bizYandere"))
     implementation(project(":libUtil"))
+    implementation(project(":libDatabase"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

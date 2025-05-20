@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class YandereRepository @Inject constructor(
     private val dataSource: YandereDataSource
 ) {
-    suspend fun getPost(): List<Cover> {
-        return dataSource.getPost()
+    suspend fun getPost(tags: String): List<Cover> {
+        return dataSource.getPost(tags)
     }
 } 

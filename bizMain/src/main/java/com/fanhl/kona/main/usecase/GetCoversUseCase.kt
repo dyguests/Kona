@@ -12,6 +12,6 @@ class GetCoversUseCase @Inject constructor(
     private val yandereRepository: YandereRepository,
 ) {
     suspend fun execute(): List<Cover> {
-        return yandereRepository.getPost()
+        return yandereRepository.getPost("landscape")
     }
 } 
