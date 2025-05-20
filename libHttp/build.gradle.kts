@@ -48,7 +48,9 @@ dependencies {
     // RxJava
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
-    
+
+    implementation(project(":libUtil"))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

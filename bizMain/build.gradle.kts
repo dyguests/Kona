@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation(libs.coil.compose)
 
     // Hilt
     implementation(libs.hilt.android)
