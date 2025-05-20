@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -54,8 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    // implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
-    
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
