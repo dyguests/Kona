@@ -22,6 +22,7 @@ class MainViewModel @Inject constructor(
         when (intent) {
             is MainIntent.UpdateSearchQuery -> {
                 setState { copy(searchQuery = intent.query) }
+                refresh()
             }
             is MainIntent.Refresh -> {
                 refresh()
@@ -36,7 +37,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             setState { copy(isRefreshing = true) }
             try {
-                val covers = getCoversUseCase.execute("landscape", 1)
+                val covers = getCoversUseCase.execute(uiState.value.searchQuery, 1)
                 setState { 
                     copy(
                         covers = covers,
@@ -57,7 +58,7 @@ class MainViewModel @Inject constructor(
             setState { copy(isLoadingMore = true) }
             try {
                 val nextPage = uiState.value.currentPage + 1
-                val newCovers = getCoversUseCase.execute("landscape", nextPage)
+                val newCovers = getCoversUseCase.execute(uiState.value.searchQuery, nextPage)
                 setState { 
                     copy(
                         covers = covers + newCovers,
