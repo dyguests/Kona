@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +42,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -54,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.viewmodel.MainEffect
 import com.fanhl.kona.main.viewmodel.MainIntent
+import com.fanhl.kona.main.viewmodel.MainState
 import com.fanhl.kona.main.viewmodel.MainViewModel
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
@@ -108,7 +114,7 @@ fun MainScreenPreview() {
 private fun MainContent(
     innerPadding: PaddingValues,
     viewModel: MainViewModel,
-    uiState: com.fanhl.kona.main.viewmodel.MainState
+    uiState: MainState
 ) {
     val listState = rememberLazyGridState()
     
@@ -134,6 +140,10 @@ private fun MainContent(
         WaterfallGrid(
             innerPadding = innerPadding,
             listState = listState,
+            isRefreshing = uiState.isRefreshing,
+            onRefresh = { viewModel.handleIntent(MainIntent.Refresh) },
+            isLoadingMore = uiState.isLoadingMore,
+            onLoadMore = { viewModel.handleIntent(MainIntent.LoadMore) }
         )
         
         TopBar(
@@ -147,37 +157,74 @@ private fun MainContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaterfallGrid(
     innerPadding: PaddingValues,
     listState: LazyGridState,
+    isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = {},
+    isLoadingMore: Boolean = false,
+    onLoadMore: () -> Unit = {},
 ) {
     // Sample data - replace with your actual image data
     val items = List(20) { "Item $it" }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp) + innerPadding + PaddingValues(
-            top = 64.dp,  // TopAppBar height
-            bottom = 80.dp // NavigationBar height
-        ),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        state = listState,
-        modifier = Modifier.fillMaxSize()
+    val pullRefreshState = rememberPullToRefreshState()
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = Modifier
+            .fillMaxSize(),
+        state = pullRefreshState,
+        indicator = {
+            Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = isRefreshing,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                state = pullRefreshState
+            )
+        },
     ) {
-        items(items) { item ->
-            // Replace this with your actual image item composable
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(8.dp) + innerPadding + PaddingValues(
+                top = 64.dp,  // TopAppBar height
+                bottom = 80.dp // NavigationBar height
+            ),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = listState,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(items) { item ->
+                // Replace this with your actual image item composable
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
                 ) {
-                    Text(item)
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(item)
+                    }
+                }
+            }
+
+            if (isLoadingMore) {
+                item(span = { GridItemSpan(2) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 }
             }
         }

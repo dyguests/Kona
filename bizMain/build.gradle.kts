@@ -54,7 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
+    // implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
     
     // Hilt
     implementation(libs.hilt.android)
