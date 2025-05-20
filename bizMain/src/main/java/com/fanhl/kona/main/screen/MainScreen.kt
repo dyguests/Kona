@@ -14,12 +14,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -127,8 +126,8 @@ private fun MainContent(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
 ) {
-    val listState = rememberLazyGridState()
-    
+    val listState = rememberLazyStaggeredGridState()
+
     // Handle load more
     val loadMoreThreshold = 5
     val shouldLoadMore = remember {
@@ -214,7 +213,7 @@ private fun CoverItem(cover: Cover) {
 @Composable
 fun WaterfallGrid(
     innerPadding: PaddingValues,
-    listState: LazyGridState,
+    listState: LazyStaggeredGridState,
     covers: List<Cover>,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
@@ -239,14 +238,14 @@ fun WaterfallGrid(
             )
         },
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(2),
             contentPadding = PaddingValues(8.dp) + innerPadding + PaddingValues(
                 top = 64.dp,  // TopAppBar height
                 bottom = 80.dp // NavigationBar height
             ),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalItemSpacing = 8.dp,
             state = listState,
             modifier = Modifier.fillMaxSize()
         ) {
@@ -255,7 +254,7 @@ fun WaterfallGrid(
             }
 
             if (isLoadingMore) {
-                item(span = { GridItemSpan(2) }) {
+                item {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -273,7 +272,7 @@ fun WaterfallGrid(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun BoxScope.TopBar(
-    listState: LazyGridState,
+    listState: LazyStaggeredGridState,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit
 ) {
@@ -366,7 +365,7 @@ private fun BoxScope.TopBar(
 }
 
 @Composable
-private fun BoxScope.BottomBar(listState: LazyGridState) {
+private fun BoxScope.BottomBar(listState: LazyStaggeredGridState) {
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
         modifier = Modifier.align(Alignment.BottomCenter),
@@ -426,7 +425,7 @@ private fun WaterfallGridPreview() {
     KonaTheme {
         WaterfallGrid(
             innerPadding = PaddingValues(),
-            listState = rememberLazyGridState(),
+            listState = rememberLazyStaggeredGridState(),
             covers = List(10) { index ->
                 Cover(
                     id = index.toString(),
@@ -445,10 +444,9 @@ private fun TopBarPreview() {
     KonaTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             TopBar(
-                listState = rememberLazyGridState(),
-                searchQuery = "Search query",
-                onSearchQueryChange = {}
-            )
+                listState = rememberLazyStaggeredGridState(),
+                searchQuery = "Search query"
+            ) {}
         }
     }
 }
@@ -458,7 +456,7 @@ private fun TopBarPreview() {
 private fun BottomBarPreview() {
     KonaTheme {
         Box(modifier = Modifier.fillMaxSize()) {
-            BottomBar(listState = rememberLazyGridState())
+            BottomBar(listState = rememberLazyStaggeredGridState())
         }
     }
 }
