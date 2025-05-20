@@ -194,7 +194,7 @@ private fun CoverItem(cover: Cover) {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-            if (cover.title != null) {
+            if (false&&cover.title != null) {
                 Text(
                     text = cover.title ?: "",
                     modifier = Modifier

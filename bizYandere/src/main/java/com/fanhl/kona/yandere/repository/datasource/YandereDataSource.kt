@@ -12,6 +12,7 @@ class YandereDataSource @Inject constructor() {
     suspend fun getPost(): List<Cover> {
         // https://yande.re/post.json?tags=winter_forest&limit=40&page=2
         return get("/post.json")
+            .query("tags" to "dark_aqua")
             .domain(DOMAIN)
             .await<List<YanderePost>>()
             .map { it.toCover() }

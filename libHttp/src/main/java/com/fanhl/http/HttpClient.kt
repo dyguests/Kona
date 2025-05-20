@@ -2,6 +2,7 @@ package com.fanhl.http
 
 import android.app.Application
 import com.fanhl.http.interceptor.HttpLoggingInterceptor
+import com.fanhl.util.GsonUtils
 import okhttp3.OkHttpClient
 import rxhttp.RxHttpPlugins
 import rxhttp.wrapper.converter.GsonConverter
@@ -26,7 +27,7 @@ object HttpClient {
         // 配置RxHttp
         RxHttpPlugins.init(okHttpClient)
             .setDebug(true) // 开启调试模式
-            .setConverter(GsonConverter.create())// 设置数据转换器
+            .setConverter(GsonConverter.create(GsonUtils.gson))// 设置数据转换器
             // .setOnParamAssembly { param ->
             //     // 在这里可以统一添加请求头等参数
             //     param.addHeader("Content-Type", "application/json")
