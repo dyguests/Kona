@@ -9,61 +9,94 @@ import rxhttp.wrapper.parse.Parser
 import rxhttp.wrapper.parse.SmartParser
 import rxhttp.wrapper.utils.javaTypeOf
 
-@CheckResult(suggest = "Use await() on the returned TcHttpParam")
-fun fetch(url: String): TcHttpParam {
-    return TcHttpParam(url)
+@CheckResult(suggest = "Use await() on the returned GetParam")
+fun get(url: String): GetParam {
+    return GetParam(url)
 }
 
-/**
- * 注意： json 的装箱和拆箱是在拦截器中做的，所以这里不需要再做转换
- */
-class TcHttpParam(
-    url: String,
-) {
-    private val rxHttpJsonParam = RxHttp.postJson(url)
+@CheckResult(suggest = "Use await() on the returned PostParam")
+fun post(url: String): PostParam {
+    return PostParam(url)
+}
 
-    fun header(vararg pairs: Pair<String, Any>): TcHttpParam {
+class GetParam(private val url: String) {
+    private val rxHttpParam = RxHttp.get(url)
+
+    fun header(vararg pairs: Pair<String, Any>): GetParam {
         for (pair in pairs) {
-            rxHttpJsonParam.addHeader(pair.first, pair.second.toString())
+            rxHttpParam.addHeader(pair.first, pair.second.toString())
         }
         return this
     }
 
-    fun header(headers: Map<String, Any>): TcHttpParam {
+    fun header(headers: Map<String, Any>): GetParam {
         for ((key, value) in headers) {
-            rxHttpJsonParam.addHeader(key, value.toString())
+            rxHttpParam.addHeader(key, value.toString())
         }
         return this
     }
 
-    fun body(vararg pairs: Pair<String, Any?>): TcHttpParam {
+    fun query(vararg pairs: Pair<String, Any?>): GetParam {
         for (pair in pairs) {
-            rxHttpJsonParam.add(pair.first, pair.second)
-            // bodyMap[pair.first] = pair.second
+            rxHttpParam.addQuery(pair.first, pair.second)
         }
         return this
     }
 
-    fun <T> body(data: T): TcHttpParam {
-        rxHttpJsonParam.addAll(GsonUtils.toMap(data))
-        // bodyMap.putAll(GsonUtils.toMap(data))
+    fun <T> query(data: T): GetParam {
+        rxHttpParam.addAll(GsonUtils.toMap(data))
         return this
     }
 
     @JvmName("awaitUnit")
-    suspend fun await() = rxHttpJsonParam.toAwait<Unit>().await()
+    suspend fun await() = rxHttpParam.toAwait<Unit>().await()
 
     suspend inline fun <reified T> await(): T = await(SmartParser.wrap(javaTypeOf<T>()))
 
     inline fun <reified T> toFlow(): Flow<T> = toFlow(SmartParser.wrap(javaTypeOf<T>()))
 
-    /**
-     * todo 注意这里和 RxHttp 耦合，之后改
-     */
-    suspend fun <T> await(parser: Parser<T>): T = rxHttpJsonParam.toAwait(parser).await()
+    suspend fun <T> await(parser: Parser<T>): T = rxHttpParam.toAwait(parser).await()
 
-    /**
-     * todo 注意这里和 RxHttp 耦合，之后改
-     */
-    fun <T> toFlow(parser: Parser<T>): Flow<T> = rxHttpJsonParam.toFlow(parser)
+    fun <T> toFlow(parser: Parser<T>): Flow<T> = rxHttpParam.toFlow(parser)
+}
+
+class PostParam(private val url: String) {
+    private val rxHttpParam = RxHttp.postJson(url)
+
+    fun header(vararg pairs: Pair<String, Any>): PostParam {
+        for (pair in pairs) {
+            rxHttpParam.addHeader(pair.first, pair.second.toString())
+        }
+        return this
+    }
+
+    fun header(headers: Map<String, Any>): PostParam {
+        for ((key, value) in headers) {
+            rxHttpParam.addHeader(key, value.toString())
+        }
+        return this
+    }
+
+    fun body(vararg pairs: Pair<String, Any?>): PostParam {
+        for (pair in pairs) {
+            rxHttpParam.add(pair.first, pair.second)
+        }
+        return this
+    }
+
+    fun <T> body(data: T): PostParam {
+        rxHttpParam.addAll(GsonUtils.toMap(data))
+        return this
+    }
+
+    @JvmName("awaitUnit")
+    suspend fun await() = rxHttpParam.toAwait<Unit>().await()
+
+    suspend inline fun <reified T> await(): T = await(SmartParser.wrap(javaTypeOf<T>()))
+
+    inline fun <reified T> toFlow(): Flow<T> = toFlow(SmartParser.wrap(javaTypeOf<T>()))
+
+    suspend fun <T> await(parser: Parser<T>): T = rxHttpParam.toAwait(parser).await()
+
+    fun <T> toFlow(parser: Parser<T>): Flow<T> = rxHttpParam.toFlow(parser)
 }
