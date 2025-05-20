@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation(project(":bizCommon"))
+    implementation(project(":bizKona"))
     implementation(project(":libUtil"))
 
     implementation(libs.androidx.core.ktx)

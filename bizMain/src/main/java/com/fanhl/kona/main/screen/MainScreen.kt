@@ -70,6 +70,12 @@ import kotlinx.coroutines.flow.collectLatest
 fun MainScreen(viewModel: MainViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // Initial refresh
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(MainIntent.Refresh)
+    }
+
+    // Effect collection
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
@@ -348,6 +354,73 @@ private fun BoxScope.BottomBar(listState: LazyGridState) {
                 selected = false,
                 onClick = { }
             )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainContentPreview() {
+    KonaTheme {
+        MainContent(
+            innerPadding = PaddingValues(),
+            uiState = MainState(
+                covers = List(10) { index ->
+                    Cover(
+                        id = index.toString(),
+                        title = "Cover $index"
+                    )
+                },
+                searchQuery = "",
+                isRefreshing = false,
+                isLoadingMore = false
+            ),
+            onSearchQueryChange = {},
+            onRefresh = {},
+            onLoadMore = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun WaterfallGridPreview() {
+    KonaTheme {
+        WaterfallGrid(
+            innerPadding = PaddingValues(),
+            listState = rememberLazyGridState(),
+            covers = List(10) { index ->
+                Cover(
+                    id = index.toString(),
+                    title = "Cover $index"
+                )
+            },
+            isRefreshing = false,
+            isLoadingMore = false
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TopBarPreview() {
+    KonaTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            TopBar(
+                listState = rememberLazyGridState(),
+                searchQuery = "Search query",
+                onSearchQueryChange = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BottomBarPreview() {
+    KonaTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            BottomBar(listState = rememberLazyGridState())
         }
     }
 }
