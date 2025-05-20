@@ -40,24 +40,60 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pullrefresh.PullRefreshIndicator
+import androidx.compose.material3.pullrefresh.pullRefresh
+import androidx.compose.material3.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.viewmodel.MainEffect
+import com.fanhl.kona.main.viewmodel.MainIntent
 import com.fanhl.kona.main.viewmodel.MainViewModel
 import com.fanhl.util.plus
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+    
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                is MainEffect.RefreshSuccess -> {
+                    // Handle refresh success
+                }
+                is MainEffect.RefreshError -> {
+                    // Handle refresh error
+                }
+                is MainEffect.LoadMoreSuccess -> {
+                    // Handle load more success
+                }
+                is MainEffect.LoadMoreError -> {
+                    // Handle load more error
+                }
+            }
+        }
+    }
+
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
         ) { innerPadding ->
-            MainContent(innerPadding)
+            MainContent(
+                innerPadding = innerPadding,
+                viewModel = viewModel,
+                uiState = uiState
+            )
         }
     }
 }
@@ -72,17 +108,61 @@ fun MainScreenPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainContent(innerPadding: PaddingValues) {
+private fun MainContent(
+    innerPadding: PaddingValues,
+    viewModel: MainViewModel,
+    uiState: com.fanhl.kona.main.viewmodel.MainState
+) {
     val listState = rememberLazyGridState()
+    
+    // Handle load more
+    LaunchedEffect(listState) {
+        val loadMoreThreshold = 5
+        val shouldLoadMore = remember {
+            derivedStateOf {
+                val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                val totalItems = listState.layoutInfo.totalItemsCount
+                lastVisibleItem >= totalItems - loadMoreThreshold
+            }
+        }
+        
+        if (shouldLoadMore.value && !uiState.isLoadingMore) {
+            viewModel.handleIntent(MainIntent.LoadMore)
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        WaterfallGrid(
-            innerPadding = innerPadding,
-            listState = listState,
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = uiState.isRefreshing,
+            onRefresh = { viewModel.handleIntent(MainIntent.Refresh) }
         )
-        TopBar(listState)
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
+        ) {
+            WaterfallGrid(
+                innerPadding = innerPadding,
+                listState = listState,
+            )
+            
+            PullRefreshIndicator(
+                refreshing = uiState.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+        
+        TopBar(
+            listState = listState,
+            searchQuery = uiState.searchQuery,
+            onSearchQueryChange = { query ->
+                viewModel.handleIntent(MainIntent.UpdateSearchQuery(query))
+            }
+        )
         BottomBar(listState)
     }
 }
@@ -126,7 +206,11 @@ fun WaterfallGrid(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun BoxScope.TopBar(listState: LazyGridState) {
+private fun BoxScope.TopBar(
+    listState: LazyGridState,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit
+) {
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
         modifier = Modifier.align(Alignment.TopCenter),
@@ -138,8 +222,8 @@ private fun BoxScope.TopBar(listState: LazyGridState) {
                 SearchBar(
                     inputField = {
                         TextField(
-                            value = "",
-                            onValueChange = { /* TODO */ },
+                            value = searchQuery,
+                            onValueChange = onSearchQueryChange,
                             placeholder = { Text("Search") },
                             leadingIcon = {
                                 Icon(
