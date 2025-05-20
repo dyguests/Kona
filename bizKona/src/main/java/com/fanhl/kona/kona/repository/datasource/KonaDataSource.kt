@@ -6,7 +6,7 @@ import javax.inject.Singleton
 
 @Singleton
 class KonaDataSource @Inject constructor() {
-    fun getCovers(): List<Cover> {
+    suspend fun getCovers(): List<Cover> {
         // Mock data for testing
         return listOf(
             Cover(

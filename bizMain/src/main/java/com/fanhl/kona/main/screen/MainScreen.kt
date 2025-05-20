@@ -3,6 +3,7 @@ package com.fanhl.kona.main.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
@@ -54,8 +56,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.viewmodel.MainEffect
@@ -172,7 +178,27 @@ private fun CoverItem(cover: Cover) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(cover.title ?: "")
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(cover.imageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = cover.title,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            if (cover.title != null) {
+                Text(
+                    text = cover.title ?: "",
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            color = Color.Black.copy(alpha = 0.6f),
+                            shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+                        )
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
@@ -437,7 +463,8 @@ private fun CoverItemPreview() {
         CoverItem(
             cover = Cover(
                 id = "1",
-                title = "Sample Cover"
+                title = "Sample Cover",
+                imageUrl = "https://picsum.photos/200/300"
             )
         )
     }
