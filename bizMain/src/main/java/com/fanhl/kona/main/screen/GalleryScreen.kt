@@ -54,7 +54,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -68,13 +70,13 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
-import com.fanhl.kona.main.viewmodel.GalleryViewModel
+import com.fanhl.kona.main.navigation.NavRoutes
 import com.fanhl.kona.main.viewmodel.GalleryEffect
 import com.fanhl.kona.main.viewmodel.GalleryIntent
 import com.fanhl.kona.main.viewmodel.GalleryState
+import com.fanhl.kona.main.viewmodel.GalleryViewModel
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
-import com.fanhl.kona.main.navigation.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -422,35 +424,68 @@ private fun BoxScope.BottomBar(
     listState: LazyStaggeredGridState,
     navController: NavController
 ) {
+    var selectedIndex by remember { mutableStateOf(0) }
+
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
         modifier = Modifier.align(Alignment.BottomCenter),
         enter = slideInVertically(initialOffsetY = { it }),
         exit = slideOutVertically(targetOffsetY = { it })
     ) {
-        NavigationBar {
-            NavigationBarItem(
-                icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                label = { Text("Home") },
-                selected = true,
-                onClick = { }
-            )
-            NavigationBarItem(
-                icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                label = { Text("Search") },
-                selected = false,
-                onClick = { 
-                    navController.navigate(NavRoutes.SEARCH)
-                }
-            )
-            NavigationBarItem(
-                icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
-                label = { Text("Profile") },
-                selected = false,
-                onClick = { 
-                    navController.navigate(NavRoutes.PROFILE)
-                }
-            )
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(24.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            NavigationBar(
+                modifier = Modifier.size(240.dp, 48.dp),
+                containerColor = Color.Transparent,
+                tonalElevation = 8.dp
+            ) {
+                NavigationBarItem(
+                    icon = { 
+                        Icon(
+                            Icons.Default.Home,
+                            contentDescription = "Home",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    selected = selectedIndex == 0,
+                    onClick = { selectedIndex = 0 }
+                )
+                NavigationBarItem(
+                    icon = { 
+                        Icon(
+                            Icons.Default.Search,
+                            contentDescription = "Search",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    selected = selectedIndex == 1,
+                    onClick = { 
+                        selectedIndex = 1
+                        // navController.navigate(NavRoutes.SEARCH)
+                    }
+                )
+                NavigationBarItem(
+                    icon = { 
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "Profile",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    selected = selectedIndex == 2,
+                    onClick = { 
+                        selectedIndex = 2
+                        // navController.navigate(NavRoutes.PROFILE)
+                    }
+                )
+            }
         }
     }
 }
