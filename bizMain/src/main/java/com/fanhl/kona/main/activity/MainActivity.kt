@@ -3,6 +3,10 @@ package com.fanhl.kona.main.activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.activity.BaseActivity
 import com.fanhl.kona.main.screen.MainScreen
 import com.fanhl.kona.main.viewmodel.MainViewModel
@@ -15,7 +19,27 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen(viewModel = viewModel)
+            AppNavigation(viewModel = viewModel)
         }
+    }
+}
+
+@Composable
+private fun AppNavigation(viewModel: MainViewModel) {
+    val navController = rememberNavController()
+    
+    NavHost(
+        navController = navController,
+        startDestination = "main"
+    ) {
+        composable("main") {
+            MainScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
+        }
+        // 其他页面路由可以在这里添加
+        // composable("detail/{id}") { ... }
+        // composable("search") { ... }
     }
 } 

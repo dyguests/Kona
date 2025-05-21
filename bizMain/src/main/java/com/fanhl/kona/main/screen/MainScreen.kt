@@ -71,10 +71,14 @@ import com.fanhl.kona.main.viewmodel.MainState
 import com.fanhl.kona.main.viewmodel.MainViewModel
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(
+    viewModel: MainViewModel,
+    navController: NavController
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     // Initial refresh
@@ -113,7 +117,8 @@ fun MainScreen(viewModel: MainViewModel) {
                     viewModel.handleIntent(MainIntent.UpdateSearchQuery(query))
                 },
                 onRefresh = { viewModel.handleIntent(MainIntent.Refresh) },
-                onLoadMore = { viewModel.handleIntent(MainIntent.LoadMore) }
+                onLoadMore = { viewModel.handleIntent(MainIntent.LoadMore) },
+                navController = navController
             )
         }
     }
@@ -127,6 +132,7 @@ private fun MainContent(
     onSearchQueryChange: (String) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
+    navController: NavController
 ) {
     val listState = rememberLazyStaggeredGridState()
 
@@ -155,20 +161,25 @@ private fun MainContent(
             covers = uiState.covers,
             isRefreshing = uiState.isRefreshing,
             onRefresh = onRefresh,
-            isLoadingMore = uiState.isLoadingMore
+            isLoadingMore = uiState.isLoadingMore,
+            navController = navController
         )
         
         TopBar(
             listState = listState,
             searchQuery = uiState.searchQuery,
-            onSearchQueryChange = onSearchQueryChange
+            onSearchQueryChange = onSearchQueryChange,
+            navController = navController
         )
-        BottomBar(listState)
+        BottomBar(listState, navController)
     }
 }
 
 @Composable
-private fun CoverItem(cover: Cover) {
+private fun CoverItem(
+    cover: Cover,
+    navController: NavController
+) {
     val aspectRatio = if (cover.previewWidth != null && cover.previewHeight != null) {
         (cover.previewWidth!!.toFloat() / cover.previewHeight!!.toFloat()).coerceIn(0.5f, 2f)
     } else {
@@ -178,6 +189,10 @@ private fun CoverItem(cover: Cover) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                // 点击跳转到详情页
+                navController.navigate("detail/${cover.id}")
+            }
     ) {
         Box(
             modifier = Modifier
@@ -219,6 +234,7 @@ fun WaterfallGrid(
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     isLoadingMore: Boolean = false,
+    navController: NavController
 ) {
     val pullRefreshState = rememberPullToRefreshState()
 
@@ -250,7 +266,10 @@ fun WaterfallGrid(
             modifier = Modifier.fillMaxSize()
         ) {
             items(covers) { cover ->
-                CoverItem(cover = cover)
+                CoverItem(
+                    cover = cover,
+                    navController = navController
+                )
             }
 
             if (isLoadingMore) {
@@ -274,7 +293,8 @@ fun WaterfallGrid(
 private fun BoxScope.TopBar(
     listState: LazyStaggeredGridState,
     searchQuery: String,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    navController: NavController
 ) {
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
@@ -338,7 +358,10 @@ private fun BoxScope.TopBar(
                         .size(48.dp)
                 ) {
                     IconButton(
-                        onClick = { /* TODO */ },
+                        onClick = { 
+                            // 打开侧边栏菜单
+                            navController.navigate("menu")
+                        },
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Icon(
@@ -357,7 +380,10 @@ private fun BoxScope.TopBar(
                         .size(48.dp)
                 ) {
                     IconButton(
-                        onClick = { /* TODO */ },
+                        onClick = { 
+                            // 跳转到通知页面
+                            navController.navigate("notifications")
+                        },
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Icon(
@@ -375,7 +401,10 @@ private fun BoxScope.TopBar(
 }
 
 @Composable
-private fun BoxScope.BottomBar(listState: LazyStaggeredGridState) {
+private fun BoxScope.BottomBar(
+    listState: LazyStaggeredGridState,
+    navController: NavController
+) {
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
         modifier = Modifier.align(Alignment.BottomCenter),
@@ -393,13 +422,17 @@ private fun BoxScope.BottomBar(listState: LazyStaggeredGridState) {
                 icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                 label = { Text("Search") },
                 selected = false,
-                onClick = { }
+                onClick = { 
+                    navController.navigate("search")
+                }
             )
             NavigationBarItem(
                 icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
                 label = { Text("Profile") },
                 selected = false,
-                onClick = { }
+                onClick = { 
+                    navController.navigate("profile")
+                }
             )
         }
     }
@@ -424,7 +457,8 @@ private fun MainContentPreview() {
             ),
             onSearchQueryChange = {},
             onRefresh = {},
-            onLoadMore = {}
+            onLoadMore = {},
+            navController = rememberNavController()
         )
     }
 }
@@ -443,7 +477,8 @@ private fun WaterfallGridPreview() {
                 )
             },
             isRefreshing = false,
-            isLoadingMore = false
+            isLoadingMore = false,
+            navController = rememberNavController()
         )
     }
 }
@@ -455,7 +490,9 @@ private fun TopBarPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TopBar(
                 listState = rememberLazyStaggeredGridState(),
-                searchQuery = "Search query"
+                searchQuery = "Search query",
+                onSearchQueryChange = {},
+                navController = rememberNavController()
             ) {}
         }
     }
@@ -466,7 +503,7 @@ private fun TopBarPreview() {
 private fun BottomBarPreview() {
     KonaTheme {
         Box(modifier = Modifier.fillMaxSize()) {
-            BottomBar(listState = rememberLazyStaggeredGridState())
+            BottomBar(listState = rememberLazyStaggeredGridState(), navController = rememberNavController())
         }
     }
 }
@@ -480,7 +517,8 @@ private fun CoverItemPreview() {
                 id = "1",
                 title = "Sample Cover",
                 previewUrl = "https://picsum.photos/200/300"
-            )
+            ),
+            navController = rememberNavController()
         )
     }
 }
