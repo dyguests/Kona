@@ -74,6 +74,7 @@ import com.fanhl.kona.main.viewmodel.MainIntent
 import com.fanhl.kona.main.viewmodel.MainState
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
+import com.fanhl.kona.main.navigation.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -193,8 +194,8 @@ private fun CoverItem(
             .fillMaxWidth()
             .clickable {
                 // 点击跳转到详情页
-                navController.currentBackStackEntry?.savedStateHandle?.set("cover", cover)
-                navController.navigate("photo")
+                navController.currentBackStackEntry?.savedStateHandle?.set(NavRoutes.Args.COVER, cover)
+                navController.navigate(NavRoutes.PHOTO)
             }
     ) {
         Box(
@@ -372,7 +373,7 @@ private fun BoxScope.TopBar(
                     IconButton(
                         onClick = { 
                             // 打开侧边栏菜单
-                            navController.navigate("menu")
+                            navController.navigate(NavRoutes.MENU)
                         },
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -394,7 +395,7 @@ private fun BoxScope.TopBar(
                     IconButton(
                         onClick = { 
                             // 跳转到通知页面
-                            navController.navigate("notifications")
+                            navController.navigate(NavRoutes.NOTIFICATIONS)
                         },
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -435,7 +436,7 @@ private fun BoxScope.BottomBar(
                 label = { Text("Search") },
                 selected = false,
                 onClick = { 
-                    navController.navigate("search")
+                    navController.navigate(NavRoutes.SEARCH)
                 }
             )
             NavigationBarItem(
@@ -443,7 +444,7 @@ private fun BoxScope.BottomBar(
                 label = { Text("Profile") },
                 selected = false,
                 onClick = { 
-                    navController.navigate("profile")
+                    navController.navigate(NavRoutes.PROFILE)
                 }
             )
         }

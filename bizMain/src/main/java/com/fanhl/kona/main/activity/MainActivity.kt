@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.activity.BaseActivity
 import com.fanhl.kona.common.entity.Cover
+import com.fanhl.kona.main.navigation.NavRoutes
 import com.fanhl.kona.main.screen.GalleryScreen
 import com.fanhl.kona.main.screen.PhotoScreen
 import com.fanhl.kona.main.viewmodel.PhotoIntent
@@ -31,16 +32,16 @@ private fun AppNavigation() {
     
     NavHost(
         navController = navController,
-        startDestination = "gallery"
+        startDestination = NavRoutes.GALLERY
     ) {
-        composable("gallery") {
+        composable(NavRoutes.GALLERY) {
             GalleryScreen(
                 viewModel = hiltViewModel(),
                 navController = navController
             )
         }
-        composable("photo") { backStackEntry ->
-            val cover = backStackEntry.savedStateHandle.get<Cover>("cover") ?: return@composable
+        composable(NavRoutes.PHOTO) { backStackEntry ->
+            val cover = backStackEntry.savedStateHandle.get<Cover>(NavRoutes.Args.COVER) ?: return@composable
             PhotoScreen(
                 viewModel = hiltViewModel<PhotoViewModel>().apply {
                     handleIntent(PhotoIntent.SetCover(cover))
@@ -50,6 +51,6 @@ private fun AppNavigation() {
         }
         // 其他页面路由可以在这里添加
         // composable("detail/{id}") { ... }
-        // composable("search") { ... }
+        // composable(NavRoutes.SEARCH) { ... }
     }
 } 
