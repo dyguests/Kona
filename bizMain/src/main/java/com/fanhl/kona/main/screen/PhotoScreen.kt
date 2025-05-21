@@ -1,11 +1,9 @@
 package com.fanhl.kona.main.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
@@ -22,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -119,41 +116,58 @@ private fun PhotoContent(
     paddingValues: PaddingValues,
     state: PhotoState
 ) {
-    val cover = state.cover ?: return
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Photo(state = state)
+    }
+}
 
+@Composable
+private fun Photo(state: PhotoState) {
+    val cover = state.cover ?: return
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     var offsetY by remember { mutableFloatStateOf(0f) }
-
-    Box(
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(cover.previewUrl)
+            .crossfade(true)
+            .build(),
+        contentDescription = cover.title,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
-            .padding(paddingValues),
-        contentAlignment = Alignment.Center
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(cover.previewUrl)
-                .crossfade(true)
-                .build(),
-            contentDescription = cover.title,
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    translationX = offsetX,
-                    translationY = offsetY
-                )
-                .pointerInput(Unit) {
-                    detectTransformGestures { _, pan, zoom, _ ->
-                        scale *= zoom
-                        offsetX += pan.x
-                        offsetY += pan.y
-                    }
-                },
-            contentScale = ContentScale.Fit
+            .graphicsLayer(
+                scaleX = scale,
+                scaleY = scale,
+                translationX = offsetX,
+                translationY = offsetY
+            )
+            .pointerInput(Unit) {
+                detectTransformGestures { _, pan, zoom, _ ->
+                    scale *= zoom
+                    offsetX += pan.x
+                    offsetY += pan.y
+                }
+            },
+        contentScale = ContentScale.Fit
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PhotoPreview() {
+    val sampleState = PhotoState(
+        cover = Cover(
+            id = "preview",
+            title = "Preview Image",
+            previewUrl = "https://picsum.photos/800/600"
         )
+    )
+    
+    KonaTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Photo(state = sampleState)
+        }
     }
 }
