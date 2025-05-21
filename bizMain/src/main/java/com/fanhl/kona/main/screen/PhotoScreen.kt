@@ -135,13 +135,13 @@ private fun PhotoContent(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(cover.sampleUrl)
+                .data(cover.previewUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = cover.title,
             modifier = Modifier
                 .fillMaxSize()
-                .graphicsLayer(
+                /*.graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
                     rotationZ = rotation,
@@ -155,7 +155,7 @@ private fun PhotoContent(
                         offsetX += pan.x
                         offsetY += pan.y
                     }
-                },
+                }*/,
             contentScale = ContentScale.Fit
         )
     }

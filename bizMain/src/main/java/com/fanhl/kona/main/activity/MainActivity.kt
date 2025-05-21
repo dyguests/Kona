@@ -39,9 +39,7 @@ private fun AppNavigation() {
                 navController = navController
             )
         }
-        composable(
-            route = "photo"
-        ) { backStackEntry ->
+        composable("photo") { backStackEntry ->
             val cover = backStackEntry.savedStateHandle.get<Cover>("cover") ?: return@composable
             PhotoScreen(
                 viewModel = hiltViewModel<PhotoViewModel>().apply {
