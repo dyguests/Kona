@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class GalleryViewModel @Inject constructor(
     private val getCoversUseCase: GetCoversUseCase
 ) : BaseViewModel<MainIntent, MainState, MainEffect>() {
 
@@ -83,7 +83,8 @@ sealed class MainIntent : IUiIntent {
 }
 
 data class MainState(
-    val searchQuery: String = "",
+    // val searchQuery: String = "",
+    val searchQuery: String = "landscape", // test
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,
     val currentPage: Int = 1,

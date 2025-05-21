@@ -62,23 +62,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.viewmodel.GalleryViewModel
 import com.fanhl.kona.main.viewmodel.MainEffect
 import com.fanhl.kona.main.viewmodel.MainIntent
 import com.fanhl.kona.main.viewmodel.MainState
-import com.fanhl.kona.main.viewmodel.MainViewModel
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
-    viewModel: MainViewModel,
+    viewModel: GalleryViewModel,
     navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -203,11 +203,20 @@ private fun CoverItem(
                 .aspectRatio(aspectRatio),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(cover.previewUrl)
                     .crossfade(true)
                     .build(),
+                loading = {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+                },
                 contentDescription = cover.title,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
