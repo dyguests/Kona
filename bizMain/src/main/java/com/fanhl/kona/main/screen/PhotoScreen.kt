@@ -19,9 +19,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +47,7 @@ import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
+import com.fanhl.kona.main.viewmodel.PhotoEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,15 +56,28 @@ fun PhotoScreen(
     navController: NavController
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is PhotoEffect.DownloadStarted -> {
+                    snackbarHostState.showSnackbar("Download started")
+                }
+            }
+        }
+    }
 
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { paddingValues ->
             PhotoContent(
                 paddingValues = paddingValues,
                 state = state,
                 onToggleOverlay = { viewModel.handleIntent(PhotoIntent.ToggleOverlay) },
+                onDownload = { viewModel.handleIntent(PhotoIntent.Download) },
                 navController = navController
             )
         }
@@ -73,6 +90,7 @@ private fun PhotoContent(
     paddingValues: PaddingValues,
     state: PhotoState,
     onToggleOverlay: () -> Unit,
+    onDownload: () -> Unit,
     navController: NavController
 ) {
     Box(
@@ -85,6 +103,7 @@ private fun PhotoContent(
         
         TopBar(
             isVisible = state.isOverlayVisible,
+            onDownload = onDownload,
             navController = navController
         )
     }
@@ -94,6 +113,7 @@ private fun PhotoContent(
 @Composable
 private fun BoxScope.TopBar(
     isVisible: Boolean,
+    onDownload: () -> Unit,
     navController: NavController
 ) {
     AnimatedVisibility(
@@ -113,7 +133,7 @@ private fun BoxScope.TopBar(
                 }
             },
             actions = {
-                IconButton(onClick = { /* TODO: 下载功能 */ }) {
+                IconButton(onClick = onDownload) {
                     Icon(
                         imageVector = Icons.Default.Download,
                         contentDescription = "Download"
@@ -150,7 +170,7 @@ private fun Photo(
     var offsetY by remember { mutableFloatStateOf(0f) }
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(cover.previewUrl)
+            .data(cover.sampleUrl)
             .crossfade(true)
             .build(),
         contentDescription = cover.title,
@@ -214,6 +234,7 @@ private fun PhotoContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TopBar(
                 isVisible = true,
+                onDownload = {},
                 navController = rememberNavController()
             )
         }

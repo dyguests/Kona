@@ -5,11 +5,14 @@ import com.fanhl.kona.common.mvi.BaseViewModel
 import com.fanhl.kona.common.mvi.IUiEffect
 import com.fanhl.kona.common.mvi.IUiIntent
 import com.fanhl.kona.common.mvi.IUiState
+import com.fanhl.kona.common.util.DownloadManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class PhotoViewModel @Inject constructor() : BaseViewModel<PhotoIntent, PhotoState, PhotoEffect>() {
+class PhotoViewModel @Inject constructor(
+    private val downloadManager: DownloadManager
+) : BaseViewModel<PhotoIntent, PhotoState, PhotoEffect>() {
     override fun createInitialState(): PhotoState = PhotoState()
 
     override fun handleIntent(intent: PhotoIntent) {
@@ -20,7 +23,18 @@ class PhotoViewModel @Inject constructor() : BaseViewModel<PhotoIntent, PhotoSta
             is PhotoIntent.ToggleOverlay -> {
                 setState { copy(isOverlayVisible = !isOverlayVisible) }
             }
+            is PhotoIntent.Download -> {
+                handleDownload()
+            }
         }
+    }
+
+    private fun handleDownload() {
+        val cover = uiState.value.cover ?: return
+        val url = cover.jpegUrl ?: return
+        val fileName = "Kona_${cover.id}.jpg"
+        downloadManager.downloadFile(url, fileName)
+        setEffect { PhotoEffect.DownloadStarted }
     }
 }
 
@@ -28,6 +42,7 @@ class PhotoViewModel @Inject constructor() : BaseViewModel<PhotoIntent, PhotoSta
 sealed class PhotoIntent : IUiIntent {
     data class SetCover(val cover: Cover) : PhotoIntent()
     object ToggleOverlay : PhotoIntent()
+    object Download : PhotoIntent()
 }
 
 data class PhotoState(
@@ -36,5 +51,5 @@ data class PhotoState(
 ) : IUiState
 
 sealed class PhotoEffect : IUiEffect {
-    // Add effects as needed
+    object DownloadStarted : PhotoEffect()
 } 
