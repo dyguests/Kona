@@ -65,7 +65,7 @@ import com.fanhl.kona.main.navigation.NavRoutes
 import com.fanhl.util.plus
 
 @Composable
-fun GalleryContent(
+fun GalleryPage(
     innerPadding: PaddingValues,
     listState: LazyStaggeredGridState,
     covers: List<Cover>,

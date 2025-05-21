@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ProfileContent() {
+fun ProfilePage() {
     Box(
         modifier = Modifier.Companion.fillMaxSize(),
         contentAlignment = Alignment.Companion.Center

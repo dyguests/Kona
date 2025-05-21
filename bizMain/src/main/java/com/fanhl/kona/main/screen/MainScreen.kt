@@ -131,7 +131,7 @@ private fun MainContent(
         ) { page ->
             when (page) {
                 0 -> {
-                    GalleryContent(
+                    GalleryPage(
                         innerPadding = innerPadding,
                         listState = listState,
                         covers = uiState.covers,
@@ -146,11 +146,11 @@ private fun MainContent(
                 }
 
                 1 -> {
-                    SearchContent()
+                    SearchPage()
                 }
 
                 2 -> {
-                    ProfileContent()
+                    ProfilePage()
                 }
             }
         }
