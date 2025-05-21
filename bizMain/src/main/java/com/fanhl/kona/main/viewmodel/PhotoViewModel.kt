@@ -17,6 +17,9 @@ class PhotoViewModel @Inject constructor() : BaseViewModel<PhotoIntent, PhotoSta
             is PhotoIntent.SetCover -> {
                 setState { copy(cover = intent.cover) }
             }
+            is PhotoIntent.ToggleOverlay -> {
+                setState { copy(isOverlayVisible = !isOverlayVisible) }
+            }
         }
     }
 }
@@ -24,10 +27,12 @@ class PhotoViewModel @Inject constructor() : BaseViewModel<PhotoIntent, PhotoSta
 // Define your MVI components
 sealed class PhotoIntent : IUiIntent {
     data class SetCover(val cover: Cover) : PhotoIntent()
+    object ToggleOverlay : PhotoIntent()
 }
 
 data class PhotoState(
-    val cover: Cover? = null
+    val cover: Cover? = null,
+    val isOverlayVisible: Boolean = false
 ) : IUiState
 
 sealed class PhotoEffect : IUiEffect {

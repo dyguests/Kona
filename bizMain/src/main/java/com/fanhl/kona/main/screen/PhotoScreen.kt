@@ -3,8 +3,8 @@ package com.fanhl.kona.main.screen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +24,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,6 +41,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
 
@@ -60,6 +60,7 @@ fun PhotoScreen(
             PhotoContent(
                 paddingValues = paddingValues,
                 state = state,
+                onToggleOverlay = { viewModel.handleIntent(PhotoIntent.ToggleOverlay) },
                 navController = navController
             )
         }
@@ -71,20 +72,19 @@ fun PhotoScreen(
 private fun PhotoContent(
     paddingValues: PaddingValues,
     state: PhotoState,
+    onToggleOverlay: () -> Unit,
     navController: NavController
 ) {
-    var isOverlayVisible by remember { mutableStateOf(false) }
-
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
         Photo(
             state = state,
-            onPhotoClick = { isOverlayVisible = !isOverlayVisible }
+            onPhotoClick = onToggleOverlay
         )
         
         TopBar(
-            isVisible = isOverlayVisible,
+            isVisible = state.isOverlayVisible,
             navController = navController
         )
     }
@@ -165,8 +165,8 @@ private fun Photo(
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     scale *= zoom
-                    offsetX += pan.x
-                    offsetY += pan.y
+                    offsetX += pan.x * scale
+                    offsetY += pan.y * scale
                 }
             }
             .pointerInput(Unit) {

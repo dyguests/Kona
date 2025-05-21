@@ -14,20 +14,20 @@ import javax.inject.Inject
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     private val getCoversUseCase: GetCoversUseCase
-) : BaseViewModel<MainIntent, MainState, MainEffect>() {
+) : BaseViewModel<GalleryIntent, GalleryState, GalleryEffect>() {
 
-    override fun createInitialState(): MainState = MainState()
+    override fun createInitialState(): GalleryState = GalleryState()
 
-    override fun handleIntent(intent: MainIntent) {
+    override fun handleIntent(intent: GalleryIntent) {
         when (intent) {
-            is MainIntent.UpdateSearchQuery -> {
+            is GalleryIntent.UpdateSearchQuery -> {
                 setState { copy(searchQuery = intent.query) }
                 refresh()
             }
-            is MainIntent.Refresh -> {
+            is GalleryIntent.Refresh -> {
                 refresh()
             }
-            is MainIntent.LoadMore -> {
+            is GalleryIntent.LoadMore -> {
                 loadMore()
             }
         }
@@ -44,9 +44,9 @@ class GalleryViewModel @Inject constructor(
                         currentPage = 1
                     ) 
                 }
-                setEffect { MainEffect.RefreshSuccess }
+                setEffect { GalleryEffect.RefreshSuccess }
             } catch (e: Exception) {
-                setEffect { MainEffect.RefreshError(e.message ?: "Refresh failed") }
+                setEffect { GalleryEffect.RefreshError(e.message ?: "Refresh failed") }
             } finally {
                 setState { copy(isRefreshing = false) }
             }
@@ -65,9 +65,9 @@ class GalleryViewModel @Inject constructor(
                         currentPage = nextPage
                     ) 
                 }
-                setEffect { MainEffect.LoadMoreSuccess }
+                setEffect { GalleryEffect.LoadMoreSuccess }
             } catch (e: Exception) {
-                setEffect { MainEffect.LoadMoreError(e.message ?: "Load more failed") }
+                setEffect { GalleryEffect.LoadMoreError(e.message ?: "Load more failed") }
             } finally {
                 setState { copy(isLoadingMore = false) }
             }
@@ -76,13 +76,13 @@ class GalleryViewModel @Inject constructor(
 }
 
 // Define your MVI components
-sealed class MainIntent : IUiIntent {
-    data class UpdateSearchQuery(val query: String) : MainIntent()
-    object Refresh : MainIntent()
-    object LoadMore : MainIntent()
+sealed class GalleryIntent : IUiIntent {
+    data class UpdateSearchQuery(val query: String) : GalleryIntent()
+    object Refresh : GalleryIntent()
+    object LoadMore : GalleryIntent()
 }
 
-data class MainState(
+data class GalleryState(
     // val searchQuery: String = "",
     val searchQuery: String = "landscape", // test
     val isRefreshing: Boolean = false,
@@ -91,9 +91,9 @@ data class MainState(
     val covers: List<Cover> = emptyList(),
 ) : IUiState
 
-sealed class MainEffect : IUiEffect {
-    object RefreshSuccess : MainEffect()
-    data class RefreshError(val message: String) : MainEffect()
-    object LoadMoreSuccess : MainEffect()
-    data class LoadMoreError(val message: String) : MainEffect()
+sealed class GalleryEffect : IUiEffect {
+    object RefreshSuccess : GalleryEffect()
+    data class RefreshError(val message: String) : GalleryEffect()
+    object LoadMoreSuccess : GalleryEffect()
+    data class LoadMoreError(val message: String) : GalleryEffect()
 } 

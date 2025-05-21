@@ -69,9 +69,9 @@ import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.viewmodel.GalleryViewModel
-import com.fanhl.kona.main.viewmodel.MainEffect
-import com.fanhl.kona.main.viewmodel.MainIntent
-import com.fanhl.kona.main.viewmodel.MainState
+import com.fanhl.kona.main.viewmodel.GalleryEffect
+import com.fanhl.kona.main.viewmodel.GalleryIntent
+import com.fanhl.kona.main.viewmodel.GalleryState
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
 import com.fanhl.kona.main.navigation.NavRoutes
@@ -86,23 +86,23 @@ fun GalleryScreen(
 
     // Initial refresh
     LaunchedEffect(Unit) {
-        viewModel.handleIntent(MainIntent.Refresh)
+        viewModel.handleIntent(GalleryIntent.Refresh)
     }
 
     // Effect collection
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is MainEffect.RefreshSuccess -> {
+                is GalleryEffect.RefreshSuccess -> {
                     // Handle refresh success
                 }
-                is MainEffect.RefreshError -> {
+                is GalleryEffect.RefreshError -> {
                     // Handle refresh error
                 }
-                is MainEffect.LoadMoreSuccess -> {
+                is GalleryEffect.LoadMoreSuccess -> {
                     // Handle load more success
                 }
-                is MainEffect.LoadMoreError -> {
+                is GalleryEffect.LoadMoreError -> {
                     // Handle load more error
                 }
             }
@@ -117,10 +117,10 @@ fun GalleryScreen(
                 innerPadding = innerPadding,
                 uiState = uiState,
                 onSearchQueryChange = { query ->
-                    viewModel.handleIntent(MainIntent.UpdateSearchQuery(query))
+                    viewModel.handleIntent(GalleryIntent.UpdateSearchQuery(query))
                 },
-                onRefresh = { viewModel.handleIntent(MainIntent.Refresh) },
-                onLoadMore = { viewModel.handleIntent(MainIntent.LoadMore) },
+                onRefresh = { viewModel.handleIntent(GalleryIntent.Refresh) },
+                onLoadMore = { viewModel.handleIntent(GalleryIntent.LoadMore) },
                 navController = navController
             )
         }
@@ -131,7 +131,7 @@ fun GalleryScreen(
 @Composable
 private fun MainContent(
     innerPadding: PaddingValues,
-    uiState: MainState,
+    uiState: GalleryState,
     onSearchQueryChange: (String) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
@@ -461,7 +461,7 @@ private fun MainContentPreview() {
     KonaTheme {
         MainContent(
             innerPadding = PaddingValues(),
-            uiState = MainState(
+            uiState = GalleryState(
                 covers = List(10) { index ->
                     Cover(
                         id = index.toString(),
