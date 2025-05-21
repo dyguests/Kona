@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.activity.BaseActivity
 import com.fanhl.kona.main.screen.GalleryScreen
+import com.fanhl.kona.main.screen.PhotoScreen
 import com.fanhl.kona.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,11 +31,21 @@ private fun AppNavigation(viewModel: MainViewModel) {
     
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "gallery"
     ) {
-        composable("main") {
+        composable("gallery") {
             GalleryScreen(
                 viewModel = viewModel,
+                navController = navController
+            )
+        }
+        composable("photo/{id}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: return@composable
+            // TODO: 从 ViewModel 获取图片 URL
+            val photoUrl = "https://picsum.photos/800/1200" // 临时使用示例 URL
+            PhotoScreen(
+                photoId = id,
+                photoUrl = photoUrl,
                 navController = navController
             )
         }
