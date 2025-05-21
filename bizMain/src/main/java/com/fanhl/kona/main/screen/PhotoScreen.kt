@@ -1,6 +1,5 @@
 package com.fanhl.kona.main.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
@@ -12,17 +11,15 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -124,10 +121,9 @@ private fun PhotoContent(
 ) {
     val cover = state.cover ?: return
 
-    var scale by remember { mutableStateOf(1f) }
-    var rotation by remember { mutableStateOf(0f) }
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
 
     Box(
         modifier = Modifier
@@ -147,14 +143,12 @@ private fun PhotoContent(
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
-                    rotationZ = rotation,
                     translationX = offsetX,
                     translationY = offsetY
                 )
                 .pointerInput(Unit) {
-                    detectTransformGestures { _, pan, zoom, rotationChange ->
+                    detectTransformGestures { _, pan, zoom, _ ->
                         scale *= zoom
-                        rotation += rotationChange
                         offsetX += pan.x
                         offsetY += pan.y
                     }
