@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,18 +38,19 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.viewmodel.PhotoEffect
 import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
-import com.fanhl.kona.main.viewmodel.PhotoEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,11 +171,20 @@ private fun Photo(
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     var offsetY by remember { mutableFloatStateOf(0f) }
-    AsyncImage(
+    SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(cover.sampleUrl)
             .crossfade(true)
             .build(),
+        loading = {
+            Box(
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+        },
         contentDescription = cover.title,
         modifier = Modifier
             .fillMaxSize()
