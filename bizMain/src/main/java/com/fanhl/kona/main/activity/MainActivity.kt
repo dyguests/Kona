@@ -11,6 +11,8 @@ import com.fanhl.kona.common.activity.BaseActivity
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.main.screen.GalleryScreen
 import com.fanhl.kona.main.screen.PhotoScreen
+import com.fanhl.kona.main.viewmodel.PhotoIntent
+import com.fanhl.kona.main.viewmodel.PhotoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,7 +44,9 @@ private fun AppNavigation() {
         ) { backStackEntry ->
             val cover = backStackEntry.savedStateHandle.get<Cover>("cover") ?: return@composable
             PhotoScreen(
-                cover = cover,
+                viewModel = hiltViewModel<PhotoViewModel>().apply {
+                    handleIntent(PhotoIntent.SetCover(cover))
+                },
                 navController = navController
             )
         }
