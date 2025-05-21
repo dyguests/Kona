@@ -2,31 +2,29 @@ package com.fanhl.kona.main.activity
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.activity.BaseActivity
+import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.main.screen.GalleryScreen
 import com.fanhl.kona.main.screen.PhotoScreen
-import com.fanhl.kona.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
-    private val viewModel: MainViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppNavigation(viewModel = viewModel)
+            AppNavigation()
         }
     }
 }
 
 @Composable
-private fun AppNavigation(viewModel: MainViewModel) {
+private fun AppNavigation() {
     val navController = rememberNavController()
     
     NavHost(
@@ -35,17 +33,16 @@ private fun AppNavigation(viewModel: MainViewModel) {
     ) {
         composable("gallery") {
             GalleryScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navController = navController
             )
         }
-        composable("photo/{id}") { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id") ?: return@composable
-            // TODO: 从 ViewModel 获取图片 URL
-            val photoUrl = "https://picsum.photos/800/1200" // 临时使用示例 URL
+        composable(
+            route = "photo"
+        ) { backStackEntry ->
+            val cover = backStackEntry.savedStateHandle.get<Cover>("cover") ?: return@composable
             PhotoScreen(
-                photoId = id,
-                photoUrl = photoUrl,
+                cover = cover,
                 navController = navController
             )
         }

@@ -193,7 +193,8 @@ private fun CoverItem(
             .fillMaxWidth()
             .clickable {
                 // 点击跳转到详情页
-                navController.navigate("detail/${cover.id}")
+                navController.currentBackStackEntry?.savedStateHandle?.set("cover", cover)
+                navController.navigate("photo")
             }
     ) {
         Box(

@@ -37,8 +37,7 @@ import com.fanhl.kona.common.ui.theme.KonaTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoScreen(
-    photoId: String,
-    photoUrl: String,
+    cover: Cover,
     navController: NavController
 ) {
     var scale by remember { mutableStateOf(1f) }
@@ -97,10 +96,10 @@ fun PhotoScreen(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(photoUrl)
+                        .data(cover.previewUrl)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Photo",
+                    contentDescription = cover.title,
                     modifier = Modifier
                         .fillMaxSize()
                         .graphicsLayer(

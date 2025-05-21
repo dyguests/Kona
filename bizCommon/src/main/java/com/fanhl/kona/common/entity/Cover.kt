@@ -1,10 +1,14 @@
 package com.fanhl.kona.common.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 /**
  * 封面
  *
  * 首页列表项结构结构
  */
+@Parcelize
 data class Cover(
     val id: String? = null,
     val title: String? = null,
@@ -16,4 +20,4 @@ data class Cover(
     val date: String? = null,
     val tags: List<String>? = null,
     val isFavorite: Boolean? = false,
-)
+) : Parcelable
