@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -72,10 +73,11 @@ import com.fanhl.kona.main.viewmodel.MainViewModel
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(
+fun GalleryScreen(
     viewModel: MainViewModel,
     navController: NavController
 ) {
@@ -493,7 +495,7 @@ private fun TopBarPreview() {
                 searchQuery = "Search query",
                 onSearchQueryChange = {},
                 navController = rememberNavController()
-            ) {}
+            )
         }
     }
 }

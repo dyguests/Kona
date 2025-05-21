@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.activity.BaseActivity
-import com.fanhl.kona.main.screen.MainScreen
+import com.fanhl.kona.main.screen.GalleryScreen
 import com.fanhl.kona.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +33,7 @@ private fun AppNavigation(viewModel: MainViewModel) {
         startDestination = "main"
     ) {
         composable("main") {
-            MainScreen(
+            GalleryScreen(
                 viewModel = viewModel,
                 navController = navController
             )
