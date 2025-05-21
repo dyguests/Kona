@@ -10,7 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.activity.BaseActivity
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.main.navigation.NavRoutes
-import com.fanhl.kona.main.screen.GalleryScreen
+import com.fanhl.kona.main.screen.MainScreen
 import com.fanhl.kona.main.screen.PhotoScreen
 import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
@@ -35,7 +35,7 @@ private fun AppNavigation() {
         startDestination = NavRoutes.GALLERY
     ) {
         composable(NavRoutes.GALLERY) {
-            GalleryScreen(
+            MainScreen(
                 viewModel = hiltViewModel(),
                 navController = navController
             )

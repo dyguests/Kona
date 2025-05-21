@@ -25,10 +25,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -36,9 +34,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,16 +42,12 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -71,76 +62,21 @@ import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.navigation.NavRoutes
-import com.fanhl.kona.main.viewmodel.GalleryEffect
-import com.fanhl.kona.main.viewmodel.GalleryIntent
-import com.fanhl.kona.main.viewmodel.GalleryState
-import com.fanhl.kona.main.viewmodel.GalleryViewModel
 import com.fanhl.util.plus
-import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GalleryScreen(
-    viewModel: GalleryViewModel,
-    navController: NavController
-) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    // Initial refresh
-    LaunchedEffect(Unit) {
-        viewModel.handleIntent(GalleryIntent.Refresh)
-    }
-
-    // Effect collection
-    LaunchedEffect(Unit) {
-        viewModel.effect.collectLatest { effect ->
-            when (effect) {
-                is GalleryEffect.RefreshSuccess -> {
-                    // Handle refresh success
-                }
-                is GalleryEffect.RefreshError -> {
-                    // Handle refresh error
-                }
-                is GalleryEffect.LoadMoreSuccess -> {
-                    // Handle load more success
-                }
-                is GalleryEffect.LoadMoreError -> {
-                    // Handle load more error
-                }
-            }
-        }
-    }
-
-    KonaTheme {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-        ) { innerPadding ->
-            MainContent(
-                innerPadding = innerPadding,
-                uiState = uiState,
-                onSearchQueryChange = { query ->
-                    viewModel.handleIntent(GalleryIntent.UpdateSearchQuery(query))
-                },
-                onRefresh = { viewModel.handleIntent(GalleryIntent.Refresh) },
-                onLoadMore = { viewModel.handleIntent(GalleryIntent.LoadMore) },
-                navController = navController
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun MainContent(
+fun GalleryContent(
     innerPadding: PaddingValues,
-    uiState: GalleryState,
-    onSearchQueryChange: (String) -> Unit,
+    listState: LazyStaggeredGridState,
+    covers: List<Cover>,
+    isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    isLoadingMore: Boolean,
     onLoadMore: () -> Unit,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
     navController: NavController
 ) {
-    val listState = rememberLazyStaggeredGridState()
-
     // Handle load more
     val loadMoreThreshold = 5
     val shouldLoadMore = remember {
@@ -150,33 +86,31 @@ private fun MainContent(
             totalItems > 0 && lastVisibleItem >= totalItems - loadMoreThreshold
         }
     }
-    
+
     LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value && !uiState.isLoadingMore) {
+        if (shouldLoadMore.value && !isLoadingMore) {
             onLoadMore()
         }
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.Companion.fillMaxSize(),
     ) {
         WaterfallGrid(
             innerPadding = innerPadding,
             listState = listState,
-            covers = uiState.covers,
-            isRefreshing = uiState.isRefreshing,
+            covers = covers,
+            isRefreshing = isRefreshing,
             onRefresh = onRefresh,
-            isLoadingMore = uiState.isLoadingMore,
+            isLoadingMore = isLoadingMore,
             navController = navController
         )
-        
         TopBar(
             listState = listState,
-            searchQuery = uiState.searchQuery,
+            searchQuery = searchQuery,
             onSearchQueryChange = onSearchQueryChange,
             navController = navController
         )
-        BottomBar(listState, navController)
     }
 }
 
@@ -192,7 +126,7 @@ private fun CoverItem(
     }
 
     Card(
-        modifier = Modifier
+        modifier = Modifier.Companion
             .fillMaxWidth()
             .clickable {
                 // 点击跳转到详情页
@@ -205,10 +139,10 @@ private fun CoverItem(
             }
     ) {
         Box(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxWidth()
                 .aspectRatio(aspectRatio),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Companion.Center
         ) {
             SubcomposeAsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -217,24 +151,24 @@ private fun CoverItem(
                     .build(),
                 loading = {
                     Box(
-                        contentAlignment = Alignment.Center,
+                        contentAlignment = Alignment.Companion.Center,
                     ) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.Companion.size(48.dp)
                         )
                     }
                 },
                 contentDescription = cover.title,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                modifier = Modifier.Companion.fillMaxSize(),
+                contentScale = ContentScale.Companion.Crop
             )
-            if (false&&cover.title != null) {
+            if (false && cover.title != null) {
                 Text(
                     text = cover.title ?: "",
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
+                    modifier = Modifier.Companion
+                        .align(Alignment.Companion.TopStart)
                         .background(
-                            color = Color.Black.copy(alpha = 0.6f),
+                            color = Color.Companion.Black.copy(alpha = 0.6f),
                             shape = RoundedCornerShape(bottomEnd = 8.dp)
                         )
                         .padding(8.dp)
@@ -260,12 +194,12 @@ fun WaterfallGrid(
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
-        modifier = Modifier
+        modifier = Modifier.Companion
             .fillMaxSize(),
         state = pullRefreshState,
         indicator = {
-            Indicator(
-                modifier = Modifier.align(Alignment.TopCenter),
+            PullToRefreshDefaults.Indicator(
+                modifier = Modifier.Companion.align(Alignment.Companion.TopCenter),
                 isRefreshing = isRefreshing,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -282,7 +216,7 @@ fun WaterfallGrid(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalItemSpacing = 8.dp,
             state = listState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.Companion.fillMaxSize()
         ) {
             items(covers) { cover ->
                 CoverItem(
@@ -292,12 +226,12 @@ fun WaterfallGrid(
             }
 
             if (isLoadingMore) {
-                item(span = StaggeredGridItemSpan.FullLine) {
+                item(span = StaggeredGridItemSpan.Companion.FullLine) {
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .fillMaxWidth()
                             .padding(16.dp),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Companion.Center
                     ) {
                         CircularProgressIndicator()
                     }
@@ -317,7 +251,7 @@ private fun BoxScope.TopBar(
 ) {
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
-        modifier = Modifier.align(Alignment.TopCenter),
+        modifier = Modifier.Companion.align(Alignment.Companion.TopCenter),
         enter = slideInVertically(initialOffsetY = { -it }),
         exit = slideOutVertically(targetOffsetY = { -it })
     ) {
@@ -346,22 +280,22 @@ private fun BoxScope.TopBar(
                                 }
                             },
                             singleLine = true,
-                            modifier = Modifier
+                            modifier = Modifier.Companion
                                 .fillMaxWidth()
                                 .padding(vertical = 0.dp),
                             colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                disabledContainerColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent,
+                                focusedContainerColor = Color.Companion.Transparent,
+                                unfocusedContainerColor = Color.Companion.Transparent,
+                                disabledContainerColor = Color.Companion.Transparent,
+                                focusedIndicatorColor = Color.Companion.Transparent,
+                                unfocusedIndicatorColor = Color.Companion.Transparent,
+                                disabledIndicatorColor = Color.Companion.Transparent,
                             )
                         )
                     },
                     expanded = false,
                     onExpandedChange = { /* TODO */ },
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .fillMaxWidth()
                         .offset(y = (-4).dp),
                 ) {
@@ -372,16 +306,16 @@ private fun BoxScope.TopBar(
                 Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .padding(8.dp)
                         .size(48.dp)
                 ) {
                     IconButton(
-                        onClick = { 
+                        onClick = {
                             // 打开侧边栏菜单
                             navController.navigate(NavRoutes.MENU)
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.Companion.fillMaxSize()
                     ) {
                         Icon(
                             imageVector = Icons.Default.Menu,
@@ -394,16 +328,16 @@ private fun BoxScope.TopBar(
                 Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier
+                    modifier = Modifier.Companion
                         .padding(8.dp)
                         .size(48.dp)
                 ) {
                     IconButton(
-                        onClick = { 
+                        onClick = {
                             // 跳转到通知页面
                             navController.navigate(NavRoutes.NOTIFICATIONS)
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.Companion.fillMaxSize()
                     ) {
                         Icon(
                             imageVector = Icons.Default.Notifications,
@@ -415,102 +349,6 @@ private fun BoxScope.TopBar(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f),
             )
-        )
-    }
-}
-
-@Composable
-private fun BoxScope.BottomBar(
-    listState: LazyStaggeredGridState,
-    navController: NavController
-) {
-    var selectedIndex by remember { mutableStateOf(0) }
-
-    AnimatedVisibility(
-        visible = !listState.isScrollInProgress,
-        modifier = Modifier.align(Alignment.BottomCenter),
-        enter = slideInVertically(initialOffsetY = { it }),
-        exit = slideOutVertically(targetOffsetY = { it })
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(24.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            NavigationBar(
-                modifier = Modifier.size(240.dp, 48.dp),
-                containerColor = Color.Transparent,
-                tonalElevation = 8.dp
-            ) {
-                NavigationBarItem(
-                    icon = { 
-                        Icon(
-                            Icons.Default.Home,
-                            contentDescription = "Home",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    selected = selectedIndex == 0,
-                    onClick = { selectedIndex = 0 }
-                )
-                NavigationBarItem(
-                    icon = { 
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = "Search",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    selected = selectedIndex == 1,
-                    onClick = { 
-                        selectedIndex = 1
-                        // navController.navigate(NavRoutes.SEARCH)
-                    }
-                )
-                NavigationBarItem(
-                    icon = { 
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = "Profile",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    },
-                    selected = selectedIndex == 2,
-                    onClick = { 
-                        selectedIndex = 2
-                        // navController.navigate(NavRoutes.PROFILE)
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MainContentPreview() {
-    KonaTheme {
-        MainContent(
-            innerPadding = PaddingValues(),
-            uiState = GalleryState(
-                covers = List(10) { index ->
-                    Cover(
-                        id = index.toString(),
-                        title = "Cover $index"
-                    )
-                },
-                searchQuery = "",
-                isRefreshing = false,
-                isLoadingMore = false
-            ),
-            onSearchQueryChange = {},
-            onRefresh = {},
-            onLoadMore = {},
-            navController = rememberNavController()
         )
     }
 }
@@ -539,23 +377,13 @@ private fun WaterfallGridPreview() {
 @Composable
 private fun TopBarPreview() {
     KonaTheme {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.Companion.fillMaxSize()) {
             TopBar(
                 listState = rememberLazyStaggeredGridState(),
                 searchQuery = "Search query",
                 onSearchQueryChange = {},
                 navController = rememberNavController()
             )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun BottomBarPreview() {
-    KonaTheme {
-        Box(modifier = Modifier.fillMaxSize()) {
-            BottomBar(listState = rememberLazyStaggeredGridState(), navController = rememberNavController())
         }
     }
 }
