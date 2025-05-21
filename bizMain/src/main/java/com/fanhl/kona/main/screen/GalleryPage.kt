@@ -47,6 +47,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +56,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.SubcomposeAsyncImage
@@ -62,21 +65,46 @@ import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.navigation.NavRoutes
+import com.fanhl.kona.main.viewmodel.GalleryEffect
+import com.fanhl.kona.main.viewmodel.GalleryIntent
+import com.fanhl.kona.main.viewmodel.GalleryViewModel
 import com.fanhl.util.plus
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun GalleryPage(
     innerPadding: PaddingValues,
-    listState: LazyStaggeredGridState,
-    covers: List<Cover>,
-    isRefreshing: Boolean,
-    onRefresh: () -> Unit,
-    isLoadingMore: Boolean,
-    onLoadMore: () -> Unit,
-    searchQuery: String,
-    onSearchQueryChange: (String) -> Unit,
     navController: NavController
 ) {
+    val viewModel: GalleryViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val listState = rememberLazyStaggeredGridState()
+
+    // Initial refresh
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(GalleryIntent.Refresh)
+    }
+
+    // Effect collection
+    LaunchedEffect(Unit) {
+        viewModel.effect.collectLatest { effect ->
+            when (effect) {
+                is GalleryEffect.RefreshSuccess -> {
+                    // Handle refresh success
+                }
+                is GalleryEffect.RefreshError -> {
+                    // Handle refresh error
+                }
+                is GalleryEffect.LoadMoreSuccess -> {
+                    // Handle load more success
+                }
+                is GalleryEffect.LoadMoreError -> {
+                    // Handle load more error
+                }
+            }
+        }
+    }
+
     // Handle load more
     val loadMoreThreshold = 5
     val shouldLoadMore = remember {
@@ -88,8 +116,8 @@ fun GalleryPage(
     }
 
     LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value && !isLoadingMore) {
-            onLoadMore()
+        if (shouldLoadMore.value && !uiState.isLoadingMore) {
+            viewModel.handleIntent(GalleryIntent.LoadMore)
         }
     }
 
@@ -99,16 +127,18 @@ fun GalleryPage(
         WaterfallGrid(
             innerPadding = innerPadding,
             listState = listState,
-            covers = covers,
-            isRefreshing = isRefreshing,
-            onRefresh = onRefresh,
-            isLoadingMore = isLoadingMore,
+            covers = uiState.covers,
+            isRefreshing = uiState.isRefreshing,
+            onRefresh = { viewModel.handleIntent(GalleryIntent.Refresh) },
+            isLoadingMore = uiState.isLoadingMore,
             navController = navController
         )
         TopBar(
             listState = listState,
-            searchQuery = searchQuery,
-            onSearchQueryChange = onSearchQueryChange,
+            searchQuery = uiState.searchQuery,
+            onSearchQueryChange = { query ->
+                viewModel.handleIntent(GalleryIntent.UpdateSearchQuery(query))
+            },
             navController = navController
         )
     }

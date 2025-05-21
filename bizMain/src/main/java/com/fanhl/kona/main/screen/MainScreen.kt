@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.entity.Cover
@@ -50,48 +51,14 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: GalleryViewModel,
     navController: NavController
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
-    // Initial refresh
-    LaunchedEffect(Unit) {
-        viewModel.handleIntent(GalleryIntent.Refresh)
-    }
-
-    // Effect collection
-    LaunchedEffect(Unit) {
-        viewModel.effect.collectLatest { effect ->
-            when (effect) {
-                is GalleryEffect.RefreshSuccess -> {
-                    // Handle refresh success
-                }
-                is GalleryEffect.RefreshError -> {
-                    // Handle refresh error
-                }
-                is GalleryEffect.LoadMoreSuccess -> {
-                    // Handle load more success
-                }
-                is GalleryEffect.LoadMoreError -> {
-                    // Handle load more error
-                }
-            }
-        }
-    }
-
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
         ) { innerPadding ->
             MainContent(
                 innerPadding = innerPadding,
-                uiState = uiState,
-                onSearchQueryChange = { query ->
-                    viewModel.handleIntent(GalleryIntent.UpdateSearchQuery(query))
-                },
-                onRefresh = { viewModel.handleIntent(GalleryIntent.Refresh) },
-                onLoadMore = { viewModel.handleIntent(GalleryIntent.LoadMore) },
                 navController = navController
             )
         }
@@ -102,10 +69,6 @@ fun MainScreen(
 @Composable
 private fun MainContent(
     innerPadding: PaddingValues,
-    uiState: GalleryState,
-    onSearchQueryChange: (String) -> Unit,
-    onRefresh: () -> Unit,
-    onLoadMore: () -> Unit,
     navController: NavController
 ) {
     var selectedIndex by remember { mutableStateOf(0) }
@@ -133,14 +96,6 @@ private fun MainContent(
                 0 -> {
                     GalleryPage(
                         innerPadding = innerPadding,
-                        listState = listState,
-                        covers = uiState.covers,
-                        isRefreshing = uiState.isRefreshing,
-                        onRefresh = onRefresh,
-                        isLoadingMore = uiState.isLoadingMore,
-                        onLoadMore = onLoadMore,
-                        searchQuery = uiState.searchQuery,
-                        onSearchQueryChange = onSearchQueryChange,
                         navController = navController
                     )
                 }
@@ -236,20 +191,6 @@ private fun MainContentPreview() {
     KonaTheme {
         MainContent(
             innerPadding = PaddingValues(),
-            uiState = GalleryState(
-                covers = List(10) { index ->
-                    Cover(
-                        id = index.toString(),
-                        title = "Cover $index"
-                    )
-                },
-                searchQuery = "",
-                isRefreshing = false,
-                isLoadingMore = false
-            ),
-            onSearchQueryChange = {},
-            onRefresh = {},
-            onLoadMore = {},
             navController = rememberNavController()
         )
     }

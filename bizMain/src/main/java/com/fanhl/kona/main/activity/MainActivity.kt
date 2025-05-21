@@ -35,10 +35,7 @@ private fun AppNavigation() {
         startDestination = NavRoutes.GALLERY
     ) {
         composable(NavRoutes.GALLERY) {
-            MainScreen(
-                viewModel = hiltViewModel(),
-                navController = navController
-            )
+            MainScreen(navController = navController)
         }
         composable(NavRoutes.PHOTO) { backStackEntry ->
             val cover = backStackEntry.savedStateHandle.get<Cover>(NavRoutes.Args.COVER) 
