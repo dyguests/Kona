@@ -53,6 +53,19 @@ fun KonaPost.toCover(): Cover {
         author = author,
         date = createdAt?.let { java.util.Date(it * 1000).toString() },
         tags = tags?.split(" ")?.filter { it.isNotBlank() },
-        isFavorite = false
+        isFavorite = false,
+        // File related
+        fileUrl = fileUrl,
+        fileSize = fileSize,
+        // Sample related
+        sampleUrl = sampleUrl,
+        sampleWidth = sampleWidth,
+        sampleHeight = sampleHeight,
+        sampleFileSize = sampleFileSize,
+        // JPEG related
+        jpegUrl = jpegUrl,
+        jpegWidth = jpegWidth,
+        jpegHeight = jpegHeight,
+        jpegFileSize = jpegFileSize
     )
 }

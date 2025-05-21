@@ -29,16 +29,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
-import androidx.compose.ui.tooling.preview.Preview
-import com.fanhl.kona.common.entity.Cover
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,7 +135,7 @@ private fun PhotoContent(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(cover.previewUrl)
+                .data(cover.sampleUrl)
                 .crossfade(true)
                 .build(),
             contentDescription = cover.title,
