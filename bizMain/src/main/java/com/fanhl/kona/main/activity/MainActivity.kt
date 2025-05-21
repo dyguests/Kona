@@ -41,7 +41,8 @@ private fun AppNavigation() {
             )
         }
         composable(NavRoutes.PHOTO) { backStackEntry ->
-            val cover = backStackEntry.savedStateHandle.get<Cover>(NavRoutes.Args.COVER) ?: return@composable
+            val cover = backStackEntry.savedStateHandle.get<Cover>(NavRoutes.Args.COVER) 
+                ?: throw IllegalStateException("Cover must not be null when navigating to PhotoScreen")
             PhotoScreen(
                 viewModel = hiltViewModel<PhotoViewModel>().apply {
                     handleIntent(PhotoIntent.SetCover(cover))

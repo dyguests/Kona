@@ -194,8 +194,12 @@ private fun CoverItem(
             .fillMaxWidth()
             .clickable {
                 // 点击跳转到详情页
-                navController.currentBackStackEntry?.savedStateHandle?.set(NavRoutes.Args.COVER, cover)
-                navController.navigate(NavRoutes.PHOTO)
+                navController.navigate(NavRoutes.PHOTO) {
+                    popUpTo(NavRoutes.GALLERY)
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                navController.getBackStackEntry(NavRoutes.PHOTO).savedStateHandle[NavRoutes.Args.COVER] = cover
             }
     ) {
         Box(
