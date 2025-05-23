@@ -27,6 +27,10 @@ class GalleryViewModel @Inject constructor(
         viewModelScope.launch {
             queryDao.getRecentQueries().collectLatest { queries ->
                 setState { copy(recentQueries = queries) }
+                // 如果有最近的搜索记录，设置为当前查询
+                queries.firstOrNull()?.let { latestQuery ->
+                    setState { copy(searchQuery = latestQuery.query) }
+                }
             }
         }
     }

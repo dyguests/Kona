@@ -34,4 +34,7 @@ Kona 是一个使用现代 Android 开发技术重构的应用程序。
 
 - Android Studio Arctic Fox 或更新版本
 - Kotlin 1.8.0 或更新版本
-- Android SDK 21 或更新版本 
+- Android SDK 21 或更新版本
+
+# TODO
+- [ ] 将 libDatabase 重命名为 bizDatabase，因为该模块涉及到业务逻辑。 
