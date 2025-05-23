@@ -1,6 +1,8 @@
 package com.fanhl.kona.main.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,6 +20,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -74,13 +78,30 @@ fun PhotoScreen(
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = { SnackbarHost(snackbarHostState) }
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            floatingActionButton = {
+                AnimatedVisibility(
+                    visible = state.isOverlayVisible,
+                    enter = slideInHorizontally(initialOffsetX = { it }),
+                    exit = slideOutHorizontally(targetOffsetX = { it })
+                ) {
+                    FloatingActionButton(
+                        onClick = { viewModel.handleIntent(PhotoIntent.Download) },
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Download,
+                            contentDescription = "Download"
+                        )
+                    }
+                }
+            }
         ) { paddingValues ->
             PhotoContent(
                 paddingValues = paddingValues,
                 state = state,
                 onToggleOverlay = { viewModel.handleIntent(PhotoIntent.ToggleOverlay) },
-                onDownload = { viewModel.handleIntent(PhotoIntent.Download) },
                 navController = navController
             )
         }
@@ -93,7 +114,6 @@ private fun PhotoContent(
     paddingValues: PaddingValues,
     state: PhotoState,
     onToggleOverlay: () -> Unit,
-    onDownload: () -> Unit,
     navController: NavController
 ) {
     Box(
@@ -106,7 +126,6 @@ private fun PhotoContent(
         
         TopBar(
             isVisible = state.isOverlayVisible,
-            onDownload = onDownload,
             navController = navController
         )
     }
@@ -116,7 +135,6 @@ private fun PhotoContent(
 @Composable
 private fun BoxScope.TopBar(
     isVisible: Boolean,
-    onDownload: () -> Unit,
     navController: NavController
 ) {
     AnimatedVisibility(
@@ -136,12 +154,6 @@ private fun BoxScope.TopBar(
                 }
             },
             actions = {
-                IconButton(onClick = onDownload) {
-                    Icon(
-                        imageVector = Icons.Default.Download,
-                        contentDescription = "Download"
-                    )
-                }
                 IconButton(onClick = { /* TODO: 收藏功能 */ }) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
@@ -246,7 +258,6 @@ private fun PhotoContentPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             TopBar(
                 isVisible = true,
-                onDownload = {},
                 navController = rememberNavController()
             )
         }
