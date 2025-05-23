@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -33,6 +35,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
@@ -48,7 +51,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -279,6 +284,10 @@ private fun BoxScope.TopBar(
     onSearchQueryChange: (String) -> Unit,
     navController: NavController
 ) {
+    val viewModel: GalleryViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var isSearchExpanded by remember { mutableStateOf(false) }
+
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
         modifier = Modifier.Companion.align(Alignment.Companion.TopCenter),
@@ -288,48 +297,50 @@ private fun BoxScope.TopBar(
         TopAppBar(
             title = {
                 SearchBar(
-                    inputField = {
-                        TextField(
-                            value = searchQuery,
-                            onValueChange = onSearchQueryChange,
-                            placeholder = { Text("Search") },
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "Search"
-                                )
-                            },
-                            trailingIcon = {
-                                if (searchQuery.isNotEmpty()) {
-                                    IconButton(onClick = { onSearchQueryChange("") }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Clear,
-                                            contentDescription = "Clear search"
-                                        )
-                                    }
-                                }
-                            },
-                            singleLine = true,
-                            modifier = Modifier.Companion
-                                .fillMaxWidth()
-                                .padding(vertical = 0.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color.Companion.Transparent,
-                                unfocusedContainerColor = Color.Companion.Transparent,
-                                disabledContainerColor = Color.Companion.Transparent,
-                                focusedIndicatorColor = Color.Companion.Transparent,
-                                unfocusedIndicatorColor = Color.Companion.Transparent,
-                                disabledIndicatorColor = Color.Companion.Transparent,
-                            )
+                    query = searchQuery,
+                    onQueryChange = onSearchQueryChange,
+                    onSearch = { onSearchQueryChange(it) },
+                    active = isSearchExpanded,
+                    onActiveChange = { isSearchExpanded = it },
+                    placeholder = { Text("搜索") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "搜索"
                         )
                     },
-                    expanded = false,
-                    onExpandedChange = { /* TODO */ },
-                    modifier = Modifier.Companion
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { onSearchQueryChange("") }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "清除搜索"
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier
                         .fillMaxWidth()
                         .offset(y = (-4).dp),
                 ) {
-                    // Search suggestions can be added here
+                    // 显示搜索建议
+                    LazyColumn {
+                        items(uiState.recentQueries) { query ->
+                            ListItem(
+                                headlineContent = { Text(query.query) },
+                                supportingContent = { 
+                                    Text(
+                                        "使用次数: ${query.useCount}",
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                },
+                                modifier = Modifier.clickable {
+                                    onSearchQueryChange(query.query)
+                                    isSearchExpanded = false
+                                }
+                            )
+                        }
+                    }
                 }
             },
             navigationIcon = {
@@ -342,14 +353,13 @@ private fun BoxScope.TopBar(
                 ) {
                     IconButton(
                         onClick = {
-                            // 打开侧边栏菜单
                             navController.navigate(NavRoutes.MENU)
                         },
                         modifier = Modifier.Companion.fillMaxSize()
                     ) {
                         Icon(
                             imageVector = Icons.Default.Menu,
-                            contentDescription = "Menu"
+                            contentDescription = "菜单"
                         )
                     }
                 }
@@ -364,14 +374,13 @@ private fun BoxScope.TopBar(
                 ) {
                     IconButton(
                         onClick = {
-                            // 跳转到通知页面
                             navController.navigate(NavRoutes.NOTIFICATIONS)
                         },
                         modifier = Modifier.Companion.fillMaxSize()
                     ) {
                         Icon(
                             imageVector = Icons.Default.Notifications,
-                            contentDescription = "Notifications"
+                            contentDescription = "通知"
                         )
                     }
                 }

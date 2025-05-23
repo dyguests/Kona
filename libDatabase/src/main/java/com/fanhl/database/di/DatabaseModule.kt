@@ -28,4 +28,7 @@ object DatabaseModule {
 
     @Provides
     fun provideCoverDao(database: KonaDatabase) = database.coverDao()
+
+    @Provides
+    fun provideQueryDao(database: KonaDatabase) = database.queryDao()
 } 

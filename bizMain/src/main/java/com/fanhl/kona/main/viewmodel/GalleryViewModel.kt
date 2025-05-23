@@ -6,22 +6,45 @@ import com.fanhl.kona.common.mvi.BaseViewModel
 import com.fanhl.kona.common.mvi.IUiEffect
 import com.fanhl.kona.common.mvi.IUiIntent
 import com.fanhl.kona.common.mvi.IUiState
+import com.fanhl.kona.database.dao.QueryDao
+import com.fanhl.kona.database.entity.QueryEntity
 import com.fanhl.kona.main.usecase.GetCoversUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
-    private val getCoversUseCase: GetCoversUseCase
+    private val getCoversUseCase: GetCoversUseCase,
+    private val queryDao: QueryDao
 ) : BaseViewModel<GalleryIntent, GalleryState, GalleryEffect>() {
 
     override fun createInitialState(): GalleryState = GalleryState()
+
+    init {
+        // 收集最近的搜索记录
+        viewModelScope.launch {
+            queryDao.getRecentQueries().collectLatest { queries ->
+                setState { copy(recentQueries = queries) }
+            }
+        }
+    }
 
     override fun handleIntent(intent: GalleryIntent) {
         when (intent) {
             is GalleryIntent.UpdateSearchQuery -> {
                 setState { copy(searchQuery = intent.query) }
+                // 保存搜索记录
+                viewModelScope.launch {
+                    queryDao.insert(
+                        QueryEntity(
+                            query = intent.query,
+                            lastUsedAt = java.time.Instant.now(),
+                            useCount = 1
+                        )
+                    )
+                }
                 refresh()
             }
             is GalleryIntent.Refresh -> {
@@ -83,12 +106,12 @@ sealed class GalleryIntent : IUiIntent {
 }
 
 data class GalleryState(
-    // val searchQuery: String = "",
-    val searchQuery: String = "landscape", // test
+    val searchQuery: String = "",
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,
     val currentPage: Int = 1,
     val covers: List<Cover> = emptyList(),
+    val recentQueries: List<QueryEntity> = emptyList()
 ) : IUiState
 
 sealed class GalleryEffect : IUiEffect {
