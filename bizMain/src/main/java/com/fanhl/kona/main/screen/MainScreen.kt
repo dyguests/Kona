@@ -88,7 +88,8 @@ private fun MainContent(
                 0 -> {
                     GalleryPage(
                         innerPadding = innerPadding,
-                        navController = navController
+                        navController = navController,
+                        listState = listState
                     )
                 }
 

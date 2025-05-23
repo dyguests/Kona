@@ -74,11 +74,11 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun GalleryPage(
     innerPadding: PaddingValues,
-    navController: NavController
+    navController: NavController,
+    listState: LazyStaggeredGridState
 ) {
     val viewModel: GalleryViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val listState = rememberLazyStaggeredGridState()
 
     // Initial refresh
     LaunchedEffect(Unit) {
