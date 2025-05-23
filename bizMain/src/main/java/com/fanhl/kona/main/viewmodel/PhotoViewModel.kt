@@ -2,6 +2,7 @@ package com.fanhl.kona.main.viewmodel
 
 import android.app.WallpaperManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Environment
 import androidx.lifecycle.viewModelScope
@@ -60,7 +61,7 @@ class PhotoViewModel @Inject constructor(
     private fun handleSetWallpaper() {
         val cover = uiState.value.cover ?: return
         val url = cover.jpegUrl ?: return
-        val fileName = "Kona_${cover.id}.jpg"
+        val fileName = downloadManager.generateFileName(cover.id)
 
         viewModelScope.launch {
             try {
@@ -69,14 +70,15 @@ class PhotoViewModel @Inject constructor(
                     downloadManager.downloadFile(url, fileName)
                 }
                 
-                // Then set it as wallpaper
-                val bitmap = withContext(Dispatchers.IO) {
-                    val file = downloadManager.getFile(fileName)
-                    BitmapFactory.decodeFile(file.absolutePath)
+                // Then set it as wallpaper using Intent
+                val file = downloadManager.getFile(fileName)
+                val intent = Intent(Intent.ACTION_ATTACH_DATA).apply {
+                    addCategory(Intent.CATEGORY_DEFAULT)
+                    setDataAndType(android.net.Uri.fromFile(file), "image/jpeg")
+                    putExtra("mimeType", "image/jpeg")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
-                val wallpaperManager = WallpaperManager.getInstance(context)
-                wallpaperManager.setBitmap(bitmap)
-                setEffect { PhotoEffect.WallpaperSet }
+                setEffect { PhotoEffect.SetWallpaperIntent(intent) }
             } catch (e: Exception) {
                 setEffect { PhotoEffect.WallpaperSetFailed }
             }
@@ -100,6 +102,6 @@ data class PhotoState(
 sealed class PhotoEffect : IUiEffect {
     object DownloadStarted : PhotoEffect()
     object FileExists : PhotoEffect()
-    object WallpaperSet : PhotoEffect()
+    data class SetWallpaperIntent(val intent: Intent) : PhotoEffect()
     object WallpaperSetFailed : PhotoEffect()
 } 
