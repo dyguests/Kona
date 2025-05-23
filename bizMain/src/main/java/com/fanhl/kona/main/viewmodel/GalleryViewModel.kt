@@ -22,42 +22,44 @@ class GalleryViewModel @Inject constructor(
 
     override fun createInitialState(): GalleryState = GalleryState()
 
-    init {
-        // 收集最近的搜索记录
+    override fun handleIntent(intent: GalleryIntent) {
+        when (intent) {
+            is GalleryIntent.Init -> handleInit()
+            is GalleryIntent.UpdateSearchInput -> setState { copy(searchQuery = intent.query) }
+            is GalleryIntent.Search -> handleSearch(intent.query)
+            is GalleryIntent.ClearSearch -> {
+                setState { copy(searchQuery = "") }
+                refresh()
+            }
+            is GalleryIntent.Refresh -> refresh()
+            is GalleryIntent.LoadMore -> loadMore()
+        }
+    }
+
+    private fun handleInit() {
         viewModelScope.launch {
             queryDao.getRecentQueries().collectLatest { queries ->
                 setState { copy(recentQueries = queries) }
-                // 如果有最近的搜索记录，设置为当前查询
                 queries.firstOrNull()?.let { latestQuery ->
                     setState { copy(searchQuery = latestQuery.query) }
+                    refresh()
                 }
             }
         }
     }
 
-    override fun handleIntent(intent: GalleryIntent) {
-        when (intent) {
-            is GalleryIntent.UpdateSearchQuery -> {
-                setState { copy(searchQuery = intent.query) }
-                // 保存搜索记录
-                viewModelScope.launch {
-                    queryDao.insert(
-                        QueryEntity(
-                            query = intent.query,
-                            lastUsedAt = java.time.Instant.now(),
-                            useCount = 1
-                        )
-                    )
-                }
-                refresh()
-            }
-            is GalleryIntent.Refresh -> {
-                refresh()
-            }
-            is GalleryIntent.LoadMore -> {
-                loadMore()
-            }
+    private fun handleSearch(query: String) {
+        setState { copy(searchQuery = query) }
+        viewModelScope.launch {
+            queryDao.insert(
+                QueryEntity(
+                    query = query,
+                    lastUsedAt = java.time.Instant.now(),
+                    useCount = 1
+                )
+            )
         }
+        refresh()
     }
 
     private fun refresh() {
@@ -104,7 +106,10 @@ class GalleryViewModel @Inject constructor(
 
 // Define your MVI components
 sealed class GalleryIntent : IUiIntent {
-    data class UpdateSearchQuery(val query: String) : GalleryIntent()
+    object Init : GalleryIntent()
+    data class UpdateSearchInput(val query: String) : GalleryIntent()
+    data class Search(val query: String) : GalleryIntent()
+    object ClearSearch : GalleryIntent()
     object Refresh : GalleryIntent()
     object LoadMore : GalleryIntent()
 }

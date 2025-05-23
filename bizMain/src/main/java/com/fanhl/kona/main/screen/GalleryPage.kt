@@ -40,8 +40,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -72,6 +70,7 @@ import com.fanhl.kona.common.ui.theme.KonaTheme
 import com.fanhl.kona.main.navigation.NavRoutes
 import com.fanhl.kona.main.viewmodel.GalleryEffect
 import com.fanhl.kona.main.viewmodel.GalleryIntent
+import com.fanhl.kona.main.viewmodel.GalleryState
 import com.fanhl.kona.main.viewmodel.GalleryViewModel
 import com.fanhl.util.plus
 import kotlinx.coroutines.flow.collectLatest
@@ -87,7 +86,7 @@ fun GalleryPage(
 
     // Initial refresh
     LaunchedEffect(Unit) {
-        viewModel.handleIntent(GalleryIntent.Refresh)
+        viewModel.handleIntent(GalleryIntent.Init)
     }
 
     // Effect collection
@@ -132,18 +131,20 @@ fun GalleryPage(
         WaterfallGrid(
             innerPadding = innerPadding,
             listState = listState,
-            covers = uiState.covers,
-            isRefreshing = uiState.isRefreshing,
+            uiState = uiState,
             onRefresh = { viewModel.handleIntent(GalleryIntent.Refresh) },
-            isLoadingMore = uiState.isLoadingMore,
             navController = navController
         )
         TopBar(
             listState = listState,
-            searchQuery = uiState.searchQuery,
+            uiState = uiState,
             onSearchQueryChange = { query ->
-                viewModel.handleIntent(GalleryIntent.UpdateSearchQuery(query))
+                viewModel.handleIntent(GalleryIntent.UpdateSearchInput(query))
             },
+            onSearch = { query ->
+                viewModel.handleIntent(GalleryIntent.Search(query))
+            },
+            onClearSearch = { viewModel.handleIntent(GalleryIntent.ClearSearch) },
             navController = navController
         )
     }
@@ -218,16 +219,14 @@ private fun CoverItem(
 fun WaterfallGrid(
     innerPadding: PaddingValues,
     listState: LazyStaggeredGridState,
-    covers: List<Cover>,
-    isRefreshing: Boolean = false,
+    uiState: GalleryState,
     onRefresh: () -> Unit = {},
-    isLoadingMore: Boolean = false,
     navController: NavController
 ) {
     val pullRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
-        isRefreshing = isRefreshing,
+        isRefreshing = uiState.isRefreshing,
         onRefresh = onRefresh,
         modifier = Modifier.Companion
             .fillMaxSize(),
@@ -235,7 +234,7 @@ fun WaterfallGrid(
         indicator = {
             PullToRefreshDefaults.Indicator(
                 modifier = Modifier.Companion.align(Alignment.Companion.TopCenter),
-                isRefreshing = isRefreshing,
+                isRefreshing = uiState.isRefreshing,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 state = pullRefreshState
@@ -253,14 +252,14 @@ fun WaterfallGrid(
             state = listState,
             modifier = Modifier.Companion.fillMaxSize()
         ) {
-            items(covers) { cover ->
+            items(uiState.covers) { cover ->
                 CoverItem(
                     cover = cover,
                     navController = navController
                 )
             }
 
-            if (isLoadingMore) {
+            if (uiState.isLoadingMore) {
                 item(span = StaggeredGridItemSpan.Companion.FullLine) {
                     Box(
                         modifier = Modifier.Companion
@@ -280,12 +279,12 @@ fun WaterfallGrid(
 @OptIn(ExperimentalMaterial3Api::class)
 private fun BoxScope.TopBar(
     listState: LazyStaggeredGridState,
-    searchQuery: String,
+    uiState: GalleryState,
     onSearchQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    onClearSearch: () -> Unit,
     navController: NavController
 ) {
-    val viewModel: GalleryViewModel = hiltViewModel()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isSearchExpanded by remember { mutableStateOf(false) }
 
     AnimatedVisibility(
@@ -297,12 +296,16 @@ private fun BoxScope.TopBar(
         TopAppBar(
             title = {
                 SearchBar(
-                    query = searchQuery,
+                    query = uiState.searchQuery,
                     onQueryChange = onSearchQueryChange,
-                    onSearch = { onSearchQueryChange(it) },
+                    onSearch = { query ->
+                        onSearch(query)
+                        isSearchExpanded = false
+                    },
                     active = isSearchExpanded,
                     onActiveChange = { isSearchExpanded = it },
                     placeholder = { Text("搜索") },
+                    shape = RoundedCornerShape(28.dp),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
@@ -310,8 +313,8 @@ private fun BoxScope.TopBar(
                         )
                     },
                     trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { onSearchQueryChange("") }) {
+                        if (uiState.searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { onClearSearch() }) {
                                 Icon(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = "清除搜索"
@@ -335,7 +338,7 @@ private fun BoxScope.TopBar(
                                     )
                                 },
                                 modifier = Modifier.clickable {
-                                    onSearchQueryChange(query.query)
+                                    onSearch(query.query)
                                     isSearchExpanded = false
                                 }
                             )
@@ -399,14 +402,8 @@ private fun WaterfallGridPreview() {
         WaterfallGrid(
             innerPadding = PaddingValues(),
             listState = rememberLazyStaggeredGridState(),
-            covers = List(10) { index ->
-                Cover(
-                    id = index.toString(),
-                    title = "Cover $index"
-                )
-            },
-            isRefreshing = false,
-            isLoadingMore = false,
+            uiState = GalleryState(),
+            onRefresh = {},
             navController = rememberNavController()
         )
     }
@@ -419,8 +416,10 @@ private fun TopBarPreview() {
         Box(modifier = Modifier.Companion.fillMaxSize()) {
             TopBar(
                 listState = rememberLazyStaggeredGridState(),
-                searchQuery = "Search query",
+                uiState = GalleryState(),
                 onSearchQueryChange = {},
+                onSearch = {},
+                onClearSearch = {},
                 navController = rememberNavController()
             )
         }
