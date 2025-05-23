@@ -1,5 +1,6 @@
 package com.fanhl.kona.main.screen
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -25,8 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -63,13 +61,16 @@ fun PhotoScreen(
     navController: NavController
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is PhotoEffect.DownloadStarted -> {
-                    snackbarHostState.showSnackbar("Download started")
+                    Toast.makeText(context, "Download started", Toast.LENGTH_SHORT).show()
+                }
+                is PhotoEffect.FileExists -> {
+                    Toast.makeText(context, "File already exists", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -78,7 +79,6 @@ fun PhotoScreen(
     KonaTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = { SnackbarHost(snackbarHostState) },
             floatingActionButton = {
                 AnimatedVisibility(
                     visible = state.isOverlayVisible,

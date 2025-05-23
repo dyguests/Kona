@@ -33,8 +33,13 @@ class PhotoViewModel @Inject constructor(
         val cover = uiState.value.cover ?: return
         val url = cover.jpegUrl ?: return
         val fileName = "Kona_${cover.id}.jpg"
-        downloadManager.downloadFile(url, fileName)
-        setEffect { PhotoEffect.DownloadStarted }
+        
+        if (downloadManager.isFileExists(fileName)) {
+            setEffect { PhotoEffect.FileExists }
+        } else {
+            downloadManager.downloadFile(url, fileName)
+            setEffect { PhotoEffect.DownloadStarted }
+        }
     }
 }
 
@@ -52,4 +57,5 @@ data class PhotoState(
 
 sealed class PhotoEffect : IUiEffect {
     object DownloadStarted : PhotoEffect()
+    object FileExists : PhotoEffect()
 } 

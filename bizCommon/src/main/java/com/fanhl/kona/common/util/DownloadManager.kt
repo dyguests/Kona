@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,5 +25,10 @@ class DownloadManager @Inject constructor(
             .setAllowedOverRoaming(true)
 
         return downloadManager.enqueue(request)
+    }
+
+    fun isFileExists(fileName: String): Boolean {
+        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
+        return file.exists()
     }
 } 

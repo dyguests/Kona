@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.fanhl.kona.database.entity.QueryEntity
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 /**
  * 搜索查询的数据访问对象。
@@ -65,4 +66,17 @@ interface QueryDao {
      */
     @Query("DELETE FROM queries")
     suspend fun deleteAll()
+
+    /**
+     * 更新查询记录的使用次数和时间
+     * 如果记录不存在则插入新记录
+     */
+    @Query("""
+        INSERT INTO queries (query, lastUsedAt, useCount, isFavorite)
+        VALUES (:query, :lastUsedAt, 1, 0)
+        ON CONFLICT(query) DO UPDATE SET
+            lastUsedAt = :lastUsedAt,
+            useCount = useCount + 1
+    """)
+    suspend fun updateOrInsertQuery(query: String, lastUsedAt: Instant = Instant.now())
 } 

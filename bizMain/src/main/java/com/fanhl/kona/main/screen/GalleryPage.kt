@@ -1,6 +1,7 @@
 package com.fanhl.kona.main.screen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,12 +23,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -38,10 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -286,112 +280,68 @@ private fun BoxScope.TopBar(
     navController: NavController
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
+    val horizontalPadding by animateDpAsState(
+        targetValue = if (!isSearchExpanded) 8.dp else 0.dp,
+        label = "horizontalPadding"
+    )
 
     AnimatedVisibility(
         visible = !listState.isScrollInProgress,
-        modifier = Modifier.Companion.align(Alignment.Companion.TopCenter),
+        modifier = Modifier.align(Alignment.TopCenter),
         enter = slideInVertically(initialOffsetY = { -it }),
         exit = slideOutVertically(targetOffsetY = { -it })
     ) {
-        TopAppBar(
-            title = {
-                SearchBar(
-                    query = uiState.searchQuery,
-                    onQueryChange = onSearchQueryChange,
-                    onSearch = { query ->
-                        onSearch(query)
-                        isSearchExpanded = false
-                    },
-                    active = isSearchExpanded,
-                    onActiveChange = { isSearchExpanded = it },
-                    placeholder = { Text("搜索") },
-                    shape = RoundedCornerShape(28.dp),
-                    leadingIcon = {
+        SearchBar(
+            query = uiState.searchQuery,
+            onQueryChange = onSearchQueryChange,
+            onSearch = { query ->
+                onSearch(query)
+                isSearchExpanded = false
+            },
+            active = isSearchExpanded,
+            onActiveChange = { isSearchExpanded = it },
+            placeholder = { Text("搜索") },
+            shape = RoundedCornerShape(28.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "搜索"
+                )
+            },
+            trailingIcon = {
+                if (uiState.searchQuery.isNotEmpty()) {
+                    IconButton(onClick = { onClearSearch() }) {
                         Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "搜索"
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "清除搜索"
                         )
-                    },
-                    trailingIcon = {
-                        if (uiState.searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { onClearSearch() }) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = "清除搜索"
-                                )
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = (-4).dp),
-                ) {
-                    // 显示搜索建议
-                    LazyColumn {
-                        items(uiState.recentQueries) { query ->
-                            ListItem(
-                                headlineContent = { Text(query.query) },
-                                supportingContent = { 
-                                    Text(
-                                        "使用次数: ${query.useCount}",
-                                        style = MaterialTheme.typography.bodySmall
-                                    )
-                                },
-                                modifier = Modifier.clickable {
-                                    onSearch(query.query)
-                                    isSearchExpanded = false
-                                }
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = horizontalPadding)
+                .align(Alignment.TopCenter),
+        ) {
+            // 显示搜索建议
+            LazyColumn {
+                items(uiState.recentQueries) { query ->
+                    ListItem(
+                        headlineContent = { Text(query.query) },
+                        supportingContent = {
+                            Text(
+                                "使用次数: ${query.useCount}",
+                                style = MaterialTheme.typography.bodySmall
                             )
+                        },
+                        modifier = Modifier.clickable {
+                            onSearch(query.query)
+                            isSearchExpanded = false
                         }
-                    }
+                    )
                 }
-            },
-            navigationIcon = {
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier.Companion
-                        .padding(8.dp)
-                        .size(48.dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.MENU)
-                        },
-                        modifier = Modifier.Companion.fillMaxSize()
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "菜单"
-                        )
-                    }
-                }
-            },
-            actions = {
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    modifier = Modifier.Companion
-                        .padding(8.dp)
-                        .size(48.dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.NOTIFICATIONS)
-                        },
-                        modifier = Modifier.Companion.fillMaxSize()
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Notifications,
-                            contentDescription = "通知"
-                        )
-                    }
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f),
-            )
-        )
+            }
+        }
     }
 }
 

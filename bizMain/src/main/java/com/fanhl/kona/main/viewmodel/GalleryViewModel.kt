@@ -51,13 +51,7 @@ class GalleryViewModel @Inject constructor(
     private fun handleSearch(query: String) {
         setState { copy(searchQuery = query) }
         viewModelScope.launch {
-            queryDao.insert(
-                QueryEntity(
-                    query = query,
-                    lastUsedAt = java.time.Instant.now(),
-                    useCount = 1
-                )
-            )
+            queryDao.updateOrInsertQuery(query)
         }
         refresh()
     }
