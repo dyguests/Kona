@@ -26,11 +26,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,18 +60,9 @@ private fun MainContent(
     innerPadding: PaddingValues,
     navController: NavController
 ) {
-    var selectedIndex by remember { mutableStateOf(0) }
+    val scope = rememberCoroutineScope()
+
     val pagerState = rememberPagerState { 3 }
-
-    // Sync pager state with selected index
-    LaunchedEffect(pagerState.currentPage) {
-        selectedIndex = pagerState.currentPage
-    }
-
-    LaunchedEffect(selectedIndex) {
-        pagerState.animateScrollToPage(selectedIndex)
-    }
-
     val listState = rememberLazyStaggeredGridState()
 
     Box(
@@ -105,8 +93,12 @@ private fun MainContent(
 
         BottomBar(
             listState = listState,
-            selectedIndex = selectedIndex,
-            onSelectedIndexChange = { selectedIndex = it },
+            selectedIndex = pagerState.currentPage,
+            onSelectedIndexChange = {
+                scope.launch {
+                    pagerState.scrollToPage(it)
+                }
+            },
             navController = navController
         )
     }
