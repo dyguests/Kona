@@ -15,6 +15,10 @@ class DownloadManager @Inject constructor(
 ) {
     private val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
+    fun getFile(fileName: String): File {
+        return File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
+    }
+
     fun downloadFile(url: String, fileName: String): Long {
         val request = DownloadManager.Request(Uri.parse(url))
             .setTitle(fileName)
@@ -28,7 +32,7 @@ class DownloadManager @Inject constructor(
     }
 
     fun isFileExists(fileName: String): Boolean {
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
+        val file = getFile(fileName)
         return file.exists()
     }
 } 

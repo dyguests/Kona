@@ -71,7 +71,7 @@ class PhotoViewModel @Inject constructor(
                 
                 // Then set it as wallpaper
                 val bitmap = withContext(Dispatchers.IO) {
-                    val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName)
+                    val file = downloadManager.getFile(fileName)
                     BitmapFactory.decodeFile(file.absolutePath)
                 }
                 val wallpaperManager = WallpaperManager.getInstance(context)
