@@ -61,7 +61,7 @@ class PhotoViewModel @Inject constructor(
     private fun handleSetWallpaper() {
         val cover = uiState.value.cover ?: return
         val url = cover.jpegUrl ?: return
-        val fileName = downloadManager.generateFileName(cover.id)
+        val fileName = "Kona_${cover.id}.jpg"
 
         viewModelScope.launch {
             try {
