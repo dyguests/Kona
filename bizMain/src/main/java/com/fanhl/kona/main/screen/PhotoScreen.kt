@@ -183,43 +183,49 @@ private fun Photo(
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
     var offsetY by remember { mutableFloatStateOf(0f) }
-    SubcomposeAsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(cover.sampleUrl)
-            .crossfade(true)
-            .build(),
-        loading = {
-            Box(
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(48.dp)
-                )
-            }
-        },
-        contentDescription = cover.title,
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .graphicsLayer(
-                scaleX = scale,
-                scaleY = scale,
-                translationX = offsetX,
-                translationY = offsetY
-            )
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     scale *= zoom
-                    offsetX += pan.x * scale
-                    offsetY += pan.y * scale
+                    offsetX += pan.x /** scale*/
+                    offsetY += pan.y /** scale*/
                 }
             }
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { onPhotoClick() }
                 )
+            }
+    ) {
+        SubcomposeAsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(cover.sampleUrl)
+                .crossfade(true)
+                .build(),
+            loading = {
+                Box(
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(48.dp)
+                    )
+                }
             },
-        contentScale = ContentScale.Fit
-    )
+            contentDescription = cover.title,
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(
+                    scaleX = scale,
+                    scaleY = scale,
+                    translationX = offsetX,
+                    translationY = offsetY
+                ),
+            contentScale = ContentScale.Fit
+        )
+    }
 }
 
 @Preview(showBackground = true)
