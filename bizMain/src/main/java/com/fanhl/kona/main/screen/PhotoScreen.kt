@@ -3,21 +3,22 @@ package com.fanhl.kona.main.screen
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -72,6 +73,12 @@ fun PhotoScreen(
                 is PhotoEffect.FileExists -> {
                     Toast.makeText(context, "File already exists", Toast.LENGTH_SHORT).show()
                 }
+                is PhotoEffect.WallpaperSet -> {
+                    Toast.makeText(context, "Wallpaper set successfully", Toast.LENGTH_SHORT).show()
+                }
+                is PhotoEffect.WallpaperSetFailed -> {
+                    Toast.makeText(context, "Failed to set wallpaper", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -80,20 +87,40 @@ fun PhotoScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             floatingActionButton = {
-                AnimatedVisibility(
-                    visible = state.isOverlayVisible,
-                    enter = slideInHorizontally(initialOffsetX = { it }),
-                    exit = slideOutHorizontally(targetOffsetX = { it })
-                ) {
-                    FloatingActionButton(
-                        onClick = { viewModel.handleIntent(PhotoIntent.Download) },
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                Column {
+                    AnimatedVisibility(
+                        visible = state.isOverlayVisible,
+                        enter = slideInHorizontally(initialOffsetX = { it }),
+                        exit = slideOutHorizontally(targetOffsetX = { it })
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Download,
-                            contentDescription = "Download"
-                        )
+                        FloatingActionButton(
+                            onClick = { viewModel.handleIntent(PhotoIntent.Download) },
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Download,
+                                contentDescription = "Download"
+                            )
+                        }
+                    }
+                    
+                    AnimatedVisibility(
+                        visible = state.isOverlayVisible,
+                        enter = slideInHorizontally(initialOffsetX = { it }),
+                        exit = slideOutHorizontally(targetOffsetX = { it })
+                    ) {
+                        FloatingActionButton(
+                            onClick = { viewModel.handleIntent(PhotoIntent.SetWallpaper) },
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Wallpaper,
+                                contentDescription = "Set as Wallpaper"
+                            )
+                        }
                     }
                 }
             }
@@ -154,18 +181,18 @@ private fun BoxScope.TopBar(
                 }
             },
             actions = {
-                IconButton(onClick = { /* TODO: 收藏功能 */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favorite"
-                    )
-                }
-                IconButton(onClick = { /* TODO: 分享功能 */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "Share"
-                    )
-                }
+                // IconButton(onClick = { /* TODO: 收藏功能 */ }) {
+                //     Icon(
+                //         imageVector = Icons.Default.Favorite,
+                //         contentDescription = "Favorite"
+                //     )
+                // }
+                // IconButton(onClick = { /* TODO: 分享功能 */ }) {
+                //     Icon(
+                //         imageVector = Icons.Default.Share,
+                //         contentDescription = "Share"
+                //     )
+                // }
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f),
@@ -190,8 +217,10 @@ private fun Photo(
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
                     scale *= zoom
-                    offsetX += pan.x /** scale*/
-                    offsetY += pan.y /** scale*/
+                    offsetX += pan.x
+                    /** scale*/
+                    offsetY += pan.y
+                    /** scale*/
                 }
             }
             .pointerInput(Unit) {
