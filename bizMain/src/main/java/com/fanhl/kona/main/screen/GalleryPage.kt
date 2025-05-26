@@ -26,6 +26,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.PictureAsPdf
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -62,7 +65,9 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.entity.SiteType
 import com.fanhl.kona.main.navigation.NavRoutes
+import com.fanhl.kona.main.util.SiteMapper
 import com.fanhl.kona.main.viewmodel.GalleryEffect
 import com.fanhl.kona.main.viewmodel.GalleryIntent
 import com.fanhl.kona.main.viewmodel.GalleryState
@@ -311,7 +316,7 @@ private fun BoxScope.TopBar(
                     placeholder = { Text("搜索") },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Search,
+                            imageVector = SiteMapper.getIcon(uiState.siteType),
                             contentDescription = "搜索",
                             modifier = Modifier.clickable {
                                 isSearchExpanded = true

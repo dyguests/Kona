@@ -8,6 +8,7 @@ import com.fanhl.kona.common.mvi.IUiIntent
 import com.fanhl.kona.common.mvi.IUiState
 import com.fanhl.kona.database.dao.QueryDao
 import com.fanhl.kona.database.entity.QueryEntity
+import com.fanhl.kona.main.entity.SiteType
 import com.fanhl.kona.main.usecase.GetCoversUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -114,7 +115,8 @@ data class GalleryState(
     val isLoadingMore: Boolean = false,
     val currentPage: Int = 1,
     val covers: List<Cover> = emptyList(),
-    val recentQueries: List<QueryEntity> = emptyList()
+    val recentQueries: List<QueryEntity> = emptyList(),
+    val siteType: SiteType = SiteType.Kona // todo cache
 ) : IUiState
 
 sealed class GalleryEffect : IUiEffect {
