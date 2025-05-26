@@ -11,6 +11,7 @@ import javax.inject.Singleton
 class KonaDataSource @Inject constructor() {
     suspend fun getPost(): List<Cover> {
         // return get("https://konachan.com/post.json")
+        // https://konachan.com/post.json?tags=&limit=21&page=3
         return get("/post.json")
             .domain(DOMAIN)
             .await<List<KonaPost>>()
