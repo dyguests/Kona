@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fanhl.kona.main"
+    namespace = "com.fanhl.kona.danbooru"
     compileSdk = 35
 
     defaultConfig {
@@ -43,11 +43,8 @@ android {
 
 dependencies {
     implementation(project(":bizCommon"))
-    implementation(project(":bizDanbooru"))
-    implementation(project(":bizKona"))
-    implementation(project(":bizYandere"))
+    implementation(project(":libHttp"))
     implementation(project(":libUtil"))
-    implementation(project(":libDatabase"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -58,17 +55,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.core)
-    implementation(libs.androidx.material.icons.extended)
-
-    // Coil
-    implementation(libs.coil.compose)
 
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -76,4 +68,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-} 
+}

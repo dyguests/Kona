@@ -23,10 +23,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "Kona"
 include(":app")
-include(":bizMain")
 include(":bizCommon")
-include(":bizKona")
+include(":bizMain")
 include(":bizYandere")
+include(":bizKona")
+include(":bizDanbooru")
 include(":libHttp")
 include(":libUtil")
 include(":libDatabase")
