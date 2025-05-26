@@ -314,8 +314,8 @@ private fun BoxScope.TopBar(
                             imageVector = Icons.Default.Search,
                             contentDescription = "搜索",
                             modifier = Modifier.clickable {
-                                isShowingIconSuggestions = !isShowingIconSuggestions
                                 isSearchExpanded = true
+                                isShowingIconSuggestions = true
                             }
                         )
                     },
@@ -332,7 +332,10 @@ private fun BoxScope.TopBar(
                 )
             },
             expanded = isSearchExpanded,
-            onExpandedChange = { isSearchExpanded = it },
+            onExpandedChange = {
+                isSearchExpanded = it
+                if (!it) isShowingIconSuggestions = false
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = horizontalPadding)
