@@ -35,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -291,33 +292,91 @@ private fun BoxScope.TopBar(
         enter = slideInVertically(initialOffsetY = { -it }),
         exit = slideOutVertically(targetOffsetY = { -it })
     ) {
+        // v1
+        // SearchBar(
+        //     query = uiState.searchQuery,
+        //     onQueryChange = onSearchQueryChange,
+        //     onSearch = { query ->
+        //         onSearch(query)
+        //         isSearchExpanded = false
+        //     },
+        //     active = isSearchExpanded,
+        //     onActiveChange = { isSearchExpanded = it },
+        //     placeholder = { Text("搜索") },
+        //     shape = RoundedCornerShape(28.dp),
+        //     leadingIcon = {
+        //         Icon(
+        //             imageVector = Icons.Default.Search,
+        //             contentDescription = "搜索"
+        //         )
+        //     },
+        //     trailingIcon = {
+        //         if (uiState.searchQuery.isNotEmpty()) {
+        //             IconButton(onClick = { onClearSearch() }) {
+        //                 Icon(
+        //                     imageVector = Icons.Default.Clear,
+        //                     contentDescription = "清除搜索"
+        //                 )
+        //             }
+        //         }
+        //     },
+        //     modifier = Modifier
+        //         .fillMaxWidth()
+        //         .padding(horizontal = horizontalPadding)
+        //         .align(Alignment.TopCenter),
+        // ) {
+        //     // 显示搜索建议
+        //     LazyColumn {
+        //         items(uiState.recentQueries) { query ->
+        //             ListItem(
+        //                 headlineContent = { Text(query.query) },
+        //                 supportingContent = {
+        //                     Text(
+        //                         "使用次数: ${query.useCount}",
+        //                         style = MaterialTheme.typography.bodySmall
+        //                     )
+        //                 },
+        //                 modifier = Modifier.clickable {
+        //                     onSearch(query.query)
+        //                     isSearchExpanded = false
+        //                 }
+        //             )
+        //         }
+        //     }
+        // }
+        // v2
         SearchBar(
-            query = uiState.searchQuery,
-            onQueryChange = onSearchQueryChange,
-            onSearch = { query ->
-                onSearch(query)
-                isSearchExpanded = false
-            },
-            active = isSearchExpanded,
-            onActiveChange = { isSearchExpanded = it },
-            placeholder = { Text("搜索") },
-            shape = RoundedCornerShape(28.dp),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "搜索"
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = uiState.searchQuery,
+                    onQueryChange = onSearchQueryChange,
+                    onSearch = { query ->
+                        onSearch(query)
+                        isSearchExpanded = false
+                    },
+                    expanded = isSearchExpanded,
+                    onExpandedChange = { isSearchExpanded = it },
+                    placeholder = { Text("搜索") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "搜索"
+                        )
+                    },
+                    trailingIcon = {
+                        if (uiState.searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { onClearSearch() }) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "清除搜索"
+                                )
+                            }
+                        }
+                    }
                 )
             },
-            trailingIcon = {
-                if (uiState.searchQuery.isNotEmpty()) {
-                    IconButton(onClick = { onClearSearch() }) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = "清除搜索"
-                        )
-                    }
-                }
-            },
+            expanded = isSearchExpanded,
+            onExpandedChange = { isSearchExpanded = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = horizontalPadding)
