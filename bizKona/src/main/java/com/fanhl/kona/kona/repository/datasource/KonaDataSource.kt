@@ -9,10 +9,15 @@ import javax.inject.Singleton
 
 @Singleton
 class KonaDataSource @Inject constructor() {
-    suspend fun getPost(): List<Cover> {
-        // return get("https://konachan.com/post.json")
+    suspend fun getPost(
+        tags: String,
+        page: Int,
+    ): List<Cover> {
         // https://konachan.com/post.json?tags=&limit=21&page=3
         return get("/post.json")
+            .query("tags" to tags)
+            .query("page" to page)
+            // .query("limit" to 20)
             .domain(DOMAIN)
             .await<List<KonaPost>>()
             .map { it.toCover() }
