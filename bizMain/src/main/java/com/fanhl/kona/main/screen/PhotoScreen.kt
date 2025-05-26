@@ -73,8 +73,8 @@ fun PhotoScreen(
                 is PhotoEffect.FileExists -> {
                     Toast.makeText(context, "File already exists", Toast.LENGTH_SHORT).show()
                 }
-                is PhotoEffect.WallpaperSet -> {
-                    Toast.makeText(context, "Wallpaper set successfully", Toast.LENGTH_SHORT).show()
+                is PhotoEffect.SetWallpaperIntent -> {
+                    context.startActivity(effect.intent)
                 }
                 is PhotoEffect.WallpaperSetFailed -> {
                     Toast.makeText(context, "Failed to set wallpaper", Toast.LENGTH_SHORT).show()

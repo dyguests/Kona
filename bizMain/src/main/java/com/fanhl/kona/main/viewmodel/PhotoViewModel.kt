@@ -15,8 +15,11 @@ import com.fanhl.kona.common.util.DownloadManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.TimeoutCancellationException
 import java.io.File
 import java.net.URL
 import javax.inject.Inject
@@ -65,16 +68,39 @@ class PhotoViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                // First download the image
+                // First download the image if it doesn't exist
                 if (!downloadManager.isFileExists(fileName)) {
-                    downloadManager.downloadFile(url, fileName)
+                    val downloadId = downloadManager.downloadFile(url, fileName)
+                    // Wait for download to complete with timeout
+                    try {
+                        withTimeout(30000) { // 30 seconds timeout
+                            var isDownloaded = false
+                            while (!isDownloaded) {
+                                val file = downloadManager.getFile(fileName)
+                                if (file.exists() && file.length() > 0) {
+                                    isDownloaded = true
+                                } else {
+                                    delay(500) // Check every 500ms
+                                }
+                            }
+                        }
+                    } catch (e: TimeoutCancellationException) {
+                        setEffect { PhotoEffect.WallpaperSetFailed }
+                        return@launch
+                    }
                 }
                 
                 // Then set it as wallpaper using Intent
                 val file = downloadManager.getFile(fileName)
+                val fileUri = androidx.core.content.FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    file
+                )
+                
                 val intent = Intent(Intent.ACTION_ATTACH_DATA).apply {
                     addCategory(Intent.CATEGORY_DEFAULT)
-                    setDataAndType(android.net.Uri.fromFile(file), "image/jpeg")
+                    setDataAndType(fileUri, "image/jpeg")
                     putExtra("mimeType", "image/jpeg")
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
