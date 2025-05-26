@@ -26,10 +26,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.PhotoLibrary
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,7 +62,6 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
-import com.fanhl.kona.main.entity.SiteType
 import com.fanhl.kona.main.navigation.NavRoutes
 import com.fanhl.kona.main.util.SiteMapper
 import com.fanhl.kona.main.viewmodel.GalleryEffect
@@ -316,12 +312,14 @@ private fun BoxScope.TopBar(
                     placeholder = { Text("搜索") },
                     leadingIcon = {
                         Icon(
-                            imageVector = SiteMapper.getIcon(uiState.siteType),
+                            painter = painterResource(SiteMapper.getIcon(uiState.siteType)),
                             contentDescription = "搜索",
-                            modifier = Modifier.clickable {
-                                isSearchExpanded = true
-                                isShowingIconSuggestions = true
-                            }
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable {
+                                    isSearchExpanded = true
+                                    isShowingIconSuggestions = true
+                                }
                         )
                     },
                     trailingIcon = {
