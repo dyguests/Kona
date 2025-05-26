@@ -281,6 +281,7 @@ private fun BoxScope.TopBar(
     navController: NavController
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
+    var isShowingIconSuggestions by remember { mutableStateOf(false) }
     val horizontalPadding by animateDpAsState(
         targetValue = if (!isSearchExpanded) 8.dp else 0.dp,
         label = "horizontalPadding"
@@ -292,59 +293,6 @@ private fun BoxScope.TopBar(
         enter = slideInVertically(initialOffsetY = { -it }),
         exit = slideOutVertically(targetOffsetY = { -it })
     ) {
-        // v1
-        // SearchBar(
-        //     query = uiState.searchQuery,
-        //     onQueryChange = onSearchQueryChange,
-        //     onSearch = { query ->
-        //         onSearch(query)
-        //         isSearchExpanded = false
-        //     },
-        //     active = isSearchExpanded,
-        //     onActiveChange = { isSearchExpanded = it },
-        //     placeholder = { Text("搜索") },
-        //     shape = RoundedCornerShape(28.dp),
-        //     leadingIcon = {
-        //         Icon(
-        //             imageVector = Icons.Default.Search,
-        //             contentDescription = "搜索"
-        //         )
-        //     },
-        //     trailingIcon = {
-        //         if (uiState.searchQuery.isNotEmpty()) {
-        //             IconButton(onClick = { onClearSearch() }) {
-        //                 Icon(
-        //                     imageVector = Icons.Default.Clear,
-        //                     contentDescription = "清除搜索"
-        //                 )
-        //             }
-        //         }
-        //     },
-        //     modifier = Modifier
-        //         .fillMaxWidth()
-        //         .padding(horizontal = horizontalPadding)
-        //         .align(Alignment.TopCenter),
-        // ) {
-        //     // 显示搜索建议
-        //     LazyColumn {
-        //         items(uiState.recentQueries) { query ->
-        //             ListItem(
-        //                 headlineContent = { Text(query.query) },
-        //                 supportingContent = {
-        //                     Text(
-        //                         "使用次数: ${query.useCount}",
-        //                         style = MaterialTheme.typography.bodySmall
-        //                     )
-        //                 },
-        //                 modifier = Modifier.clickable {
-        //                     onSearch(query.query)
-        //                     isSearchExpanded = false
-        //                 }
-        //             )
-        //         }
-        //     }
-        // }
-        // v2
         SearchBar(
             inputField = {
                 SearchBarDefaults.InputField(
@@ -353,14 +301,22 @@ private fun BoxScope.TopBar(
                     onSearch = { query ->
                         onSearch(query)
                         isSearchExpanded = false
+                        isShowingIconSuggestions = false
                     },
                     expanded = isSearchExpanded,
-                    onExpandedChange = { isSearchExpanded = it },
+                    onExpandedChange = { 
+                        isSearchExpanded = it
+                        if (!it) isShowingIconSuggestions = false
+                    },
                     placeholder = { Text("搜索") },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "搜索"
+                            contentDescription = "搜索",
+                            modifier = Modifier.clickable {
+                                isShowingIconSuggestions = !isShowingIconSuggestions
+                                isSearchExpanded = true
+                            }
                         )
                     },
                     trailingIcon = {
@@ -380,24 +336,40 @@ private fun BoxScope.TopBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = horizontalPadding)
-                .align(Alignment.TopCenter),
+                .align(Alignment.TopCenter)
         ) {
-            // 显示搜索建议
-            LazyColumn {
-                items(uiState.recentQueries) { query ->
-                    ListItem(
-                        headlineContent = { Text(query.query) },
-                        supportingContent = {
-                            Text(
-                                "使用次数: ${query.useCount}",
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        },
-                        modifier = Modifier.clickable {
-                            onSearch(query.query)
-                            isSearchExpanded = false
-                        }
-                    )
+            if (isShowingIconSuggestions) {
+                // 搜索图标点击后的建议列表
+                LazyColumn {
+                    items(listOf("热门搜索1", "热门搜索2", "热门搜索3")) { suggestion ->
+                        ListItem(
+                            headlineContent = { Text(suggestion) },
+                            modifier = Modifier.clickable {
+                                onSearch(suggestion)
+                                isSearchExpanded = false
+                                isShowingIconSuggestions = false
+                            }
+                        )
+                    }
+                }
+            } else {
+                // 原有的搜索历史建议
+                LazyColumn {
+                    items(uiState.recentQueries) { query ->
+                        ListItem(
+                            headlineContent = { Text(query.query) },
+                            supportingContent = {
+                                Text(
+                                    "使用次数: ${query.useCount}",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            },
+                            modifier = Modifier.clickable {
+                                onSearch(query.query)
+                                isSearchExpanded = false
+                            }
+                        )
+                    }
                 }
             }
         }
