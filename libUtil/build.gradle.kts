@@ -53,6 +53,7 @@ dependencies {
     api(libs.gson)
     implementation(libs.kotlin.reflect)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 } 

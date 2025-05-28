@@ -10,11 +10,16 @@ import kotlin.reflect.KProperty
 class SharedPreferenceProperty<T>(
     private val key: String
 ) : ReadWriteProperty<Any, T?> {
+    private var isInitialized = false
+    private var cachedValue: T? = null
 
     @Suppress("UNCHECKED_CAST")
     override fun getValue(thisRef: Any, property: KProperty<*>): T? {
+        if (isInitialized) return cachedValue
+        if (!exists()) return null
+
         val type = property.returnType.classifier as? KClass<*> ?: return null
-        return when (type) {
+        cachedValue = when (type) {
             String::class -> SharePreferenceUtil.getString(key, "") as T?
             Int::class -> SharePreferenceUtil.getInt(key, 0) as T?
             Long::class -> SharePreferenceUtil.getLong(key, 0L) as T?
@@ -26,9 +31,14 @@ class SharedPreferenceProperty<T>(
                 else GsonUtils.fromJson(json, type) as T?
             }
         }
+        isInitialized = true
+        return cachedValue
     }
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: T?) {
+        isInitialized = true
+        cachedValue = value
+
         when (value) {
             is String -> SharePreferenceUtil.setString(key, value)
             is Int -> SharePreferenceUtil.setInt(key, value)
@@ -44,11 +54,20 @@ class SharedPreferenceProperty<T>(
     }
 
     fun remove() {
+        cachedValue = null
+        isInitialized = false
         SharePreferenceUtil.remove(key)
     }
 
     fun exists(): Boolean {
         return SharePreferenceUtil.contains(key)
+    }
+
+    /**
+     * Invalidate the cache, forcing a fresh read from SharePreferenceUtil on next get
+     */
+    fun invalidate() {
+        isInitialized = false
     }
 }
 
