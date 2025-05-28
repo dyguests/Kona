@@ -81,7 +81,11 @@ class GalleryViewModel @Inject constructor(
             
             try {
                 val page = if (isLoadMore) uiState.value.currentPage + 1 else 1
-                val newCovers = getCoversUseCase.execute(uiState.value.searchQuery, page)
+                val newCovers = getCoversUseCase.execute(
+                    siteType = uiState.value.siteType,
+                    query = uiState.value.searchQuery,
+                    page = page,
+                )
                 
                 setState { 
                     copy(
