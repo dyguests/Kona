@@ -64,42 +64,40 @@ class GalleryViewModel @Inject constructor(
     }
 
     private fun refresh() {
-        viewModelScope.launch {
-            setState { copy(isRefreshing = true) }
-            try {
-                val covers = getCoversUseCase.execute(uiState.value.searchQuery, 1)
-                setState { 
-                    copy(
-                        covers = covers,
-                        currentPage = 1
-                    ) 
-                }
-                setEffect { GalleryEffect.RefreshSuccess }
-            } catch (e: Exception) {
-                setEffect { GalleryEffect.RefreshError(e.message ?: "Refresh failed") }
-            } finally {
-                setState { copy(isRefreshing = false) }
-            }
-        }
+        loadData(isLoadMore = false)
     }
 
     private fun loadMore() {
+        loadData(isLoadMore = true)
+    }
+
+    private fun loadData(isLoadMore: Boolean) {
         viewModelScope.launch {
-            setState { copy(isLoadingMore = true) }
+            if (isLoadMore) {
+                setState { copy(isLoadingMore = true) }
+            } else {
+                setState { copy(isRefreshing = true) }
+            }
+            
             try {
-                val nextPage = uiState.value.currentPage + 1
-                val newCovers = getCoversUseCase.execute(uiState.value.searchQuery, nextPage)
+                val page = if (isLoadMore) uiState.value.currentPage + 1 else 1
+                val newCovers = getCoversUseCase.execute(uiState.value.searchQuery, page)
+                
                 setState { 
                     copy(
-                        covers = covers + newCovers,
-                        currentPage = nextPage
+                        covers = if (isLoadMore) covers + newCovers else newCovers,
+                        currentPage = page
                     ) 
                 }
-                setEffect { GalleryEffect.LoadMoreSuccess }
+                
+                setEffect { GalleryEffect.LoadSuccess }
             } catch (e: Exception) {
-                setEffect { GalleryEffect.LoadMoreError(e.message ?: "Load more failed") }
+                setEffect { GalleryEffect.LoadError(e.message ?: "Load failed") }
             } finally {
-                setState { copy(isLoadingMore = false) }
+                setState { 
+                    if (isLoadMore) copy(isLoadingMore = false)
+                    else copy(isRefreshing = false)
+                }
             }
         }
     }
@@ -133,8 +131,6 @@ data class GalleryState(
 ) : IUiState
 
 sealed class GalleryEffect : IUiEffect {
-    object RefreshSuccess : GalleryEffect()
-    data class RefreshError(val message: String) : GalleryEffect()
-    object LoadMoreSuccess : GalleryEffect()
-    data class LoadMoreError(val message: String) : GalleryEffect()
+    object LoadSuccess : GalleryEffect()
+    data class LoadError(val message: String) : GalleryEffect()
 } 

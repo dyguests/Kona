@@ -89,17 +89,11 @@ fun GalleryPage(
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is GalleryEffect.RefreshSuccess -> {
-                    // Handle refresh success
+                is GalleryEffect.LoadSuccess -> {
+                    // Handle load success
                 }
-                is GalleryEffect.RefreshError -> {
-                    // Handle refresh error
-                }
-                is GalleryEffect.LoadMoreSuccess -> {
-                    // Handle load more success
-                }
-                is GalleryEffect.LoadMoreError -> {
-                    // Handle load more error
+                is GalleryEffect.LoadError -> {
+                    // Handle load error
                 }
             }
         }
