@@ -34,6 +34,10 @@ class GalleryViewModel @Inject constructor(
             }
             is GalleryIntent.Refresh -> refresh()
             is GalleryIntent.LoadMore -> loadMore()
+            is GalleryIntent.UpdateSiteType -> {
+                setState { copy(siteType = intent.siteType) }
+                refresh()
+            }
         }
     }
 
@@ -107,16 +111,17 @@ sealed class GalleryIntent : IUiIntent {
     object ClearSearch : GalleryIntent()
     object Refresh : GalleryIntent()
     object LoadMore : GalleryIntent()
+    data class UpdateSiteType(val siteType: SiteType) : GalleryIntent()
 }
 
 data class GalleryState(
+    val siteType: SiteType = SiteType.Konachan,
     val searchQuery: String = "",
     val isRefreshing: Boolean = false,
     val isLoadingMore: Boolean = false,
     val currentPage: Int = 1,
     val covers: List<Cover> = emptyList(),
     val recentQueries: List<QueryEntity> = emptyList(),
-    val siteType: SiteType = SiteType.Kona // todo cache
 ) : IUiState
 
 sealed class GalleryEffect : IUiEffect {

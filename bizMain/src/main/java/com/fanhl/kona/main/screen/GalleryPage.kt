@@ -62,8 +62,8 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.entity.SiteType
 import com.fanhl.kona.main.navigation.NavRoutes
-import com.fanhl.kona.main.util.SiteMapper
 import com.fanhl.kona.main.viewmodel.GalleryEffect
 import com.fanhl.kona.main.viewmodel.GalleryIntent
 import com.fanhl.kona.main.viewmodel.GalleryState
@@ -141,6 +141,9 @@ fun GalleryPage(
                 viewModel.handleIntent(GalleryIntent.Search(query))
             },
             onClearSearch = { viewModel.handleIntent(GalleryIntent.ClearSearch) },
+            onSiteChange = { siteType ->
+                viewModel.handleIntent(GalleryIntent.UpdateSiteType(siteType))
+            },
             navController = navController
         )
     }
@@ -279,6 +282,7 @@ private fun BoxScope.TopBar(
     onSearchQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
     onClearSearch: () -> Unit,
+    onSiteChange: (SiteType) -> Unit,
     navController: NavController
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
@@ -307,12 +311,16 @@ private fun BoxScope.TopBar(
                     expanded = isSearchExpanded,
                     onExpandedChange = { 
                         isSearchExpanded = it
-                        if (!it) isShowingIconSuggestions = false
+                        if (it && !isShowingIconSuggestions) {
+                            isShowingIconSuggestions = false
+                        } else if (!it) {
+                            isShowingIconSuggestions = false
+                        }
                     },
                     placeholder = { Text("搜索") },
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(SiteMapper.getIcon(uiState.siteType)),
+                            painter = painterResource(uiState.siteType.icon),
                             contentDescription = "搜索",
                             modifier = Modifier
                                 .size(24.dp)
@@ -337,7 +345,11 @@ private fun BoxScope.TopBar(
             expanded = isSearchExpanded,
             onExpandedChange = {
                 isSearchExpanded = it
-                if (!it) isShowingIconSuggestions = false
+                if (it && !isShowingIconSuggestions) {
+                    isShowingIconSuggestions = false
+                } else if (!it) {
+                    isShowingIconSuggestions = false
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -347,11 +359,18 @@ private fun BoxScope.TopBar(
             if (isShowingIconSuggestions) {
                 // 搜索图标点击后的建议列表
                 LazyColumn {
-                    items(listOf("热门搜索1", "热门搜索2", "热门搜索3")) { suggestion ->
+                    items(SiteType.values()) { siteType ->
                         ListItem(
-                            headlineContent = { Text(suggestion) },
+                            headlineContent = { Text(siteType.displayName) },
+                            leadingContent = {
+                                Icon(
+                                    painter = painterResource(siteType.icon),
+                                    contentDescription = siteType.displayName,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            },
                             modifier = Modifier.clickable {
-                                onSearch(suggestion)
+                                onSiteChange(siteType)
                                 isSearchExpanded = false
                                 isShowingIconSuggestions = false
                             }
@@ -407,6 +426,7 @@ private fun TopBarPreview() {
                 onSearchQueryChange = {},
                 onSearch = {},
                 onClearSearch = {},
+                onSiteChange = {},
                 navController = rememberNavController()
             )
         }
