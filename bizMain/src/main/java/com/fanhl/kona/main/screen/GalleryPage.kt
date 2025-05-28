@@ -327,7 +327,8 @@ private fun BoxScope.TopBar(
                                 .clickable {
                                     isSearchExpanded = true
                                     isShowingIconSuggestions = true
-                                }
+                                },
+                            tint = Color.Unspecified,
                         )
                     },
                     trailingIcon = {
@@ -366,7 +367,8 @@ private fun BoxScope.TopBar(
                                 Icon(
                                     painter = painterResource(siteType.icon),
                                     contentDescription = siteType.displayName,
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(24.dp),
+                                    tint = Color.Unspecified,
                                 )
                             },
                             modifier = Modifier.clickable {
