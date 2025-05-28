@@ -22,9 +22,11 @@ class GalleryViewModel @Inject constructor(
     private val queryDao: QueryDao
 ) : BaseViewModel<GalleryIntent, GalleryState, GalleryEffect>() {
     private var cacheSiteType by sp<SiteType>("gallery_site_type")
+    private var cacheSearchQuery by sp<String>("gallery_search_query")
 
     override fun createInitialState(): GalleryState = GalleryState(
         siteType = this@GalleryViewModel.cacheSiteType ?: SiteType.Konachan,
+        searchQuery = this@GalleryViewModel.cacheSearchQuery ?: "",
     )
 
     override fun handleIntent(intent: GalleryIntent) {
@@ -32,15 +34,10 @@ class GalleryViewModel @Inject constructor(
             is GalleryIntent.Init -> handleInit()
             is GalleryIntent.UpdateSearchInput -> setState { copy(searchQuery = intent.query) }
             is GalleryIntent.Search -> handleSearch(intent.query)
-            is GalleryIntent.ClearSearch -> {
-                setState { copy(searchQuery = "") }
-                refresh()
-            }
+            is GalleryIntent.ClearSearch -> handleSearch("")
             is GalleryIntent.Refresh -> refresh()
             is GalleryIntent.LoadMore -> loadMore()
-            is GalleryIntent.UpdateSiteType -> {
-                updateSite(intent)
-            }
+            is GalleryIntent.UpdateSiteType -> updateSite(intent)
         }
     }
 
@@ -48,19 +45,21 @@ class GalleryViewModel @Inject constructor(
         viewModelScope.launch {
             queryDao.getRecentQueries().collectLatest { queries ->
                 setState { copy(recentQueries = queries) }
-                queries.firstOrNull()?.let { latestQuery ->
-                    setState { copy(searchQuery = latestQuery.query) }
-                    refresh()
-                }
             }
+        }
+        viewModelScope.launch {
+            refresh()
         }
     }
 
     private fun handleSearch(query: String) {
         setState { copy(searchQuery = query) }
-        viewModelScope.launch {
-            queryDao.updateOrInsertQuery(query)
+        if (query.isNotEmpty()) {
+            viewModelScope.launch {
+                queryDao.updateOrInsertQuery(query)
+            }
         }
+        cacheSearchQuery = query
         refresh()
     }
 
