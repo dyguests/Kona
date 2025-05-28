@@ -10,6 +10,7 @@ import com.fanhl.kona.database.dao.QueryDao
 import com.fanhl.kona.database.entity.QueryEntity
 import com.fanhl.kona.main.entity.SiteType
 import com.fanhl.kona.main.usecase.GetCoversUseCase
+import com.fanhl.util.sp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,6 +21,8 @@ class GalleryViewModel @Inject constructor(
     private val getCoversUseCase: GetCoversUseCase,
     private val queryDao: QueryDao
 ) : BaseViewModel<GalleryIntent, GalleryState, GalleryEffect>() {
+
+    private var siteType by sp<SiteType>("gallery_site_type")
 
     override fun createInitialState(): GalleryState = GalleryState()
 
@@ -42,6 +45,7 @@ class GalleryViewModel @Inject constructor(
 
     private fun handleInit() {
         viewModelScope.launch {
+            setState { copy(siteType = this@GalleryViewModel.siteType ?: SiteType.Yandre) }
             queryDao.getRecentQueries().collectLatest { queries ->
                 setState { copy(recentQueries = queries) }
                 queries.firstOrNull()?.let { latestQuery ->
@@ -102,6 +106,7 @@ class GalleryViewModel @Inject constructor(
     }
 
     private fun updateSite(intent: GalleryIntent.UpdateSiteType) {
+        siteType = intent.siteType
         setState { copy(siteType = intent.siteType) }
         refresh()
     }
