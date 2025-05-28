@@ -20,8 +20,8 @@ abstract class BaseViewModel<UiIntent : IUiIntent, UiState : IUiState, UiEffect 
     private val initialState: UiState by lazy { createInitialState() }
     abstract fun createInitialState(): UiState
 
-    private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    private val _uiState by lazy { MutableStateFlow(initialState) }
+    val uiState: StateFlow<UiState> by lazy { _uiState.asStateFlow() }
 
     private val _effect = Channel<UiEffect>()
     val effect = _effect.receiveAsFlow()
