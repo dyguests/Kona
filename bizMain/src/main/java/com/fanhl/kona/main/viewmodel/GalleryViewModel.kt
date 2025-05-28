@@ -35,8 +35,7 @@ class GalleryViewModel @Inject constructor(
             is GalleryIntent.Refresh -> refresh()
             is GalleryIntent.LoadMore -> loadMore()
             is GalleryIntent.UpdateSiteType -> {
-                setState { copy(siteType = intent.siteType) }
-                refresh()
+                updateSite(intent)
             }
         }
     }
@@ -100,6 +99,11 @@ class GalleryViewModel @Inject constructor(
                 setState { copy(isLoadingMore = false) }
             }
         }
+    }
+
+    private fun updateSite(intent: GalleryIntent.UpdateSiteType) {
+        setState { copy(siteType = intent.siteType) }
+        refresh()
     }
 }
 
