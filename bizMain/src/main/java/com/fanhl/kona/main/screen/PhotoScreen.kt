@@ -24,17 +24,16 @@ import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,11 +56,11 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fanhl.kona.common.entity.Cover
 import com.fanhl.kona.common.ui.theme.KonaTheme
+import com.fanhl.kona.main.navigation.NavRoutes
 import com.fanhl.kona.main.viewmodel.PhotoEffect
 import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
-import com.fanhl.kona.main.navigation.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,47 +158,59 @@ private fun PhotoContent(
             onPhotoClick = onToggleOverlay
         )
 
-        // PhotoTags
-        AnimatedVisibility(
-            visible = state.isOverlayVisible,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(8.dp)
-                .padding(paddingValues)
-                .fillMaxWidth(0.85f)  // 留出 FAB 的空间
-        ) {
-            FlowRow(
-                modifier = Modifier.padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                state.cover?.tags?.forEach { tag ->
-                    FilterChip(
-                        selected = false,
-                        onClick = { 
-                            // 导航回 MainScreen，并传递选中的标签
-                            navController.previousBackStackEntry?.savedStateHandle?.set(NavRoutes.Args.TAGS, tag)
-                            navController.navigateUp()
-                        },
-                        label = {
-                            Text(
-                                text = tag,
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        },
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                            labelColor = MaterialTheme.colorScheme.onSurface
-                        )
-                    )
-                }
-            }
-        }
+        PhotoTags(
+            state = state,
+            navController = navController,
+            paddingValues = paddingValues
+        )
         
         TopBar(
             isVisible = state.isOverlayVisible,
             navController = navController
         )
+    }
+}
+
+@Composable
+private fun BoxScope.PhotoTags(
+    state: PhotoState,
+    navController: NavController,
+    paddingValues: PaddingValues
+) {
+    AnimatedVisibility(
+        visible = state.isOverlayVisible,
+        modifier = Modifier
+            .align(Alignment.BottomStart)
+            // .padding(8.dp)
+            .padding(end = 64.dp)  // 留出 FAB 的空间
+            .padding(paddingValues)
+            .fillMaxWidth(),
+    ) {
+        FlowRow(
+            modifier = Modifier.padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            // verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            state.cover?.tags?.forEach { tag ->
+                FilterChip(
+                    selected = false,
+                    onClick = { 
+                        navController.previousBackStackEntry?.savedStateHandle?.set(NavRoutes.Args.TAGS, tag)
+                        navController.navigateUp()
+                    },
+                    label = {
+                        Text(
+                            text = tag,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    },
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
+                        labelColor = MaterialTheme.colorScheme.onSurface
+                    )
+                )
+            }
+        }
     }
 }
 
