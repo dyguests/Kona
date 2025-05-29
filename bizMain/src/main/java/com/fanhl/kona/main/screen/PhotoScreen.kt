@@ -274,9 +274,7 @@ private fun Photo(
                 detectTransformGestures { _, pan, zoom, _ ->
                     scale *= zoom
                     offsetX += pan.x
-                    /** scale*/
                     offsetY += pan.y
-                    /** scale*/
                 }
             }
             .pointerInput(Unit) {
@@ -292,8 +290,17 @@ private fun Photo(
                 .build(),
             loading = {
                 Box(
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
                 ) {
+                    SubcomposeAsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(cover.previewUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = cover.title,
+                        modifier = Modifier.fillMaxSize(),
+                    )
                     CircularProgressIndicator(
                         modifier = Modifier.size(48.dp)
                     )
