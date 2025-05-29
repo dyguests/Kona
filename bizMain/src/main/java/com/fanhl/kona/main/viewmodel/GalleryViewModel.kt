@@ -31,7 +31,6 @@ class GalleryViewModel @Inject constructor(
 
     override fun handleIntent(intent: GalleryIntent) {
         when (intent) {
-            is GalleryIntent.Init -> handleInit()
             is GalleryIntent.UpdateSearchInput -> setState { copy(searchQuery = intent.query) }
             is GalleryIntent.Search -> handleSearch(intent.query)
             is GalleryIntent.ClearSearch -> handleSearch("")
@@ -41,14 +40,11 @@ class GalleryViewModel @Inject constructor(
         }
     }
 
-    private fun handleInit() {
+    init {
         viewModelScope.launch {
             queryDao.getRecentQueries().collectLatest { queries ->
                 setState { copy(recentQueries = queries) }
             }
-        }
-        viewModelScope.launch {
-            refresh()
         }
     }
 
@@ -115,7 +111,6 @@ class GalleryViewModel @Inject constructor(
 
 // Define your MVI components
 sealed class GalleryIntent : IUiIntent {
-    object Init : GalleryIntent()
     data class UpdateSearchInput(val query: String) : GalleryIntent()
     data class Search(val query: String) : GalleryIntent()
     object ClearSearch : GalleryIntent()

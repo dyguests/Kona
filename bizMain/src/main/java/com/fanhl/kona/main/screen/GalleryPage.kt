@@ -80,9 +80,8 @@ fun GalleryPage(
     val viewModel: GalleryViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Initial refresh
     LaunchedEffect(Unit) {
-        viewModel.handleIntent(GalleryIntent.Init)
+        viewModel.handleIntent(GalleryIntent.Refresh)
     }
 
     // Handle tag selection from PhotoScreen
@@ -238,7 +237,10 @@ fun WaterfallGrid(
         state = pullRefreshState,
         indicator = {
             PullToRefreshDefaults.Indicator(
-                modifier = Modifier.Companion.align(Alignment.Companion.TopCenter),
+                modifier = Modifier
+                    .align(Alignment.Companion.TopCenter)
+                    .padding(innerPadding)
+                    .padding(PaddingValues(top = 64.dp)),
                 isRefreshing = uiState.isRefreshing,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
