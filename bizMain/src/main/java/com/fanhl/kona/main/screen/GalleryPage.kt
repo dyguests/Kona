@@ -85,6 +85,18 @@ fun GalleryPage(
         viewModel.handleIntent(GalleryIntent.Init)
     }
 
+    // Handle tag selection from PhotoScreen
+    LaunchedEffect(Unit) {
+        val selectedTag = navController.currentBackStackEntry?.savedStateHandle?.get<String>(NavRoutes.Args.TAGS)
+        selectedTag?.let { tag ->
+            // 更新搜索框并执行搜索
+            viewModel.handleIntent(GalleryIntent.UpdateSearchInput(tag))
+            viewModel.handleIntent(GalleryIntent.Search(tag))
+            // 清除保存的标签，避免重复触发
+            navController.currentBackStackEntry?.savedStateHandle?.remove<String>(NavRoutes.Args.TAGS)
+        }
+    }
+
     // Effect collection
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
