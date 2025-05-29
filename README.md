@@ -2,9 +2,11 @@
 
 Kona 是一个使用现代 Android 开发技术重构的应用程序。
 
-![Screenshot 1](docs/Screenshot_20250529_135452.png)
-![Screenshot 2](docs/Screenshot_20250529_135510.png)
-![Screenshot 3](docs/Screenshot_20250529_135535.png)
+支持 Konachan, Yande.re, Danbooru, etc.
+
+<img src="docs/Screenshot_20250529_135452.png" width="50%" alt="Screenshot 1">
+<img src="docs/Screenshot_20250529_135510.png" width="50%" alt="Screenshot 2">
+<img src="docs/Screenshot_20250529_135535.png" width="50%" alt="Screenshot 3">
 
 ## 技术栈
 
