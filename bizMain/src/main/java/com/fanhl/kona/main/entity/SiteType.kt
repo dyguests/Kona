@@ -14,6 +14,10 @@ enum class SiteType(
         displayName = "Konachan",
         icon = com.fanhl.kona.kona.R.mipmap.ic_favicon_konachan
     ),
+    KonachanSafe(
+        displayName = "Konachan Safe",
+        icon = com.fanhl.kona.kona.R.mipmap.ic_favicon_konachan
+    ),
     Yandere(
         displayName = "Yande.re",
         icon = com.fanhl.kona.yandere.R.mipmap.ic_favicon_yandere
