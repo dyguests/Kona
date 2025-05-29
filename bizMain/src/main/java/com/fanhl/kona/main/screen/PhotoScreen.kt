@@ -61,6 +61,7 @@ import com.fanhl.kona.main.viewmodel.PhotoEffect
 import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
+import com.fanhl.kona.main.navigation.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -175,7 +176,11 @@ private fun PhotoContent(
                 state.cover?.tags?.forEach { tag ->
                     FilterChip(
                         selected = false,
-                        onClick = { /* TODO: 处理标签点击 */ },
+                        onClick = { 
+                            // 导航回 MainScreen，并传递选中的标签
+                            navController.previousBackStackEntry?.savedStateHandle?.set(NavRoutes.Args.TAGS, tag)
+                            navController.navigateUp()
+                        },
                         label = {
                             Text(
                                 text = tag,

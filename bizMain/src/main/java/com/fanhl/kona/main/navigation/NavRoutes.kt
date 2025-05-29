@@ -10,5 +10,6 @@ object NavRoutes {
 
     object Args {
         const val COVER = "cover"
+        const val TAGS = "tags"
     }
 } 
