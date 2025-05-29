@@ -2,6 +2,10 @@
 
 Kona 是一个使用现代 Android 开发技术重构的应用程序。
 
+![Screenshot 1](docs/Screenshot_20250529_135452.png)
+![Screenshot 2](docs/Screenshot_20250529_135510.png)
+![Screenshot 3](docs/Screenshot_20250529_135535.png)
+
 ## 技术栈
 
 - **UI 框架**: Jetpack Compose
