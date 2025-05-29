@@ -81,7 +81,9 @@ fun GalleryPage(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.handleIntent(GalleryIntent.Refresh)
+        if (uiState.covers.isEmpty()) {
+            viewModel.handleIntent(GalleryIntent.Refresh)
+        }
     }
 
     // Handle tag selection from PhotoScreen
