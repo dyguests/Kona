@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -105,6 +107,7 @@ fun GalleryPage(
                 is GalleryEffect.LoadSuccess -> {
                     // Handle load success
                 }
+
                 is GalleryEffect.LoadError -> {
                     // Handle load error
                 }
@@ -319,7 +322,7 @@ private fun BoxScope.TopBar(
                         isShowingIconSuggestions = false
                     },
                     expanded = isSearchExpanded,
-                    onExpandedChange = { 
+                    onExpandedChange = {
                         isSearchExpanded = it
                         if (it && !isShowingIconSuggestions) {
                             isShowingIconSuggestions = false
@@ -342,11 +345,25 @@ private fun BoxScope.TopBar(
                         )
                     },
                     trailingIcon = {
-                        if (uiState.searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { onClearSearch() }) {
+                        Row(
+                            // horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            if (uiState.searchQuery.isNotEmpty()) {
+                                IconButton(onClick = { onClearSearch() }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "清除搜索"
+                                    )
+                                }
+                            }
+                            IconButton(onClick = {
+                                onSearch(uiState.searchQuery)
+                                isSearchExpanded = false
+                                isShowingIconSuggestions = false
+                            }) {
                                 Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = "清除搜索"
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "搜索"
                                 )
                             }
                         }
