@@ -37,8 +37,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,6 +59,7 @@ import com.fanhl.kona.main.viewmodel.PhotoEffect
 import com.fanhl.kona.main.viewmodel.PhotoIntent
 import com.fanhl.kona.main.viewmodel.PhotoState
 import com.fanhl.kona.main.viewmodel.PhotoViewModel
+import com.fanhl.kona.main.compose.rememberPhotoState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -263,18 +262,18 @@ private fun Photo(
     onPhotoClick: () -> Unit
 ) {
     val cover = state.cover ?: return
-    var scale by remember { mutableFloatStateOf(1f) }
-    var offsetX by remember { mutableFloatStateOf(0f) }
-    var offsetY by remember { mutableFloatStateOf(0f) }
+    var photoState by rememberPhotoState()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectTransformGestures { _, pan, zoom, _ ->
-                    scale *= zoom
-                    offsetX += pan.x
-                    offsetY += pan.y
+                    photoState = photoState.copy(
+                        scale = photoState.scale * zoom,
+                        offsetX = photoState.offsetX + pan.x,
+                        offsetY = photoState.offsetY + pan.y
+                    )
                 }
             }
             .pointerInput(Unit) {
@@ -310,10 +309,10 @@ private fun Photo(
             modifier = Modifier
                 .fillMaxSize()
                 .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    translationX = offsetX,
-                    translationY = offsetY
+                    scaleX = photoState.scale,
+                    scaleY = photoState.scale,
+                    translationX = photoState.offsetX,
+                    translationY = photoState.offsetY
                 ),
             contentScale = ContentScale.Fit
         )
